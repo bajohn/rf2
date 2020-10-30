@@ -1,0 +1,42 @@
+# this is an auto generated file. This will be overwritten
+query GetCard($gameId: ID!, $cardValue: ID!) {
+  getCard(gameId: $gameId, cardValue: $cardValue) {
+    cardValue
+    gameId
+    x
+    y
+    z
+    faceUp
+    createdAt
+    updatedAt
+  }
+}
+query ListCards(
+  $gameId: ID
+  $cardValue: ModelIDKeyConditionInput
+  $filter: ModelCardFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listCards(
+    gameId: $gameId
+    cardValue: $cardValue
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      cardValue
+      gameId
+      x
+      y
+      z
+      faceUp
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

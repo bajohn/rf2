@@ -1,0 +1,17 @@
+
+type Card @model 
+ @auth (
+    rules: [
+      { allow: public, operations: [create, update, delete, read] }
+    ]
+  )
+  @key(fields: ["gameId", "cardValue"])
+  {
+  cardValue: ID!
+  gameId: ID!
+  x: Int!
+  y: Int! 
+  z: Int!
+  faceUp: Boolean!
+}
+# TODO: use query() to pull all the cards for only one game (via secondary index, @key decorator)
