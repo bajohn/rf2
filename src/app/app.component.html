@@ -1,15 +1,19 @@
-<div 
-draggable="false" 
-[style.width]="75"
-[style.height]="105" 
-[style.position]="'absolute'" 
-[style.transform-origin]="'100% 0'" 
-[style.transform]="getTransform()"
-  >
+<div class="page-container" (mousemove)="renderDrag($event)"   (mouseup)="mouseUp()" (mouseout)="mouseUp()">
+  {{ctr}}
+  <div 
+  draggable="false" 
+  [style.position]="'absolute'" 
+  [style.transform-origin]="'100% 0'" 
+  [style.transform]="getTransform()"
+  [style.height]="cardHeight + 'px'"
+  [style.width]="cardWidth + 'px'"
+  [class.card-overlay]="true"
+  (mousedown)="mouseDown()"
 
-  <div [class.card-overlay]="true">
-
+    >
+  
+  
+    <!-- <img [src]="getFrontImgSrc()"> -->
   </div>
-<!-- 
-  <img [src]="getFrontImgSrc()"> -->
 </div>
+

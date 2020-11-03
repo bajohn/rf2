@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+.card-overlay {
+    background-color: lightcoral;
+
+}
+.page-container {
+    width: 100%;
+    height: 800px;
+    background-color: lightgray;
+}
