@@ -8,6 +8,7 @@
   [style.height]="cardHeight + 'px'"
   [style.width]="cardWidth + 'px'"
   [class.card-overlay]="true"
+  [class.card-inactive]="!cardBeingDragged"
   (mousedown)="mouseDown()"
 
     >
