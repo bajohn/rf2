@@ -7,6 +7,7 @@ subscription OnCreateCard {
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }
@@ -19,6 +20,7 @@ subscription OnUpdateCard {
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }
@@ -31,6 +33,7 @@ subscription OnDeleteCard {
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }

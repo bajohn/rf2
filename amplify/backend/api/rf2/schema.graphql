@@ -13,5 +13,6 @@ type Card @model
   y: Int! 
   z: Int!
   faceUp: Boolean!
+  lastOwner: ID!
 }
 # TODO: use query() to pull all the cards for only one game (via secondary index, @key decorator)

@@ -7,6 +7,7 @@ query GetCard($gameId: ID!, $cardValue: ID!) {
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }
@@ -34,6 +35,7 @@ query ListCards(
       y
       z
       faceUp
+      lastOwner
       createdAt
       updatedAt
     }

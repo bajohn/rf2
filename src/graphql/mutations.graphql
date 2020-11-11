@@ -10,6 +10,7 @@ mutation CreateCard(
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }
@@ -25,6 +26,7 @@ mutation UpdateCard(
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }
@@ -40,6 +42,7 @@ mutation DeleteCard(
     y
     z
     faceUp
+    lastOwner
     createdAt
     updatedAt
   }

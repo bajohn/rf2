@@ -12,6 +12,7 @@ export type CreateCardInput = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
 };
 
 export type ModelCardConditionInput = {
@@ -19,6 +20,7 @@ export type ModelCardConditionInput = {
   y?: ModelIntInput | null;
   z?: ModelIntInput | null;
   faceUp?: ModelBooleanInput | null;
+  lastOwner?: ModelIDInput | null;
   and?: Array<ModelCardConditionInput | null> | null;
   or?: Array<ModelCardConditionInput | null> | null;
   not?: ModelCardConditionInput | null;
@@ -56,42 +58,6 @@ export type ModelBooleanInput = {
   attributeType?: ModelAttributeTypes | null;
 };
 
-export type UpdateCardInput = {
-  cardValue: string;
-  gameId: string;
-  x?: number | null;
-  y?: number | null;
-  z?: number | null;
-  faceUp?: boolean | null;
-};
-
-export type DeleteCardInput = {
-  gameId: string;
-  cardValue: string;
-};
-
-export type ModelIDKeyConditionInput = {
-  eq?: string | null;
-  le?: string | null;
-  lt?: string | null;
-  ge?: string | null;
-  gt?: string | null;
-  between?: Array<string | null> | null;
-  beginsWith?: string | null;
-};
-
-export type ModelCardFilterInput = {
-  cardValue?: ModelIDInput | null;
-  gameId?: ModelIDInput | null;
-  x?: ModelIntInput | null;
-  y?: ModelIntInput | null;
-  z?: ModelIntInput | null;
-  faceUp?: ModelBooleanInput | null;
-  and?: Array<ModelCardFilterInput | null> | null;
-  or?: Array<ModelCardFilterInput | null> | null;
-  not?: ModelCardFilterInput | null;
-};
-
 export type ModelIDInput = {
   ne?: string | null;
   eq?: string | null;
@@ -118,6 +84,44 @@ export type ModelSizeInput = {
   between?: Array<number | null> | null;
 };
 
+export type UpdateCardInput = {
+  cardValue: string;
+  gameId: string;
+  x?: number | null;
+  y?: number | null;
+  z?: number | null;
+  faceUp?: boolean | null;
+  lastOwner?: string | null;
+};
+
+export type DeleteCardInput = {
+  gameId: string;
+  cardValue: string;
+};
+
+export type ModelIDKeyConditionInput = {
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+};
+
+export type ModelCardFilterInput = {
+  cardValue?: ModelIDInput | null;
+  gameId?: ModelIDInput | null;
+  x?: ModelIntInput | null;
+  y?: ModelIntInput | null;
+  z?: ModelIntInput | null;
+  faceUp?: ModelBooleanInput | null;
+  lastOwner?: ModelIDInput | null;
+  and?: Array<ModelCardFilterInput | null> | null;
+  or?: Array<ModelCardFilterInput | null> | null;
+  not?: ModelCardFilterInput | null;
+};
+
 export enum ModelSortDirection {
   ASC = "ASC",
   DESC = "DESC"
@@ -131,6 +135,7 @@ export type CreateCardMutation = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -143,6 +148,7 @@ export type UpdateCardMutation = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -155,6 +161,7 @@ export type DeleteCardMutation = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -167,6 +174,7 @@ export type GetCardQuery = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -181,6 +189,7 @@ export type ListCardsQuery = {
     y: number;
     z: number;
     faceUp: boolean;
+    lastOwner: string;
     createdAt: string;
     updatedAt: string;
   } | null> | null;
@@ -195,6 +204,7 @@ export type OnCreateCardSubscription = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -207,6 +217,7 @@ export type OnUpdateCardSubscription = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -219,6 +230,7 @@ export type OnDeleteCardSubscription = {
   y: number;
   z: number;
   faceUp: boolean;
+  lastOwner: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -240,6 +252,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -268,6 +281,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -296,6 +310,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -321,6 +336,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -353,6 +369,7 @@ export class APIService {
             y
             z
             faceUp
+            lastOwner
             createdAt
             updatedAt
           }
@@ -394,6 +411,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -412,6 +430,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
@@ -430,6 +449,7 @@ export class APIService {
           y
           z
           faceUp
+          lastOwner
           createdAt
           updatedAt
         }
