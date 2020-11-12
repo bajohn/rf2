@@ -7,7 +7,7 @@ import { Observable } from "zen-observable-ts";
 
 export type CreateCardInput = {
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -86,7 +86,7 @@ export type ModelSizeInput = {
 
 export type UpdateCardInput = {
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x?: number | null;
   y?: number | null;
   z?: number | null;
@@ -95,7 +95,7 @@ export type UpdateCardInput = {
 };
 
 export type DeleteCardInput = {
-  gameId: string;
+  roomId: string;
   cardValue: string;
 };
 
@@ -171,7 +171,7 @@ export type ModelIDKeyConditionInput = {
 
 export type ModelCardFilterInput = {
   cardValue?: ModelIDInput | null;
-  gameId?: ModelIDInput | null;
+  roomId?: ModelIDInput | null;
   x?: ModelIntInput | null;
   y?: ModelIntInput | null;
   z?: ModelIntInput | null;
@@ -206,7 +206,7 @@ export type ModelPlayerFilterInput = {
 export type CreateCardMutation = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -219,7 +219,7 @@ export type CreateCardMutation = {
 export type UpdateCardMutation = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -232,7 +232,7 @@ export type UpdateCardMutation = {
 export type DeleteCardMutation = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -335,7 +335,7 @@ export type DeletePlayerMutation = {
 export type GetCardQuery = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -350,7 +350,7 @@ export type ListCardsQuery = {
   items: Array<{
     __typename: "Card";
     cardValue: string;
-    gameId: string;
+    roomId: string;
     x: number;
     y: number;
     z: number;
@@ -424,7 +424,7 @@ export type ListPlayersQuery = {
 export type OnCreateCardSubscription = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -437,7 +437,7 @@ export type OnCreateCardSubscription = {
 export type OnUpdateCardSubscription = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -450,7 +450,7 @@ export type OnUpdateCardSubscription = {
 export type OnDeleteCardSubscription = {
   __typename: "Card";
   cardValue: string;
-  gameId: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -562,7 +562,7 @@ export class APIService {
         createCard(input: $input, condition: $condition) {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -591,7 +591,7 @@ export class APIService {
         updateCard(input: $input, condition: $condition) {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -620,7 +620,7 @@ export class APIService {
         deleteCard(input: $input, condition: $condition) {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -827,12 +827,12 @@ export class APIService {
     )) as any;
     return <DeletePlayerMutation>response.data.deletePlayer;
   }
-  async GetCard(gameId: string, cardValue: string): Promise<GetCardQuery> {
-    const statement = `query GetCard($gameId: ID!, $cardValue: ID!) {
-        getCard(gameId: $gameId, cardValue: $cardValue) {
+  async GetCard(roomId: string, cardValue: string): Promise<GetCardQuery> {
+    const statement = `query GetCard($roomId: ID!, $cardValue: ID!) {
+        getCard(roomId: $roomId, cardValue: $cardValue) {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -843,7 +843,7 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      gameId,
+      roomId,
       cardValue
     };
     const response = (await API.graphql(
@@ -852,20 +852,20 @@ export class APIService {
     return <GetCardQuery>response.data.getCard;
   }
   async ListCards(
-    gameId?: string,
+    roomId?: string,
     cardValue?: ModelIDKeyConditionInput,
     filter?: ModelCardFilterInput,
     limit?: number,
     nextToken?: string,
     sortDirection?: ModelSortDirection
   ): Promise<ListCardsQuery> {
-    const statement = `query ListCards($gameId: ID, $cardValue: ModelIDKeyConditionInput, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String, $sortDirection: ModelSortDirection) {
-        listCards(gameId: $gameId, cardValue: $cardValue, filter: $filter, limit: $limit, nextToken: $nextToken, sortDirection: $sortDirection) {
+    const statement = `query ListCards($roomId: ID, $cardValue: ModelIDKeyConditionInput, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String, $sortDirection: ModelSortDirection) {
+        listCards(roomId: $roomId, cardValue: $cardValue, filter: $filter, limit: $limit, nextToken: $nextToken, sortDirection: $sortDirection) {
           __typename
           items {
             __typename
             cardValue
-            gameId
+            roomId
             x
             y
             z
@@ -878,8 +878,8 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {};
-    if (gameId) {
-      gqlAPIServiceArguments.gameId = gameId;
+    if (roomId) {
+      gqlAPIServiceArguments.roomId = roomId;
     }
     if (cardValue) {
       gqlAPIServiceArguments.cardValue = cardValue;
@@ -1036,7 +1036,7 @@ export class APIService {
         onCreateCard {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -1055,7 +1055,7 @@ export class APIService {
         onUpdateCard {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z
@@ -1074,7 +1074,7 @@ export class APIService {
         onDeleteCard {
           __typename
           cardValue
-          gameId
+          roomId
           x
           y
           z

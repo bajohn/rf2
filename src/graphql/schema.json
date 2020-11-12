@@ -18,7 +18,7 @@
           "name" : "getCard",
           "description" : null,
           "args" : [ {
-            "name" : "gameId",
+            "name" : "roomId",
             "description" : null,
             "type" : {
               "kind" : "NON_NULL",
@@ -55,7 +55,7 @@
           "name" : "listCards",
           "description" : null,
           "args" : [ {
-            "name" : "gameId",
+            "name" : "roomId",
             "description" : null,
             "type" : {
               "kind" : "SCALAR",
@@ -283,7 +283,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "gameId",
+          "name" : "roomId",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -578,7 +578,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "gameId",
+          "name" : "roomId",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -1951,7 +1951,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "gameId",
+          "name" : "roomId",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -2140,7 +2140,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "gameId",
+          "name" : "roomId",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -2207,7 +2207,7 @@
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
-          "name" : "gameId",
+          "name" : "roomId",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -3544,23 +3544,6 @@
         "onFragment" : false,
         "onField" : false
       }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_publish",
         "description" : "Tells the service which subscriptions will be published to when this mutation is called. This directive is deprecated use @aws_susbscribe directive instead.",
         "locations" : [ "FIELD_DEFINITION" ],
@@ -3622,6 +3605,23 @@
             }
           },
           "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
         } ],
         "onOperation" : false,
         "onFragment" : false,

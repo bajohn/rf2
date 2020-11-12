@@ -1,14 +1,15 @@
 
+
 type Card @model 
  @auth (
     rules: [
       { allow: public, operations: [create, update, delete, read] }
     ]
   )
-  @key(fields: ["gameId", "cardValue"])
+  @key(fields: ["roomId", "cardValue"])
   {
   cardValue: ID!
-  gameId: ID!
+  roomId: ID!
   x: Int!
   y: Int! 
   z: Int!
@@ -17,6 +18,11 @@ type Card @model
 }
 
 type Room @model
+ @auth (
+    rules: [
+      { allow: public, operations: [create, update, delete, read] }
+    ]
+  )
   @key(fields: ["roomId"])
   {
   roomId: ID!
@@ -24,6 +30,11 @@ type Room @model
 }
 
 type Player @model
+ @auth (
+    rules: [
+      { allow: public, operations: [create, update, delete, read] }
+    ]
+  )
   @key(name: "playerByRoom", fields: ["roomId", "playerId"])
   {
   roomId: ID!

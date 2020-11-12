@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { APIService } from '../../API.service';
+
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -11,30 +13,44 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private api: APIService
   ) { }
 
   ngOnInit(
   ): void {
   }
 
-  click_create() {
+  clickCreate() {
 
     const roomId = uuidv4().split('-')[0];
-    console.log(roomId);
+
+    this.api.CreateRoom({
+      roomId: roomId
+    });
     this.router.navigateByUrl(roomId);
-    // if (this.createAttempts >= 3) {
-    //   this.errorMsg = 'Error creating room. 3 attempts failed.';
-    // } else {
-    //   this.createInProgress = true;
-    //   this.createAttempts++;
-    //   const newGameId = this.getRandomString(6);
-    //   // Send newly generated game id to backend
-    //   // in an initialize message. This should
-    //   // return gameExists == false, because the
-    //   // game has not been created yet.
-    //   this.ws.setGameId(newGameId);
-    //   this.ws.sendToWs('initialize', {});
-    // }
+
+    const suits = ['H', 'C', 'S', 'D'];
+    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    let z = 0;
+    for (const suit of suits) {
+      for (const value of values) {
+        const cardValue = `${value}${suit}`;
+        this.api.CreateCard({
+          'cardValue': cardValue,
+          'roomId': roomId,
+          'x': 100,
+          'y': 150,
+          'z': z,
+          'faceUp': true,
+          'lastOwner': ''
+        });
+        z += 1;
+      }
+    }
   }
+
+
+
+
 
 }

@@ -1,6 +1,10 @@
-Room {{roomId}}
-<div class="page-container" >
-    <app-card [playerId]="playerId">
-
-    </app-card>
+<div>
+    Room {{roomId}}
 </div>
+<div>
+    Player {{playerId}}
+</div>
+
+<app-card *ngFor="let cardValue of cardValues" [cardValue]="cardValue" [roomId]="roomId" [playerId]="playerId">
+
+</app-card>

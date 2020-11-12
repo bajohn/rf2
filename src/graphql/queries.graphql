@@ -1,8 +1,8 @@
 # this is an auto generated file. This will be overwritten
-query GetCard($gameId: ID!, $cardValue: ID!) {
-  getCard(gameId: $gameId, cardValue: $cardValue) {
+query GetCard($roomId: ID!, $cardValue: ID!) {
+  getCard(roomId: $roomId, cardValue: $cardValue) {
     cardValue
-    gameId
+    roomId
     x
     y
     z
@@ -13,7 +13,7 @@ query GetCard($gameId: ID!, $cardValue: ID!) {
   }
 }
 query ListCards(
-  $gameId: ID
+  $roomId: ID
   $cardValue: ModelIDKeyConditionInput
   $filter: ModelCardFilterInput
   $limit: Int
@@ -21,7 +21,7 @@ query ListCards(
   $sortDirection: ModelSortDirection
 ) {
   listCards(
-    gameId: $gameId
+    roomId: $roomId
     cardValue: $cardValue
     filter: $filter
     limit: $limit
@@ -30,7 +30,7 @@ query ListCards(
   ) {
     items {
       cardValue
-      gameId
+      roomId
       x
       y
       z

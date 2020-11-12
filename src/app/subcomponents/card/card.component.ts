@@ -14,14 +14,16 @@ export class CardComponent implements OnInit {
   public cardBeingDragged = false;
   private cardX = 0;
   private cardY = 0;
+  public cardZ = 0;
   private readonly cardHeight = 105;
   private readonly cardWidth = 75;
 
   private lastUpdateTime = 0;
   @Input() playerId: string;
+  @Input() roomId: string;
+  @Input() cardValue: string;
   updateMinMs = 100;
-  gameId = '1';
-  cardValue = 'JH';
+
 
   constructor(private api: APIService) {
 
@@ -29,60 +31,32 @@ export class CardComponent implements OnInit {
 
   ngOnInit() {
 
-
+    this.initCard();
 
     this.api.OnUpdateCardListener.subscribe((event: any) => {
       // Unsure why we have to dig value.data.
-      const cardUpdate: OnUpdateCardSubscription = event.value.data.onUpdateCard
-      cardUpdate.lastOwner;
+      const cardUpdate: OnUpdateCardSubscription = event.value.data.onUpdateCard;
 
       if (!this.cardBeingDragged && cardUpdate.lastOwner !== this.playerId) {
         this.cardX = cardUpdate.x;
-        this.cardY = cardUpdate.y
+        this.cardY = cardUpdate.y;
+        this.cardZ = cardUpdate.z;
       }
     })
 
 
+
+
   }
 
 
 
-  async listCards() {
-    const query = `
-        {
-          listCards(gameId: "1") {
-            items {
-              cardValue
-              createdAt
-              faceUp
-              gameId
-              updatedAt
-              x
-              y
-              z
-            }
-            nextToken
-          }
-        }    
-        `
-    // const cards = await this.api.ListCards();
-    const resp = await API.graphql(graphqlOperation(query)) as GraphQLResult<any>;
-    const curCard = resp.data.listCards.items;
-    this.cardX = curCard.x;
-    this.cardY = curCard.y;
-  }
-
-  // one-off card creator
-  createCard() {
-    this.api.CreateCard({
-      'cardValue': this.cardValue,
-      'gameId': this.gameId,
-      'x': 100,
-      'y': 150,
-      'z': 1,
-      'faceUp': true,
-      'lastOwner': this.playerId
-    });
+  async initCard() {
+    const card = await this.api.GetCard(this.roomId, this.cardValue);
+    console.log(card);
+    this.cardX = card.x;
+    this.cardY = card.y;
+    this.cardZ = card.z;
   }
 
   mouseDown() {
@@ -94,7 +68,6 @@ export class CardComponent implements OnInit {
       this.publishUpdate();
     }
     this.cardBeingDragged = false;
-    console.log('mouse up');
   }
 
   mouseMove(event: MouseEvent) {
@@ -106,7 +79,6 @@ export class CardComponent implements OnInit {
       this.cardX = Math.round(x - this.cardWidth / 2);
       this.cardY = Math.round(y - this.cardHeight / 2);
       if (curTime - this.lastUpdateTime > this.updateMinMs) {
-        console.log('move');
         this.lastUpdateTime = curTime;
         this.publishUpdate();
       }
@@ -124,7 +96,7 @@ export class CardComponent implements OnInit {
 
   publishUpdate() {
     const cardUpdate: UpdateCardInput = {
-      gameId: this.gameId,
+      roomId: this.roomId,
       cardValue: this.cardValue,
       x: this.cardX,
       y: this.cardY,

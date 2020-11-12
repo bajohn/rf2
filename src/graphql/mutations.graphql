@@ -5,7 +5,7 @@ mutation CreateCard(
 ) {
   createCard(input: $input, condition: $condition) {
     cardValue
-    gameId
+    roomId
     x
     y
     z
@@ -21,7 +21,7 @@ mutation UpdateCard(
 ) {
   updateCard(input: $input, condition: $condition) {
     cardValue
-    gameId
+    roomId
     x
     y
     z
@@ -37,7 +37,7 @@ mutation DeleteCard(
 ) {
   deleteCard(input: $input, condition: $condition) {
     cardValue
-    gameId
+    roomId
     x
     y
     z

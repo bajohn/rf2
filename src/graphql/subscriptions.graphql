@@ -2,7 +2,7 @@
 subscription OnCreateCard {
   onCreateCard {
     cardValue
-    gameId
+    roomId
     x
     y
     z
@@ -15,7 +15,7 @@ subscription OnCreateCard {
 subscription OnUpdateCard {
   onUpdateCard {
     cardValue
-    gameId
+    roomId
     x
     y
     z
@@ -28,7 +28,7 @@ subscription OnUpdateCard {
 subscription OnDeleteCard {
   onDeleteCard {
     cardValue
-    gameId
+    roomId
     x
     y
     z
