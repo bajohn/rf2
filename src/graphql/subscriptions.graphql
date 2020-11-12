@@ -38,3 +38,87 @@ subscription OnDeleteCard {
     updatedAt
   }
 }
+subscription OnCreateRoom {
+  onCreateRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateRoom {
+  onUpdateRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteRoom {
+  onDeleteRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreatePlayer {
+  onCreatePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdatePlayer {
+  onUpdatePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeletePlayer {
+  onDeletePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}

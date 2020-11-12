@@ -99,6 +99,66 @@ export type DeleteCardInput = {
   cardValue: string;
 };
 
+export type CreateRoomInput = {
+  roomId: string;
+};
+
+export type ModelRoomConditionInput = {
+  and?: Array<ModelRoomConditionInput | null> | null;
+  or?: Array<ModelRoomConditionInput | null> | null;
+  not?: ModelRoomConditionInput | null;
+};
+
+export type UpdateRoomInput = {
+  roomId: string;
+};
+
+export type DeleteRoomInput = {
+  roomId: string;
+};
+
+export type CreatePlayerInput = {
+  id?: string | null;
+  roomId: string;
+  playerId: string;
+  name: string;
+};
+
+export type ModelPlayerConditionInput = {
+  roomId?: ModelIDInput | null;
+  playerId?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  and?: Array<ModelPlayerConditionInput | null> | null;
+  or?: Array<ModelPlayerConditionInput | null> | null;
+  not?: ModelPlayerConditionInput | null;
+};
+
+export type ModelStringInput = {
+  ne?: string | null;
+  eq?: string | null;
+  le?: string | null;
+  lt?: string | null;
+  ge?: string | null;
+  gt?: string | null;
+  contains?: string | null;
+  notContains?: string | null;
+  between?: Array<string | null> | null;
+  beginsWith?: string | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+  size?: ModelSizeInput | null;
+};
+
+export type UpdatePlayerInput = {
+  roomId?: string | null;
+  playerId?: string | null;
+  name?: string | null;
+};
+
+export type DeletePlayerInput = {
+  id?: string | null;
+};
+
 export type ModelIDKeyConditionInput = {
   eq?: string | null;
   le?: string | null;
@@ -126,6 +186,22 @@ export enum ModelSortDirection {
   ASC = "ASC",
   DESC = "DESC"
 }
+
+export type ModelRoomFilterInput = {
+  roomId?: ModelIDInput | null;
+  and?: Array<ModelRoomFilterInput | null> | null;
+  or?: Array<ModelRoomFilterInput | null> | null;
+  not?: ModelRoomFilterInput | null;
+};
+
+export type ModelPlayerFilterInput = {
+  roomId?: ModelIDInput | null;
+  playerId?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  and?: Array<ModelPlayerFilterInput | null> | null;
+  or?: Array<ModelPlayerFilterInput | null> | null;
+  not?: ModelPlayerFilterInput | null;
+};
 
 export type CreateCardMutation = {
   __typename: "Card";
@@ -166,6 +242,96 @@ export type DeleteCardMutation = {
   updatedAt: string;
 };
 
+export type CreateRoomMutation = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdateRoomMutation = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DeleteRoomMutation = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreatePlayerMutation = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdatePlayerMutation = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DeletePlayerMutation = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type GetCardQuery = {
   __typename: "Card";
   cardValue: string;
@@ -190,6 +356,65 @@ export type ListCardsQuery = {
     z: number;
     faceUp: boolean;
     lastOwner: string;
+    createdAt: string;
+    updatedAt: string;
+  } | null> | null;
+  nextToken: string | null;
+};
+
+export type GetRoomQuery = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListRoomsQuery = {
+  __typename: "ModelRoomConnection";
+  items: Array<{
+    __typename: "Room";
+    roomId: string;
+    players: {
+      __typename: "ModelPlayerConnection";
+      nextToken: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null> | null;
+  nextToken: string | null;
+};
+
+export type GetPlayerQuery = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListPlayersQuery = {
+  __typename: "ModelPlayerConnection";
+  items: Array<{
+    __typename: "Player";
+    id: string;
+    roomId: string;
+    playerId: string;
+    name: string;
     createdAt: string;
     updatedAt: string;
   } | null> | null;
@@ -231,6 +456,96 @@ export type OnDeleteCardSubscription = {
   z: number;
   faceUp: boolean;
   lastOwner: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnCreateRoomSubscription = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnUpdateRoomSubscription = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnDeleteRoomSubscription = {
+  __typename: "Room";
+  roomId: string;
+  players: {
+    __typename: "ModelPlayerConnection";
+    items: Array<{
+      __typename: "Player";
+      id: string;
+      roomId: string;
+      playerId: string;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null> | null;
+    nextToken: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnCreatePlayerSubscription = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnUpdatePlayerSubscription = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type OnDeletePlayerSubscription = {
+  __typename: "Player";
+  id: string;
+  roomId: string;
+  playerId: string;
+  name: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -326,6 +641,192 @@ export class APIService {
     )) as any;
     return <DeleteCardMutation>response.data.deleteCard;
   }
+  async CreateRoom(
+    input: CreateRoomInput,
+    condition?: ModelRoomConditionInput
+  ): Promise<CreateRoomMutation> {
+    const statement = `mutation CreateRoom($input: CreateRoomInput!, $condition: ModelRoomConditionInput) {
+        createRoom(input: $input, condition: $condition) {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreateRoomMutation>response.data.createRoom;
+  }
+  async UpdateRoom(
+    input: UpdateRoomInput,
+    condition?: ModelRoomConditionInput
+  ): Promise<UpdateRoomMutation> {
+    const statement = `mutation UpdateRoom($input: UpdateRoomInput!, $condition: ModelRoomConditionInput) {
+        updateRoom(input: $input, condition: $condition) {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <UpdateRoomMutation>response.data.updateRoom;
+  }
+  async DeleteRoom(
+    input: DeleteRoomInput,
+    condition?: ModelRoomConditionInput
+  ): Promise<DeleteRoomMutation> {
+    const statement = `mutation DeleteRoom($input: DeleteRoomInput!, $condition: ModelRoomConditionInput) {
+        deleteRoom(input: $input, condition: $condition) {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <DeleteRoomMutation>response.data.deleteRoom;
+  }
+  async CreatePlayer(
+    input: CreatePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<CreatePlayerMutation> {
+    const statement = `mutation CreatePlayer($input: CreatePlayerInput!, $condition: ModelPlayerConditionInput) {
+        createPlayer(input: $input, condition: $condition) {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreatePlayerMutation>response.data.createPlayer;
+  }
+  async UpdatePlayer(
+    input: UpdatePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<UpdatePlayerMutation> {
+    const statement = `mutation UpdatePlayer($input: UpdatePlayerInput!, $condition: ModelPlayerConditionInput) {
+        updatePlayer(input: $input, condition: $condition) {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <UpdatePlayerMutation>response.data.updatePlayer;
+  }
+  async DeletePlayer(
+    input: DeletePlayerInput,
+    condition?: ModelPlayerConditionInput
+  ): Promise<DeletePlayerMutation> {
+    const statement = `mutation DeletePlayer($input: DeletePlayerInput!, $condition: ModelPlayerConditionInput) {
+        deletePlayer(input: $input, condition: $condition) {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <DeletePlayerMutation>response.data.deletePlayer;
+  }
   async GetCard(gameId: string, cardValue: string): Promise<GetCardQuery> {
     const statement = `query GetCard($gameId: ID!, $cardValue: ID!) {
         getCard(gameId: $gameId, cardValue: $cardValue) {
@@ -400,6 +901,135 @@ export class APIService {
     )) as any;
     return <ListCardsQuery>response.data.listCards;
   }
+  async GetRoom(roomId: string): Promise<GetRoomQuery> {
+    const statement = `query GetRoom($roomId: ID!) {
+        getRoom(roomId: $roomId) {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      roomId
+    };
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <GetRoomQuery>response.data.getRoom;
+  }
+  async ListRooms(
+    roomId?: string,
+    filter?: ModelRoomFilterInput,
+    limit?: number,
+    nextToken?: string,
+    sortDirection?: ModelSortDirection
+  ): Promise<ListRoomsQuery> {
+    const statement = `query ListRooms($roomId: ID, $filter: ModelRoomFilterInput, $limit: Int, $nextToken: String, $sortDirection: ModelSortDirection) {
+        listRooms(roomId: $roomId, filter: $filter, limit: $limit, nextToken: $nextToken, sortDirection: $sortDirection) {
+          __typename
+          items {
+            __typename
+            roomId
+            players {
+              __typename
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (roomId) {
+      gqlAPIServiceArguments.roomId = roomId;
+    }
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    if (sortDirection) {
+      gqlAPIServiceArguments.sortDirection = sortDirection;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <ListRoomsQuery>response.data.listRooms;
+  }
+  async GetPlayer(id: string): Promise<GetPlayerQuery> {
+    const statement = `query GetPlayer($id: ID!) {
+        getPlayer(id: $id) {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      id
+    };
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <GetPlayerQuery>response.data.getPlayer;
+  }
+  async ListPlayers(
+    filter?: ModelPlayerFilterInput,
+    limit?: number,
+    nextToken?: string
+  ): Promise<ListPlayersQuery> {
+    const statement = `query ListPlayers($filter: ModelPlayerFilterInput, $limit: Int, $nextToken: String) {
+        listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            roomId
+            playerId
+            name
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <ListPlayersQuery>response.data.listPlayers;
+  }
   OnCreateCardListener: Observable<OnCreateCardSubscription> = API.graphql(
     graphqlOperation(
       `subscription OnCreateCard {
@@ -456,4 +1086,130 @@ export class APIService {
       }`
     )
   ) as Observable<OnDeleteCardSubscription>;
+
+  OnCreateRoomListener: Observable<OnCreateRoomSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnCreateRoom {
+        onCreateRoom {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnCreateRoomSubscription>;
+
+  OnUpdateRoomListener: Observable<OnUpdateRoomSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnUpdateRoom {
+        onUpdateRoom {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnUpdateRoomSubscription>;
+
+  OnDeleteRoomListener: Observable<OnDeleteRoomSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnDeleteRoom {
+        onDeleteRoom {
+          __typename
+          roomId
+          players {
+            __typename
+            items {
+              __typename
+              id
+              roomId
+              playerId
+              name
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnDeleteRoomSubscription>;
+
+  OnCreatePlayerListener: Observable<OnCreatePlayerSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnCreatePlayer {
+        onCreatePlayer {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnCreatePlayerSubscription>;
+
+  OnUpdatePlayerListener: Observable<OnUpdatePlayerSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnUpdatePlayer {
+        onUpdatePlayer {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnUpdatePlayerSubscription>;
+
+  OnDeletePlayerListener: Observable<OnDeletePlayerSubscription> = API.graphql(
+    graphqlOperation(
+      `subscription OnDeletePlayer {
+        onDeletePlayer {
+          __typename
+          id
+          roomId
+          playerId
+          name
+          createdAt
+          updatedAt
+        }
+      }`
+    )
+  ) as Observable<OnDeletePlayerSubscription>;
 }

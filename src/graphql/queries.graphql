@@ -42,3 +42,73 @@ query ListCards(
     nextToken
   }
 }
+query GetRoom($roomId: ID!) {
+  getRoom(roomId: $roomId) {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+query ListRooms(
+  $roomId: ID
+  $filter: ModelRoomFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listRooms(
+    roomId: $roomId
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      roomId
+      players {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetPlayer($id: ID!) {
+  getPlayer(id: $id) {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}
+query ListPlayers(
+  $filter: ModelPlayerFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPlayers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      roomId
+      playerId
+      name
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

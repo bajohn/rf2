@@ -1,20 +1,4 @@
-<div class="page-container" (mousemove)="renderDrag($event)"   (mouseup)="mouseUp()" >
-  {{ctr}}
-  <div 
-  draggable="false" 
-  [style.position]="'absolute'" 
-  [style.transform-origin]="'100% 0'" 
-  [style.transform]="getTransform()"
-  [style.height]="cardHeight + 'px'"
-  [style.width]="cardWidth + 'px'"
-  [class.card-overlay]="true"
-  [class.card-inactive]="!cardBeingDragged"
-  (mousedown)="mouseDown()"
 
-    >
-  
-  
-    <!-- <img [src]="getFrontImgSrc()"> -->
-  </div>
-</div>
+<router-outlet>
 
+</router-outlet>
