@@ -6,6 +6,7 @@ RF, take two
 - Built on AWS Amplify's Angular integration
 
 ## TODO
+- Get all cards to work at the same time- currently having a z-index stacking problem.
 - Get `@connection` to work to map Player elements of a Room in graphql schema.
 
 ## DONE
