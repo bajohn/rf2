@@ -8,3 +8,34 @@
 <app-card *ngFor="let cardValue of cardValues" [cardValue]="cardValue" [roomId]="roomId" [playerId]="playerId">
 
 </app-card>
+
+
+<div class="page-container" 
+(mousemove)="mouseMove($event)"
+
+(mouseup)="mouseUp()"
+>
+<ng-container *ngFor="let cardValue of cardValues">
+    <div 
+  
+    draggable="false" 
+    [style.position]="'absolute'" 
+    [style.transform-origin]="'100% 0'" 
+    [style.transform]="getTransform(cardValue)"
+    [style.height]="getHeight()"
+    [style.width]="getWidth()"
+    [style.z-index]="getZ(cardValue)"
+    [class.card-overlay]="true"
+    [class.card-inactive]="!cardBeingDragged(cardValue)"
+    (mousedown)="mouseDown(cardValue)"
+  
+      >
+    
+    
+      <!-- <img  draggable="false"  [src]="getFrontImgSrc(cardValue)"> -->
+    </div>
+</ng-container>
+
+
+
+</div>
