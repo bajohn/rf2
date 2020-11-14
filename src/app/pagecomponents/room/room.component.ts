@@ -51,7 +51,14 @@ export class RoomComponent implements OnInit {
         curCard.cardY = cardUpdate.y;
         curCard.cardZ = cardUpdate.z;
       }
-    })
+    });
+    this.initRoom();
+   
+  }
+
+  async initRoom(){
+    const resp = await this.api.GetRoom(this.roomId);
+    console.log(resp);
   }
 
   async listCards() {
@@ -71,7 +78,6 @@ export class RoomComponent implements OnInit {
       }
       this.cards[card.cardValue] = cardObjToPush;
     }
-    console.log(this.cards);
 
   }
 
