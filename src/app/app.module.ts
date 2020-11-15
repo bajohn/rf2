@@ -6,20 +6,29 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pagecomponents/home/home.component';
 import { RoomComponent } from './pagecomponents/room/room.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PlayerNameDialogComponent } from './subcomponents/player-name-dialog/player-name-dialog.component';
+import { FormsModule } from '@angular/forms';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     RoomComponent,
+    PlayerNameDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatInputModule
 
   ],
   providers: [],

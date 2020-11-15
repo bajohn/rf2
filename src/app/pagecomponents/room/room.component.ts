@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
 import { APIService, OnUpdateCardSubscription, UpdateCardInput } from 'src/app/API.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PlayerNameDialogComponent } from 'src/app/subcomponents/player-name-dialog/player-name-dialog.component';
+import { ModalService } from 'src/app/services/modal.service';
 
 interface localCard {
   cardValue: string
@@ -32,7 +35,9 @@ export class RoomComponent implements OnInit {
   private readonly updateMinMs = 100;
   constructor(
     private router: Router,
-    private api: APIService
+    private api: APIService,
+    private dialog: MatDialog,
+    private modalService: ModalService,
   ) {
     const roomId = this.router.url.substring(1);
     this.roomId = roomId;
@@ -40,7 +45,7 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.initRoom();
     this.listCards();
     this.api.OnUpdateCardListener.subscribe((event: any) => {
       // Unsure why we have to dig value.data.
@@ -52,13 +57,27 @@ export class RoomComponent implements OnInit {
         curCard.cardZ = cardUpdate.z;
       }
     });
-    this.initRoom();
-   
+
   }
 
-  async initRoom(){
+  async initRoom() {
+    const player = await this.api.GetPlayer(this.playerId);
+    console.log(player);
+    if (player === null) {
+      this.playerNameDialog();
+
+    }
     const resp = await this.api.GetRoom(this.roomId);
     console.log(resp);
+  }
+
+  playerNameDialog() {
+
+    const dialogRef = this.dialog.open(PlayerNameDialogComponent, {
+      width: '250px',
+      data: { playerId: this.playerId, roomId: this.roomId }
+    });
+    this.modalService.setModalRef(dialogRef);
   }
 
   async listCards() {
@@ -164,7 +183,7 @@ export class RoomComponent implements OnInit {
     return this.cards[cardValue].cardBeingDragged;
   }
 
-  getZ(cardValue){
+  getZ(cardValue) {
     return this.cards[cardValue].cardZ;
   }
 
