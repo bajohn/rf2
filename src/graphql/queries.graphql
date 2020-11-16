@@ -112,3 +112,30 @@ query ListPlayers(
     nextToken
   }
 }
+query PlayerbyRoom(
+  $roomId: ID
+  $playerId: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelPlayerFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  playerbyRoom(
+    roomId: $roomId
+    playerId: $playerId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      roomId
+      playerId
+      name
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

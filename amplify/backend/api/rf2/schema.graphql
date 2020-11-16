@@ -35,7 +35,7 @@ type Player @model
       { allow: public, operations: [create, update, delete, read] }
     ]
   )
-  @key(name: "playerByRoom", fields: ["roomId", "playerId"])
+  @key(name: "playerByRoom", fields: ["roomId", "playerId"], queryField: "playerbyRoom")
   {
   roomId: ID!
   playerId: ID!

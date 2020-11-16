@@ -58,17 +58,26 @@ export class RoomComponent implements OnInit {
       }
     });
 
+    this.api.OnUpdateRoomListener.subscribe((event: any) => {
+      console.log(event);
+    });
+
   }
 
   async initRoom() {
-    const player = await this.api.GetPlayer(this.playerId);
-    console.log(player);
-    if (player === null) {
+
+    const resp = await this.api.PlayerbyRoom(this.roomId, {
+      eq: this.playerId
+    });
+
+    console.log(resp);
+    if (resp.items.length === 0) {
       this.playerNameDialog();
 
+    } else {
+      const player = resp.items[0];
+      console.log(player);
     }
-    const resp = await this.api.GetRoom(this.roomId);
-    console.log(resp);
   }
 
   playerNameDialog() {

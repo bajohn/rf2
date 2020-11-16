@@ -421,6 +421,20 @@ export type ListPlayersQuery = {
   nextToken: string | null;
 };
 
+export type PlayerbyRoomQuery = {
+  __typename: "ModelPlayerConnection";
+  items: Array<{
+    __typename: "Player";
+    id: string;
+    roomId: string;
+    playerId: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+  } | null> | null;
+  nextToken: string | null;
+};
+
 export type OnCreateCardSubscription = {
   __typename: "Card";
   cardValue: string;
@@ -1029,6 +1043,53 @@ export class APIService {
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
     return <ListPlayersQuery>response.data.listPlayers;
+  }
+  async PlayerbyRoom(
+    roomId?: string,
+    playerId?: ModelIDKeyConditionInput,
+    sortDirection?: ModelSortDirection,
+    filter?: ModelPlayerFilterInput,
+    limit?: number,
+    nextToken?: string
+  ): Promise<PlayerbyRoomQuery> {
+    const statement = `query PlayerbyRoom($roomId: ID, $playerId: ModelIDKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelPlayerFilterInput, $limit: Int, $nextToken: String) {
+        playerbyRoom(roomId: $roomId, playerId: $playerId, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            roomId
+            playerId
+            name
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (roomId) {
+      gqlAPIServiceArguments.roomId = roomId;
+    }
+    if (playerId) {
+      gqlAPIServiceArguments.playerId = playerId;
+    }
+    if (sortDirection) {
+      gqlAPIServiceArguments.sortDirection = sortDirection;
+    }
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <PlayerbyRoomQuery>response.data.playerbyRoom;
   }
   OnCreateCardListener: Observable<OnCreateCardSubscription> = API.graphql(
     graphqlOperation(

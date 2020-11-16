@@ -14,7 +14,7 @@ export class PlayerNameDialogComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private api: APIService,
-    @Inject(MAT_DIALOG_DATA) public data: { name: string }
+    @Inject(MAT_DIALOG_DATA) public data: { playerId: string, roomId: string }
   ) {
 
   }
@@ -38,11 +38,11 @@ export class PlayerNameDialogComponent implements OnInit {
 
   completeModal() {
     this.modalService.getModalRef().close();
-    // this.api.UpdatePlayer({
-    //   'name': this.playerName,
-    //   'roomId'
-    // })
-    console.log()
+    this.api.CreatePlayer({
+      name: this.playerName,
+      roomId: this.data.roomId,
+      playerId: this.data.playerId
+    });
   }
 
   canClose() {
