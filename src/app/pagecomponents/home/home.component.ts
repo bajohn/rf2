@@ -20,11 +20,11 @@ export class HomeComponent implements OnInit {
   ): void {
   }
 
-  clickCreate() {
+  async clickCreate() {
 
     const roomId = uuidv4().split('-')[0];
 
-    this.api.CreateRoom({
+    await this.api.CreateRoom({
       roomId: roomId
     });
     this.router.navigateByUrl(roomId);

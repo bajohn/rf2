@@ -65,7 +65,8 @@ export class RoomComponent implements OnInit {
   }
 
   async initRoom() {
-
+    const room = await this.api.GetRoom(this.roomId);
+    console.log(room);
     const resp = await this.api.PlayerbyRoom(this.roomId, {
       eq: this.playerId
     });
@@ -90,9 +91,10 @@ export class RoomComponent implements OnInit {
   }
 
   async listCards() {
-    const resp = await this.api.ListCards(this.roomId);
+    const resp = await this.api.ListCards();
+    console.log(resp);
     this.cardValues = resp.items.map(el => el.cardValue);
-
+    
     for (const card of resp.items) {
       const cardObjToPush: localCard = {
         cardValue: card.cardValue,
@@ -122,7 +124,6 @@ export class RoomComponent implements OnInit {
   }
 
   mouseMove(event: MouseEvent) {
-    //const curCard = this.cards[cardValue];
     for (const cardValue of this.cardValues) {
       const curCard = this.cards[cardValue];
       if (curCard.cardBeingDragged) {
@@ -149,6 +150,7 @@ export class RoomComponent implements OnInit {
       y: curCard.cardY,
       lastOwner: this.playerId
     }
+    console.log(cardUpdate);
     this.api.UpdateCard(cardUpdate);
 
   }
