@@ -1,0 +1,124 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateCard {
+  onCreateCard {
+    cardValue
+    roomId
+    x
+    y
+    z
+    faceUp
+    lastOwner
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateCard {
+  onUpdateCard {
+    cardValue
+    roomId
+    x
+    y
+    z
+    faceUp
+    lastOwner
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteCard {
+  onDeleteCard {
+    cardValue
+    roomId
+    x
+    y
+    z
+    faceUp
+    lastOwner
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateRoom {
+  onCreateRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateRoom {
+  onUpdateRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteRoom {
+  onDeleteRoom {
+    roomId
+    players {
+      items {
+        id
+        roomId
+        playerId
+        name
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreatePlayer {
+  onCreatePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdatePlayer {
+  onUpdatePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeletePlayer {
+  onDeletePlayer {
+    id
+    roomId
+    playerId
+    name
+    createdAt
+    updatedAt
+  }
+}

@@ -6,9 +6,8 @@ import API, { graphqlOperation, GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
 
 export type CreateCardInput = {
-  id?: string | null;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -17,8 +16,6 @@ export type CreateCardInput = {
 };
 
 export type ModelCardConditionInput = {
-  roomId?: ModelIDInput | null;
-  cardValue?: ModelIDInput | null;
   x?: ModelIntInput | null;
   y?: ModelIntInput | null;
   z?: ModelIntInput | null;
@@ -27,6 +24,38 @@ export type ModelCardConditionInput = {
   and?: Array<ModelCardConditionInput | null> | null;
   or?: Array<ModelCardConditionInput | null> | null;
   not?: ModelCardConditionInput | null;
+};
+
+export type ModelIntInput = {
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+};
+
+export enum ModelAttributeTypes {
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+  _null = "_null"
+}
+
+export type ModelBooleanInput = {
+  ne?: boolean | null;
+  eq?: boolean | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
 };
 
 export type ModelIDInput = {
@@ -45,19 +74,6 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null;
 };
 
-export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null"
-}
-
 export type ModelSizeInput = {
   ne?: number | null;
   eq?: number | null;
@@ -68,28 +84,9 @@ export type ModelSizeInput = {
   between?: Array<number | null> | null;
 };
 
-export type ModelIntInput = {
-  ne?: number | null;
-  eq?: number | null;
-  le?: number | null;
-  lt?: number | null;
-  ge?: number | null;
-  gt?: number | null;
-  between?: Array<number | null> | null;
-  attributeExists?: boolean | null;
-  attributeType?: ModelAttributeTypes | null;
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null;
-  eq?: boolean | null;
-  attributeExists?: boolean | null;
-  attributeType?: ModelAttributeTypes | null;
-};
-
 export type UpdateCardInput = {
-  roomId?: string | null;
-  cardValue?: string | null;
+  cardValue: string;
+  roomId: string;
   x?: number | null;
   y?: number | null;
   z?: number | null;
@@ -98,7 +95,8 @@ export type UpdateCardInput = {
 };
 
 export type DeleteCardInput = {
-  id?: string | null;
+  roomId: string;
+  cardValue: string;
 };
 
 export type CreateRoomInput = {
@@ -161,40 +159,6 @@ export type DeletePlayerInput = {
   id?: string | null;
 };
 
-export type ModelCardFilterInput = {
-  roomId?: ModelIDInput | null;
-  cardValue?: ModelIDInput | null;
-  x?: ModelIntInput | null;
-  y?: ModelIntInput | null;
-  z?: ModelIntInput | null;
-  faceUp?: ModelBooleanInput | null;
-  lastOwner?: ModelIDInput | null;
-  and?: Array<ModelCardFilterInput | null> | null;
-  or?: Array<ModelCardFilterInput | null> | null;
-  not?: ModelCardFilterInput | null;
-};
-
-export type ModelRoomFilterInput = {
-  roomId?: ModelIDInput | null;
-  and?: Array<ModelRoomFilterInput | null> | null;
-  or?: Array<ModelRoomFilterInput | null> | null;
-  not?: ModelRoomFilterInput | null;
-};
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC"
-}
-
-export type ModelPlayerFilterInput = {
-  roomId?: ModelIDInput | null;
-  playerId?: ModelIDInput | null;
-  name?: ModelStringInput | null;
-  and?: Array<ModelPlayerFilterInput | null> | null;
-  or?: Array<ModelPlayerFilterInput | null> | null;
-  not?: ModelPlayerFilterInput | null;
-};
-
 export type ModelIDKeyConditionInput = {
   eq?: string | null;
   le?: string | null;
@@ -205,11 +169,44 @@ export type ModelIDKeyConditionInput = {
   beginsWith?: string | null;
 };
 
+export type ModelCardFilterInput = {
+  cardValue?: ModelIDInput | null;
+  roomId?: ModelIDInput | null;
+  x?: ModelIntInput | null;
+  y?: ModelIntInput | null;
+  z?: ModelIntInput | null;
+  faceUp?: ModelBooleanInput | null;
+  lastOwner?: ModelIDInput | null;
+  and?: Array<ModelCardFilterInput | null> | null;
+  or?: Array<ModelCardFilterInput | null> | null;
+  not?: ModelCardFilterInput | null;
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC"
+}
+
+export type ModelRoomFilterInput = {
+  roomId?: ModelIDInput | null;
+  and?: Array<ModelRoomFilterInput | null> | null;
+  or?: Array<ModelRoomFilterInput | null> | null;
+  not?: ModelRoomFilterInput | null;
+};
+
+export type ModelPlayerFilterInput = {
+  roomId?: ModelIDInput | null;
+  playerId?: ModelIDInput | null;
+  name?: ModelStringInput | null;
+  and?: Array<ModelPlayerFilterInput | null> | null;
+  or?: Array<ModelPlayerFilterInput | null> | null;
+  not?: ModelPlayerFilterInput | null;
+};
+
 export type CreateCardMutation = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -221,9 +218,8 @@ export type CreateCardMutation = {
 
 export type UpdateCardMutation = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -235,9 +231,8 @@ export type UpdateCardMutation = {
 
 export type DeleteCardMutation = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -263,23 +258,6 @@ export type CreateRoomMutation = {
     } | null> | null;
     nextToken: string | null;
   } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -300,23 +278,6 @@ export type UpdateRoomMutation = {
     } | null> | null;
     nextToken: string | null;
   } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -332,23 +293,6 @@ export type DeleteRoomMutation = {
       roomId: string;
       playerId: string;
       name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -390,9 +334,8 @@ export type DeletePlayerMutation = {
 
 export type GetCardQuery = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -406,9 +349,8 @@ export type ListCardsQuery = {
   __typename: "ModelCardConnection";
   items: Array<{
     __typename: "Card";
-    id: string;
-    roomId: string;
     cardValue: string;
+    roomId: string;
     x: number;
     y: number;
     z: number;
@@ -436,23 +378,6 @@ export type GetRoomQuery = {
     } | null> | null;
     nextToken: string | null;
   } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -464,10 +389,6 @@ export type ListRoomsQuery = {
     roomId: string;
     players: {
       __typename: "ModelPlayerConnection";
-      nextToken: string | null;
-    } | null;
-    cards: {
-      __typename: "ModelCardConnection";
       nextToken: string | null;
     } | null;
     createdAt: string;
@@ -500,42 +421,6 @@ export type ListPlayersQuery = {
   nextToken: string | null;
 };
 
-export type CardByRoomQuery = {
-  __typename: "ModelCardConnection";
-  items: Array<{
-    __typename: "Card";
-    id: string;
-    roomId: string;
-    cardValue: string;
-    x: number;
-    y: number;
-    z: number;
-    faceUp: boolean;
-    lastOwner: string;
-    createdAt: string;
-    updatedAt: string;
-  } | null> | null;
-  nextToken: string | null;
-};
-
-export type UniqueCardQuery = {
-  __typename: "ModelCardConnection";
-  items: Array<{
-    __typename: "Card";
-    id: string;
-    roomId: string;
-    cardValue: string;
-    x: number;
-    y: number;
-    z: number;
-    faceUp: boolean;
-    lastOwner: string;
-    createdAt: string;
-    updatedAt: string;
-  } | null> | null;
-  nextToken: string | null;
-};
-
 export type PlayerbyRoomQuery = {
   __typename: "ModelPlayerConnection";
   items: Array<{
@@ -552,9 +437,8 @@ export type PlayerbyRoomQuery = {
 
 export type OnCreateCardSubscription = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -566,9 +450,8 @@ export type OnCreateCardSubscription = {
 
 export type OnUpdateCardSubscription = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -580,9 +463,8 @@ export type OnUpdateCardSubscription = {
 
 export type OnDeleteCardSubscription = {
   __typename: "Card";
-  id: string;
-  roomId: string;
   cardValue: string;
+  roomId: string;
   x: number;
   y: number;
   z: number;
@@ -608,23 +490,6 @@ export type OnCreateRoomSubscription = {
     } | null> | null;
     nextToken: string | null;
   } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -645,23 +510,6 @@ export type OnUpdateRoomSubscription = {
     } | null> | null;
     nextToken: string | null;
   } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -677,23 +525,6 @@ export type OnDeleteRoomSubscription = {
       roomId: string;
       playerId: string;
       name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
-    nextToken: string | null;
-  } | null;
-  cards: {
-    __typename: "ModelCardConnection";
-    items: Array<{
-      __typename: "Card";
-      id: string;
-      roomId: string;
-      cardValue: string;
-      x: number;
-      y: number;
-      z: number;
-      faceUp: boolean;
-      lastOwner: string;
       createdAt: string;
       updatedAt: string;
     } | null> | null;
@@ -744,9 +575,8 @@ export class APIService {
     const statement = `mutation CreateCard($input: CreateCardInput!, $condition: ModelCardConditionInput) {
         createCard(input: $input, condition: $condition) {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -774,9 +604,8 @@ export class APIService {
     const statement = `mutation UpdateCard($input: UpdateCardInput!, $condition: ModelCardConditionInput) {
         updateCard(input: $input, condition: $condition) {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -804,9 +633,8 @@ export class APIService {
     const statement = `mutation DeleteCard($input: DeleteCardInput!, $condition: ModelCardConditionInput) {
         deleteCard(input: $input, condition: $condition) {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -848,23 +676,6 @@ export class APIService {
             }
             nextToken
           }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
           createdAt
           updatedAt
         }
@@ -901,23 +712,6 @@ export class APIService {
             }
             nextToken
           }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
           createdAt
           updatedAt
         }
@@ -949,23 +743,6 @@ export class APIService {
               roomId
               playerId
               name
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
               createdAt
               updatedAt
             }
@@ -1064,13 +841,12 @@ export class APIService {
     )) as any;
     return <DeletePlayerMutation>response.data.deletePlayer;
   }
-  async GetCard(id: string): Promise<GetCardQuery> {
-    const statement = `query GetCard($id: ID!) {
-        getCard(id: $id) {
+  async GetCard(roomId: string, cardValue: string): Promise<GetCardQuery> {
+    const statement = `query GetCard($roomId: ID!, $cardValue: ID!) {
+        getCard(roomId: $roomId, cardValue: $cardValue) {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -1081,7 +857,8 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {
-      id
+      roomId,
+      cardValue
     };
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -1089,18 +866,20 @@ export class APIService {
     return <GetCardQuery>response.data.getCard;
   }
   async ListCards(
+    roomId?: string,
+    cardValue?: ModelIDKeyConditionInput,
     filter?: ModelCardFilterInput,
     limit?: number,
-    nextToken?: string
+    nextToken?: string,
+    sortDirection?: ModelSortDirection
   ): Promise<ListCardsQuery> {
-    const statement = `query ListCards($filter: ModelCardFilterInput, $limit: Int, $nextToken: String) {
-        listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    const statement = `query ListCards($roomId: ID, $cardValue: ModelIDKeyConditionInput, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String, $sortDirection: ModelSortDirection) {
+        listCards(roomId: $roomId, cardValue: $cardValue, filter: $filter, limit: $limit, nextToken: $nextToken, sortDirection: $sortDirection) {
           __typename
           items {
             __typename
-            id
-            roomId
             cardValue
+            roomId
             x
             y
             z
@@ -1113,6 +892,12 @@ export class APIService {
         }
       }`;
     const gqlAPIServiceArguments: any = {};
+    if (roomId) {
+      gqlAPIServiceArguments.roomId = roomId;
+    }
+    if (cardValue) {
+      gqlAPIServiceArguments.cardValue = cardValue;
+    }
     if (filter) {
       gqlAPIServiceArguments.filter = filter;
     }
@@ -1121,6 +906,9 @@ export class APIService {
     }
     if (nextToken) {
       gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    if (sortDirection) {
+      gqlAPIServiceArguments.sortDirection = sortDirection;
     }
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
@@ -1140,23 +928,6 @@ export class APIService {
               roomId
               playerId
               name
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
               createdAt
               updatedAt
             }
@@ -1188,10 +959,6 @@ export class APIService {
             __typename
             roomId
             players {
-              __typename
-              nextToken
-            }
-            cards {
               __typename
               nextToken
             }
@@ -1277,104 +1044,6 @@ export class APIService {
     )) as any;
     return <ListPlayersQuery>response.data.listPlayers;
   }
-  async CardByRoom(
-    roomId?: string,
-    sortDirection?: ModelSortDirection,
-    filter?: ModelCardFilterInput,
-    limit?: number,
-    nextToken?: string
-  ): Promise<CardByRoomQuery> {
-    const statement = `query CardByRoom($roomId: ID, $sortDirection: ModelSortDirection, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String) {
-        cardByRoom(roomId: $roomId, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {
-          __typename
-          items {
-            __typename
-            id
-            roomId
-            cardValue
-            x
-            y
-            z
-            faceUp
-            lastOwner
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {};
-    if (roomId) {
-      gqlAPIServiceArguments.roomId = roomId;
-    }
-    if (sortDirection) {
-      gqlAPIServiceArguments.sortDirection = sortDirection;
-    }
-    if (filter) {
-      gqlAPIServiceArguments.filter = filter;
-    }
-    if (limit) {
-      gqlAPIServiceArguments.limit = limit;
-    }
-    if (nextToken) {
-      gqlAPIServiceArguments.nextToken = nextToken;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <CardByRoomQuery>response.data.cardByRoom;
-  }
-  async UniqueCard(
-    roomId?: string,
-    cardValue?: ModelIDKeyConditionInput,
-    sortDirection?: ModelSortDirection,
-    filter?: ModelCardFilterInput,
-    limit?: number,
-    nextToken?: string
-  ): Promise<UniqueCardQuery> {
-    const statement = `query UniqueCard($roomId: ID, $cardValue: ModelIDKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelCardFilterInput, $limit: Int, $nextToken: String) {
-        uniqueCard(roomId: $roomId, cardValue: $cardValue, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {
-          __typename
-          items {
-            __typename
-            id
-            roomId
-            cardValue
-            x
-            y
-            z
-            faceUp
-            lastOwner
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {};
-    if (roomId) {
-      gqlAPIServiceArguments.roomId = roomId;
-    }
-    if (cardValue) {
-      gqlAPIServiceArguments.cardValue = cardValue;
-    }
-    if (sortDirection) {
-      gqlAPIServiceArguments.sortDirection = sortDirection;
-    }
-    if (filter) {
-      gqlAPIServiceArguments.filter = filter;
-    }
-    if (limit) {
-      gqlAPIServiceArguments.limit = limit;
-    }
-    if (nextToken) {
-      gqlAPIServiceArguments.nextToken = nextToken;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <UniqueCardQuery>response.data.uniqueCard;
-  }
   async PlayerbyRoom(
     roomId?: string,
     playerId?: ModelIDKeyConditionInput,
@@ -1427,9 +1096,8 @@ export class APIService {
       `subscription OnCreateCard {
         onCreateCard {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -1447,9 +1115,8 @@ export class APIService {
       `subscription OnUpdateCard {
         onUpdateCard {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -1467,9 +1134,8 @@ export class APIService {
       `subscription OnDeleteCard {
         onDeleteCard {
           __typename
-          id
-          roomId
           cardValue
+          roomId
           x
           y
           z
@@ -1501,23 +1167,6 @@ export class APIService {
             }
             nextToken
           }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
           createdAt
           updatedAt
         }
@@ -1544,23 +1193,6 @@ export class APIService {
             }
             nextToken
           }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
           createdAt
           updatedAt
         }
@@ -1582,23 +1214,6 @@ export class APIService {
               roomId
               playerId
               name
-              createdAt
-              updatedAt
-            }
-            nextToken
-          }
-          cards {
-            __typename
-            items {
-              __typename
-              id
-              roomId
-              cardValue
-              x
-              y
-              z
-              faceUp
-              lastOwner
               createdAt
               updatedAt
             }

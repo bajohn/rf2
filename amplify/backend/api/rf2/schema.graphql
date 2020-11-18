@@ -6,12 +6,10 @@ type Card @model
       { allow: public, operations: [create, update, delete, read] }
     ]
   )
-  @key( fields: ["roomId", "cardValue"])
-  @key(name: "cardByRoom", fields: ["roomId"], queryField: "cardByRoom")
-  @key(name: "uniqueCard", fields: ["roomId", "cardValue"], queryField: "uniqueCard")
+  @key(fields: ["roomId", "cardValue"])
   {
-  roomId: ID!
   cardValue: ID!
+  roomId: ID!
   x: Int!
   y: Int! 
   z: Int!
@@ -29,7 +27,6 @@ type Room @model
   {
   roomId: ID!
   players: [Player] @connection(keyName: "playerByRoom", fields: ["roomId"])
-  cards: [Card] @connection(keyName: "cardByRoom", fields: ["roomId"])
 }
 
 type Player @model
