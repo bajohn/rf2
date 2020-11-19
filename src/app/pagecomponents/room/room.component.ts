@@ -67,6 +67,7 @@ export class RoomComponent implements OnInit {
   async initRoom() {
     const room = await this.api.GetRoom(this.roomId);
     console.log(room);
+
     const resp = await this.api.PlayerbyRoom(this.roomId, {
       eq: this.playerId
     });
@@ -94,7 +95,7 @@ export class RoomComponent implements OnInit {
     const resp = await this.api.ListCards();
     console.log(resp);
     this.cardValues = resp.items.map(el => el.cardValue);
-    
+
     for (const card of resp.items) {
       const cardObjToPush: localCard = {
         cardValue: card.cardValue,

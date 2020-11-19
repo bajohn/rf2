@@ -46,14 +46,6 @@ query GetRoom($roomId: ID!) {
   getRoom(roomId: $roomId) {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
@@ -76,9 +68,6 @@ query ListRooms(
   ) {
     items {
       roomId
-      players {
-        nextToken
-      }
       createdAt
       updatedAt
     }

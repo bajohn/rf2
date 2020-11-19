@@ -7,6 +7,8 @@ type Card @model
     ]
   )
   @key(fields: ["roomId", "cardValue"])
+  # @key(name: "cardComposite", fields: ["roomId", "cardValue"])
+  # @key(name: "cardByRoom", fields: ["roomId"])
   {
   cardValue: ID!
   roomId: ID!
@@ -27,7 +29,15 @@ type Room @model
   {
   roomId: ID!
   players: [Player] @connection(keyName: "playerByRoom", fields: ["roomId"])
+  # cards: [Card] @connection(keyName: "cardByRoom", fields: ["roomId"])
 }
+
+
+type RoomUpdates {
+  onCardMove: Card @aws_subscribe(mutations: ["updateCard"])
+}
+
+
 
 type Player @model
  @auth (

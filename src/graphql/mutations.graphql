@@ -54,14 +54,6 @@ mutation CreateRoom(
   createRoom(input: $input, condition: $condition) {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
@@ -75,14 +67,6 @@ mutation UpdateRoom(
   updateRoom(input: $input, condition: $condition) {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
@@ -96,14 +80,6 @@ mutation DeleteRoom(
   deleteRoom(input: $input, condition: $condition) {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt

@@ -247,15 +247,6 @@ export type CreateRoomMutation = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -267,15 +258,6 @@ export type UpdateRoomMutation = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -287,15 +269,6 @@ export type DeleteRoomMutation = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -367,15 +340,6 @@ export type GetRoomQuery = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -387,10 +351,6 @@ export type ListRoomsQuery = {
   items: Array<{
     __typename: "Room";
     roomId: string;
-    players: {
-      __typename: "ModelPlayerConnection";
-      nextToken: string | null;
-    } | null;
     createdAt: string;
     updatedAt: string;
   } | null> | null;
@@ -479,15 +439,6 @@ export type OnCreateRoomSubscription = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -499,15 +450,6 @@ export type OnUpdateRoomSubscription = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -519,15 +461,6 @@ export type OnDeleteRoomSubscription = {
   roomId: string;
   players: {
     __typename: "ModelPlayerConnection";
-    items: Array<{
-      __typename: "Player";
-      id: string;
-      roomId: string;
-      playerId: string;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-    } | null> | null;
     nextToken: string | null;
   } | null;
   createdAt: string;
@@ -665,15 +598,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -701,15 +625,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -737,15 +652,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -922,15 +828,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -958,10 +855,6 @@ export class APIService {
           items {
             __typename
             roomId
-            players {
-              __typename
-              nextToken
-            }
             createdAt
             updatedAt
           }
@@ -1156,15 +1049,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -1182,15 +1066,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt
@@ -1208,15 +1083,6 @@ export class APIService {
           roomId
           players {
             __typename
-            items {
-              __typename
-              id
-              roomId
-              playerId
-              name
-              createdAt
-              updatedAt
-            }
             nextToken
           }
           createdAt

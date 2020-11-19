@@ -42,14 +42,6 @@ subscription OnCreateRoom {
   onCreateRoom {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
@@ -60,14 +52,6 @@ subscription OnUpdateRoom {
   onUpdateRoom {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
@@ -78,14 +62,6 @@ subscription OnDeleteRoom {
   onDeleteRoom {
     roomId
     players {
-      items {
-        id
-        roomId
-        playerId
-        name
-        createdAt
-        updatedAt
-      }
       nextToken
     }
     createdAt
