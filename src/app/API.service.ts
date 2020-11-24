@@ -395,33 +395,7 @@ export type PlayerbyRoomQuery = {
   nextToken: string | null;
 };
 
-export type OnCreateCardSubscription = {
-  __typename: "Card";
-  cardValue: string;
-  roomId: string;
-  x: number;
-  y: number;
-  z: number;
-  faceUp: boolean;
-  lastOwner: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type OnUpdateCardSubscription = {
-  __typename: "Card";
-  cardValue: string;
-  roomId: string;
-  x: number;
-  y: number;
-  z: number;
-  faceUp: boolean;
-  lastOwner: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type OnDeleteCardSubscription = {
+export type OnArfSubscription = {
   __typename: "Card";
   cardValue: string;
   roomId: string;
@@ -984,10 +958,10 @@ export class APIService {
     )) as any;
     return <PlayerbyRoomQuery>response.data.playerbyRoom;
   }
-  OnCreateCardListener: Observable<OnCreateCardSubscription> = API.graphql(
+  OnArfListener: Observable<OnArfSubscription> = API.graphql(
     graphqlOperation(
-      `subscription OnCreateCard {
-        onCreateCard {
+      `subscription OnArf($roomId: String, $cardValue: String) {
+        onArf(roomId: $roomId, cardValue: $cardValue) {
           __typename
           cardValue
           roomId
@@ -1001,45 +975,7 @@ export class APIService {
         }
       }`
     )
-  ) as Observable<OnCreateCardSubscription>;
-
-  OnUpdateCardListener: Observable<OnUpdateCardSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnUpdateCard {
-        onUpdateCard {
-          __typename
-          cardValue
-          roomId
-          x
-          y
-          z
-          faceUp
-          lastOwner
-          createdAt
-          updatedAt
-        }
-      }`
-    )
-  ) as Observable<OnUpdateCardSubscription>;
-
-  OnDeleteCardListener: Observable<OnDeleteCardSubscription> = API.graphql(
-    graphqlOperation(
-      `subscription OnDeleteCard {
-        onDeleteCard {
-          __typename
-          cardValue
-          roomId
-          x
-          y
-          z
-          faceUp
-          lastOwner
-          createdAt
-          updatedAt
-        }
-      }`
-    )
-  ) as Observable<OnDeleteCardSubscription>;
+  ) as Observable<OnArfSubscription>;
 
   OnCreateRoomListener: Observable<OnCreateRoomSubscription> = API.graphql(
     graphqlOperation(

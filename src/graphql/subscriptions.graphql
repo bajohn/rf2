@@ -1,32 +1,6 @@
 # this is an auto generated file. This will be overwritten
-subscription OnCreateCard {
-  onCreateCard {
-    cardValue
-    roomId
-    x
-    y
-    z
-    faceUp
-    lastOwner
-    createdAt
-    updatedAt
-  }
-}
-subscription OnUpdateCard {
-  onUpdateCard {
-    cardValue
-    roomId
-    x
-    y
-    z
-    faceUp
-    lastOwner
-    createdAt
-    updatedAt
-  }
-}
-subscription OnDeleteCard {
-  onDeleteCard {
+subscription OnArf($roomId: String, $cardValue: String) {
+  onArf(roomId: $roomId, cardValue: $cardValue) {
     cardValue
     roomId
     x

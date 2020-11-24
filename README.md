@@ -6,7 +6,9 @@ RF, take two
 - Built on AWS Amplify's Angular integration
 
 ## TODO
-
+Figure out parameterized subscriptions!
+https://medium.com/swlh/how-to-really-use-aws-amplify-fcb4c5ed769c
+https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## DONE

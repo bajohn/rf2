@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
-import { APIService, OnUpdateCardSubscription, UpdateCardInput } from 'src/app/API.service';
+import { APIService, UpdateCardInput } from 'src/app/API.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PlayerNameDialogComponent } from 'src/app/subcomponents/player-name-dialog/player-name-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
 
+import { API, graphqlOperation } from 'aws-amplify'
+import { query } from '@angular/animations';
+import Observable from 'zen-observable-ts';
+// import {} from '../../../graphql'
 interface localCard {
   cardValue: string
   cardX: number
@@ -47,38 +51,33 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
     this.initRoom();
     this.listCards();
-    this.api.OnUpdateCardListener.subscribe((event: any) => {
-      // Unsure why we have to dig value.data.
-      const cardUpdate: OnUpdateCardSubscription = event.value.data.onUpdateCard;
-      const curCard = this.cards[cardUpdate.cardValue];
-      if (!curCard.cardBeingDragged && cardUpdate.lastOwner !== this.playerId) {
-        curCard.cardX = cardUpdate.x;
-        curCard.cardY = cardUpdate.y;
-        curCard.cardZ = cardUpdate.z;
-      }
-    });
-
-    this.api.OnUpdateRoomListener.subscribe((event: any) => {
+    this.api.OnArfListener.subscribe((event: any) => {
       console.log(event);
+      // Unsure why we have to dig value.data.
+      //const cardUpdate = event.value.data.onUpdateCard;
+      // console.log(cardUpdate);
+      //const curCard = this.cards[cardUpdate.cardValue];
+      // if (!curCard.cardBeingDragged && cardUpdate.lastOwner !== this.playerId) {
+      //   curCard.cardX = cardUpdate.x;
+      //   curCard.cardY = cardUpdate.y;
+      //   curCard.cardZ = cardUpdate.z;
+      // }
     });
 
   }
 
   async initRoom() {
     const room = await this.api.GetRoom(this.roomId);
-    console.log(room);
 
     const resp = await this.api.PlayerbyRoom(this.roomId, {
       eq: this.playerId
     });
 
-    console.log(resp);
     if (resp.items.length === 0) {
       this.playerNameDialog();
 
     } else {
       const player = resp.items[0];
-      console.log(player);
     }
   }
 
@@ -93,7 +92,49 @@ export class RoomComponent implements OnInit {
 
   async listCards() {
     const resp = await this.api.ListCards();
-    console.log(resp);
+    // const op = this.api
+
+
+    // const queryString = `
+    // subscription onArf($cardValue: String, $roomId: String) {
+    //   onArf(cardValue: $cardValue, roomId: $roomId) {
+    //     __typename
+    //     cardValue
+    //     roomId
+    //     x
+    //     y
+    //     z
+    //     faceUp
+    //     lastOwner
+    //   }
+    // }`;
+
+    const queryString = `
+    subscription onArf {
+      onArf(cardValue: "AD", roomId: "${this.roomId}") {
+        __typename
+        cardValue
+        roomId
+        x
+        y
+        z
+        faceUp
+        lastOwner
+      }
+    }`;
+
+
+    const vars = {
+      cardValue: 'efjepsfks',
+      roomId: this.roomId,
+    };
+    const obs = API.graphql(graphqlOperation(queryString, vars)) as Observable<object>
+    obs.subscribe({
+      next: resp => {
+        //console.log(resp);
+      }
+    });
+
     this.cardValues = resp.items.map(el => el.cardValue);
 
     for (const card of resp.items) {
@@ -151,7 +192,6 @@ export class RoomComponent implements OnInit {
       y: curCard.cardY,
       lastOwner: this.playerId
     }
-    console.log(cardUpdate);
     this.api.UpdateCard(cardUpdate);
 
   }
@@ -186,7 +226,6 @@ export class RoomComponent implements OnInit {
   }
 
   mouseDown(cardValue) {
-    console.log(cardValue);
     this.cards[cardValue].cardBeingDragged = true;
 
   }
