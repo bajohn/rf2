@@ -5,10 +5,22 @@ RF, take two
 ## Tech Stack
 - Built on AWS Amplify's Angular integration
 
-## TODO
-Figure out parameterized subscriptions!
-https://medium.com/swlh/how-to-really-use-aws-amplify-fcb4c5ed769c
+## Notes
+- `amplify mock` does not seem to work with paramterized subscriptions
+- To change from mock to cloud server, force recompilation via `amplify push`. `Ctrl-c` is supposed to work but doesn't seem to.
+
+
+## Refs
 https://github.com/aws-amplify/docs/pull/614/files
+
+
+## TODO
+- Set up card subscriptions with properly scoped parameters (`cardValue, roomId`)
+- Better understand how sensitive amplify schema are to names of things, for example it appears that some of these names are magic:
+```
+    subscription OnUpdateCard($roomId: String , $cardValue: String) {
+      onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
+```
 
 
 ## DONE
@@ -17,3 +29,4 @@ https://github.com/aws-amplify/docs/pull/614/files
 - On end of card being dragged, update with final position (skip x ms rate limiter defined by `updateMinMs`)
 - Write graphql query for cards belonging to a game. This is possible via a graphql schema query `amplify/backend/api/rf2/schema.graphql`
 - Cloud dev iteration is slow! Figure out local dev
+- Figure out parameterized subscriptions!
