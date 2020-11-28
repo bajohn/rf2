@@ -29,7 +29,6 @@ type Room @model
   {
   roomId: ID!
   players: [Player] @connection(keyName: "playerByRoom", fields: ["roomId"])
-  # cards: [Card] @connection(keyName: "cardByRoom", fields: ["roomId"])
 }
 
 
