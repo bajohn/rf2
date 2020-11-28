@@ -395,7 +395,7 @@ export type PlayerbyRoomQuery = {
   nextToken: string | null;
 };
 
-export type OnArfSubscription = {
+export type OnUpdateCardSubscription = {
   __typename: "Card";
   cardValue: string;
   roomId: string;
@@ -958,10 +958,10 @@ export class APIService {
     )) as any;
     return <PlayerbyRoomQuery>response.data.playerbyRoom;
   }
-  OnArfListener: Observable<OnArfSubscription> = API.graphql(
+  OnUpdateCardListener: Observable<OnUpdateCardSubscription> = API.graphql(
     graphqlOperation(
-      `subscription OnArf($roomId: String, $cardValue: String) {
-        onArf(roomId: $roomId, cardValue: $cardValue) {
+      `subscription OnUpdateCard($roomId: String, $cardValue: String) {
+        onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
           __typename
           cardValue
           roomId
@@ -975,7 +975,7 @@ export class APIService {
         }
       }`
     )
-  ) as Observable<OnArfSubscription>;
+  ) as Observable<OnUpdateCardSubscription>;
 
   OnCreateRoomListener: Observable<OnCreateRoomSubscription> = API.graphql(
     graphqlOperation(

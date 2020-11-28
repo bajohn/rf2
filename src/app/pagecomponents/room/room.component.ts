@@ -7,8 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PlayerNameDialogComponent } from 'src/app/subcomponents/player-name-dialog/player-name-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
 
-import { API, graphqlOperation } from 'aws-amplify'
-import { query } from '@angular/animations';
+import { API, graphqlOperation } from 'aws-amplify';
+
 import Observable from 'zen-observable-ts';
 // import {} from '../../../graphql'
 interface localCard {
@@ -51,11 +51,10 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
     this.initRoom();
     this.listCards();
-    this.api.OnArfListener.subscribe((event: any) => {
-      console.log(event);
+    this.api.OnUpdateCardListener.subscribe((event: any) => {
+      //console.log(event);
       // Unsure why we have to dig value.data.
       //const cardUpdate = event.value.data.onUpdateCard;
-      // console.log(cardUpdate);
       //const curCard = this.cards[cardUpdate.cardValue];
       // if (!curCard.cardBeingDragged && cardUpdate.lastOwner !== this.playerId) {
       //   curCard.cardX = cardUpdate.x;
@@ -92,27 +91,10 @@ export class RoomComponent implements OnInit {
 
   async listCards() {
     const resp = await this.api.ListCards();
-    // const op = this.api
-
-
-    // const queryString = `
-    // subscription onArf($cardValue: String, $roomId: String) {
-    //   onArf(cardValue: $cardValue, roomId: $roomId) {
-    //     __typename
-    //     cardValue
-    //     roomId
-    //     x
-    //     y
-    //     z
-    //     faceUp
-    //     lastOwner
-    //   }
-    // }`;
 
     const queryString = `
-    subscription onArf {
-      onArf(cardValue: "AD", roomId: "${this.roomId}") {
-        __typename
+    subscription OnUpdateCard($roomId: String , $cardValue: String) {
+      onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
         cardValue
         roomId
         x
@@ -120,18 +102,24 @@ export class RoomComponent implements OnInit {
         z
         faceUp
         lastOwner
+        createdAt
+        updatedAt
       }
-    }`;
+    }
+    `;
 
 
     const vars = {
-      cardValue: 'efjepsfks',
       roomId: this.roomId,
+      cardValue: 'AD'
     };
+    console.log(vars);
     const obs = API.graphql(graphqlOperation(queryString, vars)) as Observable<object>
     obs.subscribe({
       next: resp => {
-        //console.log(resp);
+        const cardUpdate = resp['value']['data']['onUpdateCard'];
+        console.log('hi')
+        console.log(cardUpdate);
       }
     });
 

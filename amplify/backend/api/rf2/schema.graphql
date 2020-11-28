@@ -34,7 +34,7 @@ type Room @model
 
 
 type Subscription {
-    onArf(roomId: String, cardValue:String): Card @aws_subscribe(mutations: "updateCard")
+    onUpdateCard(roomId: String, cardValue:String): Card @aws_subscribe(mutations: ["updateCard"])
 }
 
 

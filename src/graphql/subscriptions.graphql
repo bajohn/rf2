@@ -1,6 +1,6 @@
 # this is an auto generated file. This will be overwritten
-subscription OnArf($roomId: String, $cardValue: String) {
-  onArf(roomId: $roomId, cardValue: $cardValue) {
+subscription OnUpdateCard($roomId: String, $cardValue: String) {
+  onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
     cardValue
     roomId
     x
