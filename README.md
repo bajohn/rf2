@@ -8,13 +8,14 @@ RF, take two
 ## Notes
 - `amplify mock` does not seem to work with paramterized subscriptions
 - To change from mock to cloud server, force recompilation via `amplify push`. `Ctrl-c` is supposed to work but doesn't seem to.
-
+- It is possible to regenerate `src/graphql/subscriptions.ts` by changing `codeGenTarget` in `.graphqlconfig.yml` from `angular` to `typescript`
 
 ## Refs
 https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
+- Figure how to get query strings from auto-generated queries.
 - Set up card subscriptions with properly scoped parameters (`cardValue, roomId`)
 - Better understand how sensitive amplify schema are to names of things, for example it appears that some of these names are magic:
 ```

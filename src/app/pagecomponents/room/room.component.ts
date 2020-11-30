@@ -8,9 +8,10 @@ import { PlayerNameDialogComponent } from 'src/app/subcomponents/player-name-dia
 import { ModalService } from 'src/app/services/modal.service';
 
 import { API, graphqlOperation } from 'aws-amplify';
-
 import Observable from 'zen-observable-ts';
-// import {} from '../../../graphql'
+import { onUpdateCard } from 'src/graphql/subscriptions';
+
+
 interface localCard {
   cardValue: string
   cardX: number
@@ -51,32 +52,20 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
     this.initRoom();
     this.listCards();
-    this.api.OnUpdateCardListener.subscribe((event: any) => {
-      //console.log(event);
-      // Unsure why we have to dig value.data.
-      //const cardUpdate = event.value.data.onUpdateCard;
-      //const curCard = this.cards[cardUpdate.cardValue];
-      // if (!curCard.cardBeingDragged && cardUpdate.lastOwner !== this.playerId) {
-      //   curCard.cardX = cardUpdate.x;
-      //   curCard.cardY = cardUpdate.y;
-      //   curCard.cardZ = cardUpdate.z;
-      // }
-    });
-
   }
 
   async initRoom() {
     const room = await this.api.GetRoom(this.roomId);
-
+    console.log('room', room);
     const resp = await this.api.PlayerbyRoom(this.roomId, {
       eq: this.playerId
     });
 
     if (resp.items.length === 0) {
       this.playerNameDialog();
-
     } else {
       const player = resp.items[0];
+      console.log('player', player);
     }
   }
 
@@ -92,29 +81,12 @@ export class RoomComponent implements OnInit {
   async listCards() {
     const resp = await this.api.ListCards();
 
-    const queryString = `
-    subscription OnUpdateCard($roomId: String , $cardValue: String) {
-      onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
-        cardValue
-        roomId
-        x
-        y
-        z
-        faceUp
-        lastOwner
-        createdAt
-        updatedAt
-      }
-    }
-    `;
-
-
     const vars = {
       roomId: this.roomId,
       cardValue: 'AD'
     };
     console.log(vars);
-    const obs = API.graphql(graphqlOperation(queryString, vars)) as Observable<object>
+    const obs = API.graphql(graphqlOperation(onUpdateCard, vars)) as Observable<object>
     obs.subscribe({
       next: resp => {
         const cardUpdate = resp['value']['data']['onUpdateCard'];

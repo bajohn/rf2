@@ -7,8 +7,6 @@ type Card @model(subscriptions: null)
     ]
   )
   @key(fields: ["roomId", "cardValue"])
-  # @key(name: "cardComposite", fields: ["roomId", "cardValue"])
-  # @key(name: "cardByRoom", fields: ["roomId"])
   {
   cardValue: ID!
   roomId: ID!
