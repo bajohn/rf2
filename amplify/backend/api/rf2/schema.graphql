@@ -32,6 +32,7 @@ type Room @model
 
 type Subscription {
     onUpdateCard(roomId: String, cardValue:String): Card @aws_subscribe(mutations: ["updateCard"])
+    onUpdateCardRoom(roomId: String): Card @aws_subscribe(mutations: ["updateCard"])
 }
 
 

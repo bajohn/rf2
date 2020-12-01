@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { APIService } from 'src/app/API.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-player-name-dialog',
   templateUrl: './player-name-dialog.component.html',
@@ -13,7 +12,6 @@ export class PlayerNameDialogComponent implements OnInit {
   public roomid;
   constructor(
     private modalService: ModalService,
-    private api: APIService,
     @Inject(MAT_DIALOG_DATA) public data: { playerId: string, roomId: string }
   ) {
 
@@ -38,11 +36,11 @@ export class PlayerNameDialogComponent implements OnInit {
 
   completeModal() {
     this.modalService.getModalRef().close();
-    this.api.CreatePlayer({
-      name: this.playerName,
-      roomId: this.data.roomId,
-      playerId: this.data.playerId
-    });
+    // this.api.CreatePlayer({
+    //   name: this.playerName,
+    //   roomId: this.data.roomId,
+    //   playerId: this.data.playerId
+    // });
   }
 
   canClose() {

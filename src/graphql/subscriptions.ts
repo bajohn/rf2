@@ -17,6 +17,21 @@ export const onUpdateCard = /* GraphQL */ `
     }
   }
 `;
+export const onUpdateCardRoom = /* GraphQL */ `
+  subscription OnUpdateCardRoom($roomId: String) {
+    onUpdateCardRoom(roomId: $roomId) {
+      cardValue
+      roomId
+      x
+      y
+      z
+      faceUp
+      lastOwner
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateRoom = /* GraphQL */ `
   subscription OnCreateRoom {
     onCreateRoom {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { APIService } from '../../API.service';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,7 +12,6 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private api: APIService
   ) { }
 
   ngOnInit(
@@ -24,9 +22,9 @@ export class HomeComponent implements OnInit {
 
     const roomId = uuidv4().split('-')[0];
 
-    await this.api.CreateRoom({
-      roomId: roomId
-    });
+    // await this.api.CreateRoom({
+    //   roomId: roomId
+    // });
     this.router.navigateByUrl(roomId);
 
     const suits = ['H', 'C', 'S', 'D'];
@@ -35,15 +33,15 @@ export class HomeComponent implements OnInit {
     for (const suit of suits) {
       for (const value of values) {
         const cardValue = `${value}${suit}`;
-        this.api.CreateCard({
-          'cardValue': cardValue,
-          'roomId': roomId,
-          'x': 100,
-          'y': 150,
-          'z': z,
-          'faceUp': true,
-          'lastOwner': ''
-        });
+        // this.api.CreateCard({
+        //   'cardValue': cardValue,
+        //   'roomId': roomId,
+        //   'x': 100,
+        //   'y': 150,
+        //   'z': z,
+        //   'faceUp': true,
+        //   'lastOwner': ''
+        // });
         z += 1;
       }
     }
