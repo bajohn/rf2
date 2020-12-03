@@ -6,7 +6,7 @@ RF, take two
 - Built on AWS Amplify's Angular integration
 
 ## Notes
-- `amplify mock` does not seem to work with paramterized subscriptions
+- `amplify mock` does not seem to work with parameterized subscriptions
 - To change from mock to cloud server, force recompilation via `amplify push`. `Ctrl-c` is supposed to work but doesn't seem to.
 - It is possible to regenerate `src/graphql/subscriptions.ts` by changing `codeGenTarget` in `.graphqlconfig.yml` from `angular` to `typescript`
 
@@ -16,11 +16,8 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 ## TODO
 
-- Better understand how sensitive amplify schema are to names of things, for example it appears that some of these names are magic:
-```
-    subscription OnUpdateCard($roomId: String , $cardValue: String) {
-      onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
-```
+- Write out logical game flow!
+- Card stacks
 
 
 ## DONE
