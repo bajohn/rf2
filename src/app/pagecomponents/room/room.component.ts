@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 
-import { GetPlayerQueryVariables, GetRoomQuery, GetRoomQueryVariables, ListCardsQuery, ListCardsQueryVariables, OnUpdateCardSubscription, OnUpdateCardSubscriptionVariables, PlayerbyRoomQuery, PlayerbyRoomQueryVariables, UpdateCardInput, UpdateCardMutationVariables } from 'src/app/API.service';
+import { ListCardsQuery, ListCardsQueryVariables, OnUpdateCardSubscriptionVariables, PlayerbyRoomQuery, PlayerbyRoomQueryVariables, UpdateCardMutationVariables } from 'src/app/API.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PlayerNameDialogComponent } from 'src/app/subcomponents/player-name-dialog/player-name-dialog.component';
 import { ModalService } from 'src/app/services/modal.service';
 
 import { API, graphqlOperation } from 'aws-amplify';
 import Observable from 'zen-observable-ts';
-import { onUpdateCard, onUpdateCardRoom } from 'src/graphql/subscriptions';
-import { getRoom, listCards, playerbyRoom } from 'src/graphql/queries';
+import { onUpdateCardRoom } from 'src/graphql/subscriptions';
+import { listCards, playerbyRoom } from 'src/graphql/queries';
 import { updateCard } from 'src/graphql/mutations';
 
 interface localCard {
@@ -110,14 +110,17 @@ export class RoomComponent implements OnInit {
       next: (resp: { value: { data: { onUpdateCardRoom: any } } }) => {
         const updatedCard = resp.value.data.onUpdateCardRoom;
         const localCard = this.cards[updatedCard.cardValue];
-        if (!localCard.cardBeingDragged) {
+        const updateTime = (new Date(updatedCard.updatedAt)).getTime();
+        if (!localCard.cardBeingDragged
+          && this.playerId !== updatedCard.lastOwner
+          && updateTime > localCard.lastUpdateTime) {
           const copyProps = {
             cardX: updatedCard.x,
             cardY: updatedCard.y,
             cardZ: updatedCard.z,
             faceUp: updatedCard.faceUp,
             lastOwner: updatedCard.lastOwner,
-            lastUpdateTime: (new Date(updatedCard.updatedAt)).getTime(),
+            lastUpdateTime: updateTime
           };
           Object.assign(localCard, copyProps);
         }

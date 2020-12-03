@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
       }
     };
     const resp = await API.graphql(graphqlOperation(createRoom, roomParams)) as { data: CreateRoomMutation };
-    this.generateDeck(roomId);
+    await this.generateDeck(roomId);
 
 
     this.router.navigateByUrl(roomId);

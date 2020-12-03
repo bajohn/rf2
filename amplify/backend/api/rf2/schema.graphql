@@ -49,7 +49,3 @@ type Player @model
   playerId: ID!
   name: String!
 }
-
-
-
-# TODO: use query() to pull all the cards for only one game (via secondary index, @key decorator)

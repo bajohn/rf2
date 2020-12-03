@@ -15,8 +15,7 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
-- Figure how to get query strings from auto-generated queries.
-- Set up card subscriptions with properly scoped parameters (`cardValue, roomId`)
+
 - Better understand how sensitive amplify schema are to names of things, for example it appears that some of these names are magic:
 ```
     subscription OnUpdateCard($roomId: String , $cardValue: String) {
@@ -31,3 +30,5 @@ https://github.com/aws-amplify/docs/pull/614/files
 - Write graphql query for cards belonging to a game. This is possible via a graphql schema query `amplify/backend/api/rf2/schema.graphql`
 - Cloud dev iteration is slow! Figure out local dev
 - Figure out parameterized subscriptions!
+- Figure how to get query strings from auto-generated queries.
+- Set up card subscriptions with properly scoped parameters (`cardValue, roomId`)
