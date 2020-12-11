@@ -46,3 +46,18 @@ this into am extendable ts class.
     - After all players are ready, the room randomizes positions and places players in a circle
 - Game flow
     - Based on position of dealer token, players enter bid
+
+
+
+
+- Sample response JSON
+[
+    {
+        turn: number
+        bids: [
+        ]{
+            player_id: string,
+            bid: number 
+        }
+    }
+]
