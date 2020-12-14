@@ -1,51 +1,58 @@
 
 
-type Card @model(subscriptions: null)
- @auth (
-    rules: [
-      { allow: public, operations: [create, update, delete, read] }
-    ]
-  )
-  @key(fields: ["roomId", "cardValue"])
-  {
-  cardValue: ID!
-  roomId: ID!
-  x: Int!
-  y: Int! 
-  z: Int!
-  faceUp: Boolean!
-  lastOwner: ID!
-}
-
 type Room @model
- @auth (
-    rules: [
-      { allow: public, operations: [create, update, delete, read] }
-    ]
-  )
-  @key(fields: ["roomId"])
+  @key(fields: ["id"])
   {
+  id: ID!
+  players: [Player] @connection(keyName: "cardsByRoom", fields: ["roomId"])
+  card: [Card] @connection(keyName: "playersByRoom", fields: ["roomId"])
+
+}
+
+
+type Moveable @model
+  @key(fields: ["id"])
+  {
+    id: ID! 
+    draggable: String
+    x: Int! 
+    y: Int! 
+    z: Int!
+    lastOwner: String!
+    inMotion: Boolean! 
+}
+
+type Card @model
+  @key(fields: ["id"])
+  @key(name: "cardsByRoom", fields: ["roomId"], queryField: "cardsByRoom")
+  {
+  id: ID!
   roomId: ID!
-  players: [Player] @connection(keyName: "playerByRoom", fields: ["roomId"])
+  owner: ID!
+  faceUp: Boolean!
+  cardValue: String!
+  moveable: Moveable @connection(keyName: "id", fields: ["id"])
 }
-
-
-type Subscription {
-    onUpdateCard(roomId: String, cardValue:String): Card @aws_subscribe(mutations: ["updateCard"])
-    onUpdateCardRoom(roomId: String): Card @aws_subscribe(mutations: ["updateCard"])
-}
-
-
 
 type Player @model
- @auth (
-    rules: [
-      { allow: public, operations: [create, update, delete, read] }
-    ]
-  )
-  @key(name: "playerByRoom", fields: ["roomId", "playerId"], queryField: "playerbyRoom")
+  @key(fields: ["id"])
+  @key(name: "playersByRoom", fields: ["roomId"], queryField: "playersByRoom")
   {
+  id: ID!
   roomId: ID!
-  playerId: ID!
   name: String!
+  moveable: Moveable @connection(keyName: "id", fields: ["id"])
 }
+
+# Next up:
+# type CardStack @model
+#   @key(fields: ["id"])
+#   @key(name: "cardStacksByRoom", fields: ["roomId"], queryField: "cardStacksByRoom")
+#   {
+#   id: ID!
+#   roomId: ID!
+#   spread: Boolean!
+#   moveable: Moveable @connection(keyName: "id", fields: ["id"])
+#   card: [Card] @connection(keyName: "playersByRoom", fields: ["roomId"])
+# }
+
