@@ -2,41 +2,15 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onUpdateCard = /* GraphQL */ `
-  subscription OnUpdateCard($roomId: String, $cardValue: String) {
-    onUpdateCard(roomId: $roomId, cardValue: $cardValue) {
-      cardValue
-      roomId
-      x
-      y
-      z
-      faceUp
-      lastOwner
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateCardRoom = /* GraphQL */ `
-  subscription OnUpdateCardRoom($roomId: String) {
-    onUpdateCardRoom(roomId: $roomId) {
-      cardValue
-      roomId
-      x
-      y
-      z
-      faceUp
-      lastOwner
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const onCreateRoom = /* GraphQL */ `
   subscription OnCreateRoom {
     onCreateRoom {
-      roomId
+      id
+      gameType
       players {
+        nextToken
+      }
+      card {
         nextToken
       }
       createdAt
@@ -47,8 +21,12 @@ export const onCreateRoom = /* GraphQL */ `
 export const onUpdateRoom = /* GraphQL */ `
   subscription OnUpdateRoom {
     onUpdateRoom {
-      roomId
+      id
+      gameType
       players {
+        nextToken
+      }
+      card {
         nextToken
       }
       createdAt
@@ -59,9 +37,130 @@ export const onUpdateRoom = /* GraphQL */ `
 export const onDeleteRoom = /* GraphQL */ `
   subscription OnDeleteRoom {
     onDeleteRoom {
-      roomId
+      id
+      gameType
       players {
         nextToken
+      }
+      card {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateMoveable = /* GraphQL */ `
+  subscription OnCreateMoveable {
+    onCreateMoveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMoveable = /* GraphQL */ `
+  subscription OnUpdateMoveable {
+    onUpdateMoveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMoveable = /* GraphQL */ `
+  subscription OnDeleteMoveable {
+    onDeleteMoveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateCard = /* GraphQL */ `
+  subscription OnCreateCard {
+    onCreateCard {
+      id
+      roomId
+      ownerId
+      faceUp
+      cardValue
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCard = /* GraphQL */ `
+  subscription OnUpdateCard {
+    onUpdateCard {
+      id
+      roomId
+      ownerId
+      faceUp
+      cardValue
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCard = /* GraphQL */ `
+  subscription OnDeleteCard {
+    onDeleteCard {
+      id
+      roomId
+      ownerId
+      faceUp
+      cardValue
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -73,8 +172,21 @@ export const onCreatePlayer = /* GraphQL */ `
     onCreatePlayer {
       id
       roomId
-      playerId
       name
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cards {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -85,8 +197,21 @@ export const onUpdatePlayer = /* GraphQL */ `
     onUpdatePlayer {
       id
       roomId
-      playerId
       name
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cards {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -97,8 +222,21 @@ export const onDeletePlayer = /* GraphQL */ `
     onDeletePlayer {
       id
       roomId
-      playerId
       name
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cards {
+        nextToken
+      }
       createdAt
       updatedAt
     }
