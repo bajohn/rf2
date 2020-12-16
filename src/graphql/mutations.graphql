@@ -1,0 +1,253 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateRoom(
+  $input: CreateRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  createRoom(input: $input, condition: $condition) {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateRoom(
+  $input: UpdateRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  updateRoom(input: $input, condition: $condition) {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteRoom(
+  $input: DeleteRoomInput!
+  $condition: ModelRoomConditionInput
+) {
+  deleteRoom(input: $input, condition: $condition) {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateMoveable(
+  $input: CreateMoveableInput!
+  $condition: ModelMoveableConditionInput
+) {
+  createMoveable(input: $input, condition: $condition) {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateMoveable(
+  $input: UpdateMoveableInput!
+  $condition: ModelMoveableConditionInput
+) {
+  updateMoveable(input: $input, condition: $condition) {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteMoveable(
+  $input: DeleteMoveableInput!
+  $condition: ModelMoveableConditionInput
+) {
+  deleteMoveable(input: $input, condition: $condition) {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateCard(
+  $input: CreateCardInput!
+  $condition: ModelCardConditionInput
+) {
+  createCard(input: $input, condition: $condition) {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateCard(
+  $input: UpdateCardInput!
+  $condition: ModelCardConditionInput
+) {
+  updateCard(input: $input, condition: $condition) {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteCard(
+  $input: DeleteCardInput!
+  $condition: ModelCardConditionInput
+) {
+  deleteCard(input: $input, condition: $condition) {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreatePlayer(
+  $input: CreatePlayerInput!
+  $condition: ModelPlayerConditionInput
+) {
+  createPlayer(input: $input, condition: $condition) {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdatePlayer(
+  $input: UpdatePlayerInput!
+  $condition: ModelPlayerConditionInput
+) {
+  updatePlayer(input: $input, condition: $condition) {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeletePlayer(
+  $input: DeletePlayerInput!
+  $condition: ModelPlayerConditionInput
+) {
+  deletePlayer(input: $input, condition: $condition) {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}

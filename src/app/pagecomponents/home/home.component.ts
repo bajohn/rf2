@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { API, graphqlOperation } from 'aws-amplify';
-import { CreateCardMutation, CreateCardMutationVariables, CreateRoomInput, CreateRoomMutation, CreateRoomMutationVariables } from 'src/app/API.service';
-import { createCard, createRoom } from 'src/graphql/mutations';
+import { CreateCardInput, CreateCardMutation, CreateMoveableInput, CreateMoveableMutation } from 'src/app/API.service';
+import { createCard, createMoveable, createRoom } from 'src/graphql/mutations';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,18 +23,45 @@ export class HomeComponent implements OnInit {
 
   async clickCreate() {
 
-    const roomId = uuidv4().split('-')[0];
+    // const roomId = uuidv4().split('-')[0];
 
-    const roomParams: CreateRoomMutationVariables = {
-      input: {
-        roomId: roomId
-      }
+    // const roomParams = {
+    //   input: {
+    //     roomId: roomId
+    //   }
+    // };
+    //const resp = await API.graphql(graphqlOperation(createRoom, roomParams)) as { data };
+
+    // await this.generateDeck(roomId);
+
+
+    // this.router.navigateByUrl(roomId);
+
+    const moveableParams: CreateMoveableMutationVariables = {
+      
+      draggable: true,
+      inMotion: false,
+      lastOwner: '',
+      x: 10,
+      y: 10,
+      z: 10,
+
+    }
+
+    const resp = await API.graphql(graphqlOperation(createMoveable, moveableParams));
+    console.log('done', resp);
+
+    const cardParams: CreateCardInput = {
+      cardValue: 'JH',
+      faceUp: true,
+      ownerId: '',
+      roomId: 'abcd',
     };
-    const resp = await API.graphql(graphqlOperation(createRoom, roomParams)) as { data: CreateRoomMutation };
-    await this.generateDeck(roomId);
+
+    //API.graphql(graphqlOperation(createCard, cardParams));
 
 
-    this.router.navigateByUrl(roomId);
+
   }
 
   async generateDeck(roomId) {
@@ -45,7 +72,7 @@ export class HomeComponent implements OnInit {
     for (const suit of suits) {
       for (const value of values) {
         const cardValue = `${value}${suit}`;
-        const cardParams: CreateCardMutationVariables = {
+        const cardParams = {
           input: {
             'cardValue': cardValue,
             'roomId': roomId,
@@ -61,7 +88,7 @@ export class HomeComponent implements OnInit {
         z += 1;
       }
     }
-    const resps = await Promise.all(promises) as CreateCardMutation[];
+    const resps = await Promise.all(promises);
   }
 
 

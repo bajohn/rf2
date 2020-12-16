@@ -1,0 +1,217 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateRoom {
+  onCreateRoom {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateRoom {
+  onUpdateRoom {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteRoom {
+  onDeleteRoom {
+    id
+    gameType
+    players {
+      nextToken
+    }
+    card {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateMoveable {
+  onCreateMoveable {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateMoveable {
+  onUpdateMoveable {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteMoveable {
+  onDeleteMoveable {
+    id
+    draggable
+    x
+    y
+    z
+    lastOwner
+    inMotion
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateCard {
+  onCreateCard {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateCard {
+  onUpdateCard {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteCard {
+  onDeleteCard {
+    id
+    roomId
+    ownerId
+    faceUp
+    cardValue
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreatePlayer {
+  onCreatePlayer {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdatePlayer {
+  onUpdatePlayer {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeletePlayer {
+  onDeletePlayer {
+    id
+    roomId
+    name
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cards {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
