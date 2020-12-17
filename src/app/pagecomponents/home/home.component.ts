@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { API, graphqlOperation } from 'aws-amplify';
-import { CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery } from 'src/app/API.service';
+import { CardsByRoomQueryVariables, CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, CreateRoomMutation, CreateRoomMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery } from 'src/app/API.service';
 import { createCard, createMoveable, createRoom } from 'src/graphql/mutations';
-import { getCard, listCards } from 'src/graphql/queries';
+import { cardsByRoom, getCard, listCards } from 'src/graphql/queries';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,70 +20,24 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(
   ): void {
-    this.initRoom();
-  }
-
-  async initRoom() {
-    // const resp = await API.graphql(graphqlOperation(listCards)) as { data: ListCardsQuery };
-    // console.log(resp.data);
-    const cardParams: GetCardQueryVariables = {
-      id: 'ae5e344c-ce85-42e6-abe1-32f834021078'
-    };
-    const resp = await API.graphql(graphqlOperation(getCard, cardParams)) as { data: GetCardQuery };
-    console.log(resp);
-
   }
 
   async clickCreate() {
 
-    // const roomId = uuidv4().split('-')[0];
+    const roomId = uuidv4().split('-')[0];
 
-    // const roomParams = {
-    //   input: {
-    //     roomId: roomId
-    //   }
-    // };
-    //const resp = await API.graphql(graphqlOperation(createRoom, roomParams)) as { data };
-
-    // await this.generateDeck(roomId);
-
-
-    // this.router.navigateByUrl(roomId);
-
-    const moveableParams: CreateMoveableMutationVariables = {
+    const roomParams: CreateRoomMutationVariables = {
       input: {
-        draggable: true,
-        inMotion: false,
-        lastOwner: '',
-        x: 10,
-        y: 10,
-        z: 10,
-      }
-    }
-
-
-
-    const moveResp = (await API.graphql(graphqlOperation(createMoveable, moveableParams))) as { data: CreateMoveableMutation };
-    console.log('done', moveResp.data.createMoveable);
-    const id = moveResp.data.createMoveable.id;
-
-
-    const cardParams: CreateCardMutationVariables = {
-      input: {
-        cardValue: 'JH',
-        faceUp: true,
-        ownerId: 'none',
-        roomId: 'abcd',
-        cardMoveableId: id
+        id: roomId,
+        gameType: 'generic'
       }
     };
 
-    const resp = await API.graphql(graphqlOperation(createCard, cardParams)) as { data: CreateCardMutation };
-    console.log('done', resp.data);
+    const resp = await API.graphql(graphqlOperation(createRoom, roomParams)) as { data: CreateRoomMutation };
+    await this.generateDeck(roomId);
 
 
-
-
+    this.router.navigateByUrl(roomId);
   }
 
   async generateDeck(roomId) {
@@ -94,24 +48,46 @@ export class HomeComponent implements OnInit {
     for (const suit of suits) {
       for (const value of values) {
         const cardValue = `${value}${suit}`;
-        const cardParams = {
+
+        const moveableParams: CreateMoveableMutationVariables = {
           input: {
-            'cardValue': cardValue,
-            'roomId': roomId,
+            draggable: true,
+            inMotion: false,
+            lastOwner: 'none',
             'x': 100,
             'y': 150,
             'z': z,
-            'faceUp': true,
-            'lastOwner': ''
+          }
+        }
+
+        const moveResp = (await API.graphql(graphqlOperation(createMoveable, moveableParams))) as { data: CreateMoveableMutation };
+        console.log('done', moveResp.data.createMoveable);
+        const id = moveResp.data.createMoveable.id;
+
+
+        const cardParams: CreateCardMutationVariables = {
+          input: {
+            'cardValue': cardValue,
+            faceUp: true,
+            ownerId: 'none',
+            roomId: roomId,
+            cardMoveableId: id
           }
         };
+
+        const resp = await API.graphql(graphqlOperation(createCard, cardParams)) as { data: CreateCardMutation };
+        console.log('done', resp.data);
 
         promises.push(API.graphql(graphqlOperation(createCard, cardParams)));
         z += 1;
       }
     }
-    const resps = await Promise.all(promises);
+    const resps = await Promise.all(promises) as CreateCardMutation[];
+    console.log(resps);
   }
+
+
+
 
 
 

@@ -3,6 +3,7 @@ import { ModalService } from 'src/app/services/modal.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createPlayer } from 'src/graphql/mutations';
+import { CreatePlayerMutation, CreatePlayerMutationVariables } from 'src/app/API.service';
 
 @Component({
   selector: 'app-player-name-dialog',
@@ -37,14 +38,14 @@ export class PlayerNameDialogComponent implements OnInit {
 
   async completeModal() {
     this.modalService.getModalRef().close();
-    const playerParams = {
+    const playerParams: CreatePlayerMutationVariables = {
       input: {
         name: this.playerName,
         roomId: this.data.roomId,
-        playerId: this.data.playerId
+        id: this.data.playerId
       }
     };
-    const resp = await API.graphql(graphqlOperation(createPlayer, playerParams)) ;
+    const resp = await API.graphql(graphqlOperation(createPlayer, playerParams));
   }
 
   canClose() {
