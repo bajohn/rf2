@@ -3,7 +3,7 @@
 //  This file was automatically generated and should not be edited.
 
 export type CreateRoomInput = {
-  id?: string | null,
+  uuid: string,
   gameType: string,
 };
 
@@ -55,22 +55,24 @@ export type ModelSizeInput = {
 };
 
 export type UpdateRoomInput = {
-  id: string,
+  uuid: string,
   gameType?: string | null,
 };
 
 export type DeleteRoomInput = {
-  id: string,
+  uuid: string,
 };
 
 export type CreateMoveableInput = {
-  id?: string | null,
+  uuid: string,
+  roomId: string,
   draggable: boolean,
   x: number,
   y: number,
   z: number,
   lastOwner: string,
   inMotion: boolean,
+  type: string,
 };
 
 export type ModelMoveableConditionInput = {
@@ -80,6 +82,7 @@ export type ModelMoveableConditionInput = {
   z?: ModelIntInput | null,
   lastOwner?: ModelStringInput | null,
   inMotion?: ModelBooleanInput | null,
+  type?: ModelStringInput | null,
   and?: Array< ModelMoveableConditionInput | null > | null,
   or?: Array< ModelMoveableConditionInput | null > | null,
   not?: ModelMoveableConditionInput | null,
@@ -105,17 +108,20 @@ export type ModelIntInput = {
 };
 
 export type UpdateMoveableInput = {
-  id: string,
+  uuid: string,
+  roomId: string,
   draggable?: boolean | null,
   x?: number | null,
   y?: number | null,
   z?: number | null,
   lastOwner?: string | null,
   inMotion?: boolean | null,
+  type?: string | null,
 };
 
 export type DeleteMoveableInput = {
-  id: string,
+  uuid: string,
+  roomId: string,
 };
 
 export type CreateCardInput = {
@@ -124,7 +130,6 @@ export type CreateCardInput = {
   ownerId: string,
   faceUp: boolean,
   cardValue: string,
-  cardMoveableId?: string | null,
 };
 
 export type ModelCardConditionInput = {
@@ -159,7 +164,6 @@ export type UpdateCardInput = {
   ownerId?: string | null,
   faceUp?: boolean | null,
   cardValue?: string | null,
-  cardMoveableId?: string | null,
 };
 
 export type DeleteCardInput = {
@@ -170,7 +174,6 @@ export type CreatePlayerInput = {
   id?: string | null,
   roomId: string,
   name: string,
-  playerMoveableId?: string | null,
 };
 
 export type ModelPlayerConditionInput = {
@@ -185,7 +188,6 @@ export type UpdatePlayerInput = {
   id: string,
   roomId?: string | null,
   name?: string | null,
-  playerMoveableId?: string | null,
 };
 
 export type DeletePlayerInput = {
@@ -193,7 +195,7 @@ export type DeletePlayerInput = {
 };
 
 export type ModelRoomFilterInput = {
-  id?: ModelIDInput | null,
+  uuid?: ModelIDInput | null,
   gameType?: ModelStringInput | null,
   and?: Array< ModelRoomFilterInput | null > | null,
   or?: Array< ModelRoomFilterInput | null > | null,
@@ -206,14 +208,26 @@ export enum ModelSortDirection {
 }
 
 
+export type ModelIDKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
 export type ModelMoveableFilterInput = {
-  id?: ModelIDInput | null,
+  uuid?: ModelIDInput | null,
+  roomId?: ModelIDInput | null,
   draggable?: ModelBooleanInput | null,
   x?: ModelIntInput | null,
   y?: ModelIntInput | null,
   z?: ModelIntInput | null,
   lastOwner?: ModelStringInput | null,
   inMotion?: ModelBooleanInput | null,
+  type?: ModelStringInput | null,
   and?: Array< ModelMoveableFilterInput | null > | null,
   or?: Array< ModelMoveableFilterInput | null > | null,
   not?: ModelMoveableFilterInput | null,
@@ -239,16 +253,6 @@ export type ModelPlayerFilterInput = {
   not?: ModelPlayerFilterInput | null,
 };
 
-export type ModelIDKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
 export type CreateRoomMutationVariables = {
   input: CreateRoomInput,
   condition?: ModelRoomConditionInput | null,
@@ -257,14 +261,10 @@ export type CreateRoomMutationVariables = {
 export type CreateRoomMutation = {
   createRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -280,14 +280,10 @@ export type UpdateRoomMutationVariables = {
 export type UpdateRoomMutation = {
   updateRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -303,14 +299,10 @@ export type DeleteRoomMutationVariables = {
 export type DeleteRoomMutation = {
   deleteRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -326,13 +318,15 @@ export type CreateMoveableMutationVariables = {
 export type CreateMoveableMutation = {
   createMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -346,13 +340,15 @@ export type UpdateMoveableMutationVariables = {
 export type UpdateMoveableMutation = {
   updateMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -366,13 +362,15 @@ export type DeleteMoveableMutationVariables = {
 export type DeleteMoveableMutation = {
   deleteMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -391,18 +389,6 @@ export type CreateCardMutation = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -421,18 +407,6 @@ export type UpdateCardMutation = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -451,18 +425,6 @@ export type DeleteCardMutation = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -479,22 +441,6 @@ export type CreatePlayerMutation = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -511,22 +457,6 @@ export type UpdatePlayerMutation = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -543,42 +473,22 @@ export type DeletePlayerMutation = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
 export type GetRoomQueryVariables = {
-  id: string,
+  uuid: string,
 };
 
 export type GetRoomQuery = {
   getRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -587,7 +497,7 @@ export type GetRoomQuery = {
 };
 
 export type ListRoomsQueryVariables = {
-  id?: string | null,
+  uuid?: string | null,
   filter?: ModelRoomFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
@@ -599,7 +509,7 @@ export type ListRoomsQuery = {
     __typename: "ModelRoomConnection",
     items:  Array< {
       __typename: "Room",
-      id: string,
+      uuid: string,
       gameType: string,
       createdAt: string,
       updatedAt: string,
@@ -609,26 +519,30 @@ export type ListRoomsQuery = {
 };
 
 export type GetMoveableQueryVariables = {
-  id: string,
+  uuid: string,
+  roomId: string,
 };
 
 export type GetMoveableQuery = {
   getMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
 export type ListMoveablesQueryVariables = {
-  id?: string | null,
+  uuid?: string | null,
+  roomId?: ModelIDKeyConditionInput | null,
   filter?: ModelMoveableFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
@@ -640,13 +554,15 @@ export type ListMoveablesQuery = {
     __typename: "ModelMoveableConnection",
     items:  Array< {
       __typename: "Moveable",
-      id: string,
+      uuid: string,
+      roomId: string,
       draggable: boolean,
       x: number,
       y: number,
       z: number,
       lastOwner: string,
       inMotion: boolean,
+      type: string,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -666,18 +582,6 @@ export type GetCardQuery = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -718,22 +622,6 @@ export type GetPlayerQuery = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -762,75 +650,28 @@ export type ListPlayersQuery = {
   } | null,
 };
 
-export type CardsByRoomQueryVariables = {
+export type MoveableByRoomQueryVariables = {
   roomId?: string | null,
-  id?: ModelIDKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelCardFilterInput | null,
+  filter?: ModelMoveableFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type CardsByRoomQuery = {
-  cardsByRoom:  {
-    __typename: "ModelCardConnection",
+export type MoveableByRoomQuery = {
+  moveableByRoom:  {
+    __typename: "ModelMoveableConnection",
     items:  Array< {
-      __typename: "Card",
-      id: string,
+      __typename: "Moveable",
+      uuid: string,
       roomId: string,
-      ownerId: string,
-      faceUp: boolean,
-      cardValue: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
-};
-
-export type CardsByOwnerQueryVariables = {
-  ownerId?: string | null,
-  id?: ModelIDKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelCardFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type CardsByOwnerQuery = {
-  cardsByOwner:  {
-    __typename: "ModelCardConnection",
-    items:  Array< {
-      __typename: "Card",
-      id: string,
-      roomId: string,
-      ownerId: string,
-      faceUp: boolean,
-      cardValue: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
-};
-
-export type PlayersByRoomQueryVariables = {
-  roomId?: string | null,
-  id?: ModelIDKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelPlayerFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type PlayersByRoomQuery = {
-  playersByRoom:  {
-    __typename: "ModelPlayerConnection",
-    items:  Array< {
-      __typename: "Player",
-      id: string,
-      roomId: string,
-      name: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      type: string,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -841,14 +682,10 @@ export type PlayersByRoomQuery = {
 export type OnCreateRoomSubscription = {
   onCreateRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -859,14 +696,10 @@ export type OnCreateRoomSubscription = {
 export type OnUpdateRoomSubscription = {
   onUpdateRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -877,14 +710,10 @@ export type OnUpdateRoomSubscription = {
 export type OnDeleteRoomSubscription = {
   onDeleteRoom:  {
     __typename: "Room",
-    id: string,
+    uuid: string,
     gameType: string,
-    players:  {
-      __typename: "ModelPlayerConnection",
-      nextToken: string | null,
-    } | null,
-    card:  {
-      __typename: "ModelCardConnection",
+    moveables:  {
+      __typename: "ModelMoveableConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -895,13 +724,15 @@ export type OnDeleteRoomSubscription = {
 export type OnCreateMoveableSubscription = {
   onCreateMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -910,13 +741,15 @@ export type OnCreateMoveableSubscription = {
 export type OnUpdateMoveableSubscription = {
   onUpdateMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -925,13 +758,15 @@ export type OnUpdateMoveableSubscription = {
 export type OnDeleteMoveableSubscription = {
   onDeleteMoveable:  {
     __typename: "Moveable",
-    id: string,
+    uuid: string,
+    roomId: string,
     draggable: boolean,
     x: number,
     y: number,
     z: number,
     lastOwner: string,
     inMotion: boolean,
+    type: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -945,18 +780,6 @@ export type OnCreateCardSubscription = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -970,18 +793,6 @@ export type OnUpdateCardSubscription = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -995,18 +806,6 @@ export type OnDeleteCardSubscription = {
     ownerId: string,
     faceUp: boolean,
     cardValue: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1018,22 +817,6 @@ export type OnCreatePlayerSubscription = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1045,22 +828,6 @@ export type OnUpdatePlayerSubscription = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1072,22 +839,6 @@ export type OnDeletePlayerSubscription = {
     id: string,
     roomId: string,
     name: string,
-    moveable:  {
-      __typename: "Moveable",
-      id: string,
-      draggable: boolean,
-      x: number,
-      y: number,
-      z: number,
-      lastOwner: string,
-      inMotion: boolean,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    cards:  {
-      __typename: "ModelCardConnection",
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,

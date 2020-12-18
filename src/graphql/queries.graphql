@@ -1,12 +1,9 @@
 # this is an auto generated file. This will be overwritten
-query GetRoom($id: ID!) {
-  getRoom(id: $id) {
-    id
+query GetRoom($uuid: ID!) {
+  getRoom(uuid: $uuid) {
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -14,21 +11,21 @@ query GetRoom($id: ID!) {
   }
 }
 query ListRooms(
-  $id: ID
+  $uuid: ID
   $filter: ModelRoomFilterInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
 ) {
   listRooms(
-    id: $id
+    uuid: $uuid
     filter: $filter
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
   ) {
     items {
-      id
+      uuid
       gameType
       createdAt
       updatedAt
@@ -36,41 +33,47 @@ query ListRooms(
     nextToken
   }
 }
-query GetMoveable($id: ID!) {
-  getMoveable(id: $id) {
-    id
+query GetMoveable($uuid: ID!, $roomId: ID!) {
+  getMoveable(uuid: $uuid, roomId: $roomId) {
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
 }
 query ListMoveables(
-  $id: ID
+  $uuid: ID
+  $roomId: ModelIDKeyConditionInput
   $filter: ModelMoveableFilterInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
 ) {
   listMoveables(
-    id: $id
+    uuid: $uuid
+    roomId: $roomId
     filter: $filter
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
   ) {
     items {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -84,17 +87,6 @@ query GetCard($id: ID!) {
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -130,20 +122,6 @@ query GetPlayer($id: ID!) {
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -172,82 +150,30 @@ query ListPlayers(
     nextToken
   }
 }
-query CardsByRoom(
+query MoveableByRoom(
   $roomId: ID
-  $id: ModelIDKeyConditionInput
   $sortDirection: ModelSortDirection
-  $filter: ModelCardFilterInput
+  $filter: ModelMoveableFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  cardsByRoom(
+  moveableByRoom(
     roomId: $roomId
-    id: $id
     sortDirection: $sortDirection
     filter: $filter
     limit: $limit
     nextToken: $nextToken
   ) {
     items {
-      id
+      uuid
       roomId
-      ownerId
-      faceUp
-      cardValue
-      createdAt
-      updatedAt
-    }
-    nextToken
-  }
-}
-query CardsByOwner(
-  $ownerId: ID
-  $id: ModelIDKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelCardFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  cardsByOwner(
-    ownerId: $ownerId
-    id: $id
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      roomId
-      ownerId
-      faceUp
-      cardValue
-      createdAt
-      updatedAt
-    }
-    nextToken
-  }
-}
-query PlayersByRoom(
-  $roomId: ID
-  $id: ModelIDKeyConditionInput
-  $sortDirection: ModelSortDirection
-  $filter: ModelPlayerFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  playersByRoom(
-    roomId: $roomId
-    id: $id
-    sortDirection: $sortDirection
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-  ) {
-    items {
-      id
-      roomId
-      name
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      type
       createdAt
       updatedAt
     }

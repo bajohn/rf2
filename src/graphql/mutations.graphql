@@ -4,12 +4,9 @@ mutation CreateRoom(
   $condition: ModelRoomConditionInput
 ) {
   createRoom(input: $input, condition: $condition) {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -21,12 +18,9 @@ mutation UpdateRoom(
   $condition: ModelRoomConditionInput
 ) {
   updateRoom(input: $input, condition: $condition) {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -38,12 +32,9 @@ mutation DeleteRoom(
   $condition: ModelRoomConditionInput
 ) {
   deleteRoom(input: $input, condition: $condition) {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -55,13 +46,15 @@ mutation CreateMoveable(
   $condition: ModelMoveableConditionInput
 ) {
   createMoveable(input: $input, condition: $condition) {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
@@ -71,13 +64,15 @@ mutation UpdateMoveable(
   $condition: ModelMoveableConditionInput
 ) {
   updateMoveable(input: $input, condition: $condition) {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
@@ -87,13 +82,15 @@ mutation DeleteMoveable(
   $condition: ModelMoveableConditionInput
 ) {
   deleteMoveable(input: $input, condition: $condition) {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
@@ -108,17 +105,6 @@ mutation CreateCard(
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -133,17 +119,6 @@ mutation UpdateCard(
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -158,17 +133,6 @@ mutation DeleteCard(
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -181,20 +145,6 @@ mutation CreatePlayer(
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -207,20 +157,6 @@ mutation UpdatePlayer(
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -233,20 +169,6 @@ mutation DeletePlayer(
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }

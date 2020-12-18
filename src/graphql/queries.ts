@@ -3,14 +3,11 @@
 // this is an auto generated file. This will be overwritten
 
 export const getRoom = /* GraphQL */ `
-  query GetRoom($id: ID!) {
-    getRoom(id: $id) {
-      id
+  query GetRoom($uuid: ID!) {
+    getRoom(uuid: $uuid) {
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -20,21 +17,21 @@ export const getRoom = /* GraphQL */ `
 `;
 export const listRooms = /* GraphQL */ `
   query ListRooms(
-    $id: ID
+    $uuid: ID
     $filter: ModelRoomFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listRooms(
-      id: $id
+      uuid: $uuid
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
-        id
+        uuid
         gameType
         createdAt
         updatedAt
@@ -44,15 +41,17 @@ export const listRooms = /* GraphQL */ `
   }
 `;
 export const getMoveable = /* GraphQL */ `
-  query GetMoveable($id: ID!) {
-    getMoveable(id: $id) {
-      id
+  query GetMoveable($uuid: ID!, $roomId: ID!) {
+    getMoveable(uuid: $uuid, roomId: $roomId) {
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -60,27 +59,31 @@ export const getMoveable = /* GraphQL */ `
 `;
 export const listMoveables = /* GraphQL */ `
   query ListMoveables(
-    $id: ID
+    $uuid: ID
+    $roomId: ModelIDKeyConditionInput
     $filter: ModelMoveableFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listMoveables(
-      id: $id
+      uuid: $uuid
+      roomId: $roomId
       filter: $filter
       limit: $limit
       nextToken: $nextToken
       sortDirection: $sortDirection
     ) {
       items {
-        id
+        uuid
+        roomId
         draggable
         x
         y
         z
         lastOwner
         inMotion
+        type
         createdAt
         updatedAt
       }
@@ -96,17 +99,6 @@ export const getCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -146,20 +138,6 @@ export const getPlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -191,87 +169,31 @@ export const listPlayers = /* GraphQL */ `
     }
   }
 `;
-export const cardsByRoom = /* GraphQL */ `
-  query CardsByRoom(
+export const moveableByRoom = /* GraphQL */ `
+  query MoveableByRoom(
     $roomId: ID
-    $id: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelCardFilterInput
+    $filter: ModelMoveableFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    cardsByRoom(
+    moveableByRoom(
       roomId: $roomId
-      id: $id
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
       nextToken: $nextToken
     ) {
       items {
-        id
+        uuid
         roomId
-        ownerId
-        faceUp
-        cardValue
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const cardsByOwner = /* GraphQL */ `
-  query CardsByOwner(
-    $ownerId: ID
-    $id: ModelIDKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelCardFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    cardsByOwner(
-      ownerId: $ownerId
-      id: $id
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        roomId
-        ownerId
-        faceUp
-        cardValue
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const playersByRoom = /* GraphQL */ `
-  query PlayersByRoom(
-    $roomId: ID
-    $id: ModelIDKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPlayerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    playersByRoom(
-      roomId: $roomId
-      id: $id
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        roomId
-        name
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        type
         createdAt
         updatedAt
       }

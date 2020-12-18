@@ -6,12 +6,12 @@ type Room @model
       { allow: public, operations: [create, update, delete, read] }
     ]
   )
-  @key(fields: ["id"])
+  @key(fields: ["uuid"])
   {
-  id: ID!
+  uuid: ID!
   gameType: String!
-  players: [Player] @connection(keyName: "playersByRoom", fields: ["id"])
-  card: [Card] @connection(keyName: "cardsByRoom", fields: ["id"])
+  moveables: [Moveable] @connection(keyName: "moveableByRoom", fields: ["uuid"])
+  # card: [Card] @connection(keyName: "cardsByRoom", fields: ["id"])
 
 }
 
@@ -21,15 +21,18 @@ type Moveable @model
       { allow: public, operations: [create, update, delete, read] }
     ]
   )
-  @key(fields: ["id"])
+  @key(fields: ["uuid", "roomId"])
+  @key(name: "moveableByRoom", fields: ["roomId"], queryField: "moveableByRoom")
   {
-    id: ID! 
+    uuid: ID! # uuid, partition key
+    roomId: ID! # sort key
     draggable: Boolean!
     x: Int! 
     y: Int! 
     z: Int!
     lastOwner: String!
     inMotion: Boolean! 
+    type: String!
 }
 
 type Card @model
@@ -39,15 +42,14 @@ type Card @model
     ]
   )
   @key(fields: ["id"])
-  @key(name: "cardsByRoom", fields: ["roomId", "id"], queryField: "cardsByRoom")
-  @key(name: "cardsByOwner", fields: ["ownerId", "id"], queryField: "cardsByOwner")
+  # @key(name: "cardsByRoom", fields: ["roomId", "id"], queryField: "cardsByRoom")
+  # @key(name: "cardsByOwner", fields: ["ownerId", "id"], queryField: "cardsByOwner")
   {
   id: ID!
   roomId: ID!
   ownerId: ID!
   faceUp: Boolean!
   cardValue: String!
-  moveable: Moveable @connection
 }
 
 type Player @model
@@ -57,13 +59,12 @@ type Player @model
     ]
   )
   @key(fields: [ "id"])
-  @key(name: "playersByRoom", fields: ["roomId", "id"], queryField: "playersByRoom")
   {
   id: ID!
   roomId: ID!
   name: String!
-  moveable: Moveable @connection
-  cards: [Card] @connection(keyName: "cardsByOwner", fields: ["id"])
+  # moveable: Moveable @connection
+  # cards: [Card] @connection(keyName: "cardsByOwner", fields: ["id"])
 }
 
 # Next up:

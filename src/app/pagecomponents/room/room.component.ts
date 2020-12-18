@@ -10,8 +10,8 @@ import { API, graphqlOperation } from 'aws-amplify';
 import Observable from 'zen-observable-ts';
 import { onUpdateCard, onUpdateMoveable } from 'src/graphql/subscriptions';
 import { updateCard, updateMoveable } from 'src/graphql/mutations';
-import { cardsByOwner, cardsByRoom, getCard, getMoveable, listCards, playersByRoom } from 'src/graphql/queries';
-import { CardsByRoomQuery, CardsByRoomQueryVariables, GetCardQuery, GetCardQueryVariables, GetMoveableQueryVariables, ListCardsQuery, ListCardsQueryVariables, OnUpdateMoveableSubscription, PlayersByRoomQuery, PlayersByRoomQueryVariables, UpdateCardMutationVariables, UpdateMoveableMutationVariables } from 'src/app/API.service';
+import { getCard, getMoveable, listCards } from 'src/graphql/queries';
+import { GetCardQuery, GetCardQueryVariables, GetMoveableQueryVariables, ListCardsQuery, ListCardsQueryVariables, OnUpdateMoveableSubscription, UpdateCardMutationVariables, UpdateMoveableMutationVariables } from 'src/app/API.service';
 
 interface localCard {
   cardValue: string
@@ -58,19 +58,19 @@ export class RoomComponent implements OnInit {
   }
 
   async initRoom() {
-    const playerParams: PlayersByRoomQueryVariables = {
-      roomId: this.roomId,
-      id: {
-        eq: this.playerId
-      }
-    };
-    const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
-    const playerItems = resp.data.playersByRoom.items;
-    if (playerItems.length === 0) {
-      this.playerNameDialog();
-    } else {
-      const player = playerItems[0];
-    }
+    // const playerParams: PlayersByRoomQueryVariables = {
+    //   roomId: this.roomId,
+    //   id: {
+    //     eq: this.playerId
+    //   }
+    // };
+    // const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
+    // const playerItems = resp.data.playersByRoom.items;
+    // if (playerItems.length === 0) {
+    //   this.playerNameDialog();
+    // } else {
+    //   const player = playerItems[0];
+    // }
   }
 
   playerNameDialog() {
@@ -83,33 +83,33 @@ export class RoomComponent implements OnInit {
   }
 
   async listCards() {
-    const listParams: CardsByRoomQueryVariables = {
-      roomId: this.roomId
-    };
-    const resp = await API.graphql(graphqlOperation(cardsByRoom, listParams)) as { data: CardsByRoomQuery };
+    // const listParams: CardsByRoomQueryVariables = {
+    //   roomId: this.roomId
+    // };
+    // const resp = await API.graphql(graphqlOperation(cardsByRoom, listParams)) as { data: CardsByRoomQuery };
 
-    for (const cardIter of resp.data.cardsByRoom.items) {
+    // for (const cardIter of resp.data.cardsByRoom.items) {
 
 
-      const cardParam: GetCardQueryVariables = {
-        id: cardIter.id
-      }
-      const cardResp = await API.graphql(graphqlOperation(getCard, cardParam)) as { data: GetCardQuery };
-      const cardRespData = cardResp.data.getCard;
-      const cardObjToPush: localCard = {
-        cardValue: cardRespData.cardValue,
-        cardX: cardRespData.moveable.x,
-        cardY: cardRespData.moveable.y,
-        cardZ: cardRespData.moveable.z,
-        inMotion: cardRespData.moveable.inMotion,
-        faceUp: cardRespData.faceUp,
-        lastUpdateTime: (new Date(cardRespData.moveable.updatedAt)).getTime(),
-        lastOwner: cardRespData.moveable.lastOwner,
-        moveableId: cardRespData.moveable.id
-      }
-      this.cards[cardRespData.cardValue] = cardObjToPush;
-    }
-    this.cardValues = resp.data.cardsByRoom.items.map(el => el.cardValue);
+    //   const cardParam: GetCardQueryVariables = {
+    //     id: cardIter.id
+    //   }
+    //   const cardResp = await API.graphql(graphqlOperation(getCard, cardParam)) as { data: GetCardQuery };
+    //   const cardRespData = cardResp.data.getCard;
+    // const cardObjToPush: localCard = {
+    //   cardValue: cardRespData.cardValue,
+    //   cardX: cardRespData.moveable.x,
+    //   cardY: cardRespData.moveable.y,
+    //   cardZ: cardRespData.moveable.z,
+    //   inMotion: cardRespData.moveable.inMotion,
+    //   faceUp: cardRespData.faceUp,
+    //   lastUpdateTime: (new Date(cardRespData.moveable.updatedAt)).getTime(),
+    //   lastOwner: cardRespData.moveable.lastOwner,
+    //   moveableId: cardRespData.moveable.id
+    // }
+    // this.cards[cardRespData.cardValue] = cardObjToPush;
+    // }
+    //this.cardValues = resp.data.cardsByRoom.items.map(el => el.cardValue);
 
     // All cards of room in one subscription
     // // 
@@ -181,12 +181,15 @@ export class RoomComponent implements OnInit {
     // change to moveable 
     const moveableParams: UpdateMoveableMutationVariables = {
       input: {
-        id: curCard.moveableId,
+        uuid: curCard.moveableId,
+        roomId: this.roomId,
         x: curCard.cardX,
         y: curCard.cardY,
         z: curCard.cardZ,
         lastOwner: this.playerId,
-        inMotion: curCard.inMotion
+        inMotion: curCard.inMotion,
+        type: 'card'
+
       }
     };
 

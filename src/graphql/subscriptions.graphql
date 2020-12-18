@@ -1,12 +1,9 @@
 # this is an auto generated file. This will be overwritten
 subscription OnCreateRoom {
   onCreateRoom {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -15,12 +12,9 @@ subscription OnCreateRoom {
 }
 subscription OnUpdateRoom {
   onUpdateRoom {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -29,12 +23,9 @@ subscription OnUpdateRoom {
 }
 subscription OnDeleteRoom {
   onDeleteRoom {
-    id
+    uuid
     gameType
-    players {
-      nextToken
-    }
-    card {
+    moveables {
       nextToken
     }
     createdAt
@@ -43,39 +34,45 @@ subscription OnDeleteRoom {
 }
 subscription OnCreateMoveable {
   onCreateMoveable {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
 }
 subscription OnUpdateMoveable {
   onUpdateMoveable {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
 }
 subscription OnDeleteMoveable {
   onDeleteMoveable {
-    id
+    uuid
+    roomId
     draggable
     x
     y
     z
     lastOwner
     inMotion
+    type
     createdAt
     updatedAt
   }
@@ -87,17 +84,6 @@ subscription OnCreateCard {
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -109,17 +95,6 @@ subscription OnUpdateCard {
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -131,17 +106,6 @@ subscription OnDeleteCard {
     ownerId
     faceUp
     cardValue
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }
@@ -151,20 +115,6 @@ subscription OnCreatePlayer {
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -174,20 +124,6 @@ subscription OnUpdatePlayer {
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }
@@ -197,20 +133,6 @@ subscription OnDeletePlayer {
     id
     roomId
     name
-    moveable {
-      id
-      draggable
-      x
-      y
-      z
-      lastOwner
-      inMotion
-      createdAt
-      updatedAt
-    }
-    cards {
-      nextToken
-    }
     createdAt
     updatedAt
   }

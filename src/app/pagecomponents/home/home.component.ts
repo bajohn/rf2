@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { API, graphqlOperation } from 'aws-amplify';
-import { CardsByRoomQueryVariables, CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, CreateRoomMutation, CreateRoomMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery } from 'src/app/API.service';
+import { CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, CreateRoomMutation, CreateRoomMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery } from 'src/app/API.service';
 import { createCard, createMoveable, createRoom } from 'src/graphql/mutations';
-import { cardsByRoom, getCard, listCards } from 'src/graphql/queries';
+import { getCard, listCards } from 'src/graphql/queries';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
 
     const roomParams: CreateRoomMutationVariables = {
       input: {
-        id: roomId,
+        uuid: roomId,
         gameType: 'generic'
       }
     };
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     await this.generateDeck(roomId);
 
 
-    this.router.navigateByUrl(roomId);
+    //this.router.navigateByUrl(roomId);
   }
 
   async generateDeck(roomId) {
@@ -51,27 +51,31 @@ export class HomeComponent implements OnInit {
 
         const moveableParams: CreateMoveableMutationVariables = {
           input: {
+            uuid: cardValue + roomId,
+            roomId: roomId,
             draggable: true,
             inMotion: false,
             lastOwner: 'none',
             'x': 100,
             'y': 150,
             'z': z,
+            'type': 'card'
           }
         }
 
         const moveResp = (await API.graphql(graphqlOperation(createMoveable, moveableParams))) as { data: CreateMoveableMutation };
         console.log('done', moveResp.data.createMoveable);
-        const id = moveResp.data.createMoveable.id;
+        const id = moveResp.data.createMoveable.uuid;
 
 
         const cardParams: CreateCardMutationVariables = {
           input: {
-            'cardValue': cardValue,
+            id: id,
+            cardValue: cardValue,
             faceUp: true,
             ownerId: 'none',
             roomId: roomId,
-            cardMoveableId: id
+
           }
         };
 

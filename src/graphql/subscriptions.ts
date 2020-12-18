@@ -5,12 +5,9 @@
 export const onCreateRoom = /* GraphQL */ `
   subscription OnCreateRoom {
     onCreateRoom {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -21,12 +18,9 @@ export const onCreateRoom = /* GraphQL */ `
 export const onUpdateRoom = /* GraphQL */ `
   subscription OnUpdateRoom {
     onUpdateRoom {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -37,12 +31,9 @@ export const onUpdateRoom = /* GraphQL */ `
 export const onDeleteRoom = /* GraphQL */ `
   subscription OnDeleteRoom {
     onDeleteRoom {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -53,13 +44,15 @@ export const onDeleteRoom = /* GraphQL */ `
 export const onCreateMoveable = /* GraphQL */ `
   subscription OnCreateMoveable {
     onCreateMoveable {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -68,13 +61,15 @@ export const onCreateMoveable = /* GraphQL */ `
 export const onUpdateMoveable = /* GraphQL */ `
   subscription OnUpdateMoveable {
     onUpdateMoveable {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -83,13 +78,15 @@ export const onUpdateMoveable = /* GraphQL */ `
 export const onDeleteMoveable = /* GraphQL */ `
   subscription OnDeleteMoveable {
     onDeleteMoveable {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -103,17 +100,6 @@ export const onCreateCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -127,17 +113,6 @@ export const onUpdateCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -151,17 +126,6 @@ export const onDeleteCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -173,20 +137,6 @@ export const onCreatePlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -198,20 +148,6 @@ export const onUpdatePlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -223,20 +159,6 @@ export const onDeletePlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }

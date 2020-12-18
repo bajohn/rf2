@@ -1,19 +1,62 @@
 ## [Start] Set query expression for @key **
-#if( !$util.isNull($ctx.args.sortDirection) )
-  $util.error("sortDirection is not supported for List operations without a Sort key defined.", "InvalidArgumentsError")
+#if( $util.isNull($ctx.args.uuid) && !$util.isNull($ctx.args.sortDirection) )
+  $util.error("When providing argument 'sortDirection' you must also provide argument 'uuid'.", "InvalidArgumentsError")
 #end
 #set( $modelQueryExpression = {} )
-#if( !$util.isNull($ctx.args.id) )
-  #set( $modelQueryExpression.expression = "#id = :id" )
+## [Start] Validate key arguments. **
+#if( !$util.isNull($ctx.args.roomId) && $util.isNull($ctx.args.uuid) )
+  $util.error("When providing argument 'roomId' you must also provide arguments uuid", "InvalidArgumentsError")
+#end
+## [End] Validate key arguments. **
+#if( !$util.isNull($ctx.args.uuid) )
+  #set( $modelQueryExpression.expression = "#uuid = :uuid" )
   #set( $modelQueryExpression.expressionNames = {
-  "#id": "id"
+  "#uuid": "uuid"
 } )
   #set( $modelQueryExpression.expressionValues = {
-  ":id": {
-      "S": "$ctx.args.id"
+  ":uuid": {
+      "S": "$ctx.args.uuid"
   }
 } )
 #end
+## [Start] Applying Key Condition **
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.beginsWith) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.beginsWith" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.between) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey0", { "S": "$ctx.args.roomId.between[0]" }))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey1", { "S": "$ctx.args.roomId.between[1]" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.eq) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey = :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.eq" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.lt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey < :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.lt" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.le) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey <= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.le" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.gt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey > :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.gt" }))
+#end
+#if( !$util.isNull($ctx.args.roomId) && !$util.isNull($ctx.args.roomId.ge) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey >= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "roomId"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$ctx.args.roomId.ge" }))
+#end
+## [End] Applying Key Condition **
 ## [End] Set query expression for @key **
 #set( $limit = $util.defaultIfNull($context.args.limit, 100) )
 #set( $ListRequest = {

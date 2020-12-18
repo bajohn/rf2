@@ -8,12 +8,9 @@ export const createRoom = /* GraphQL */ `
     $condition: ModelRoomConditionInput
   ) {
     createRoom(input: $input, condition: $condition) {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -27,12 +24,9 @@ export const updateRoom = /* GraphQL */ `
     $condition: ModelRoomConditionInput
   ) {
     updateRoom(input: $input, condition: $condition) {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -46,12 +40,9 @@ export const deleteRoom = /* GraphQL */ `
     $condition: ModelRoomConditionInput
   ) {
     deleteRoom(input: $input, condition: $condition) {
-      id
+      uuid
       gameType
-      players {
-        nextToken
-      }
-      card {
+      moveables {
         nextToken
       }
       createdAt
@@ -65,13 +56,15 @@ export const createMoveable = /* GraphQL */ `
     $condition: ModelMoveableConditionInput
   ) {
     createMoveable(input: $input, condition: $condition) {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -83,13 +76,15 @@ export const updateMoveable = /* GraphQL */ `
     $condition: ModelMoveableConditionInput
   ) {
     updateMoveable(input: $input, condition: $condition) {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -101,13 +96,15 @@ export const deleteMoveable = /* GraphQL */ `
     $condition: ModelMoveableConditionInput
   ) {
     deleteMoveable(input: $input, condition: $condition) {
-      id
+      uuid
+      roomId
       draggable
       x
       y
       z
       lastOwner
       inMotion
+      type
       createdAt
       updatedAt
     }
@@ -124,17 +121,6 @@ export const createCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -151,17 +137,6 @@ export const updateCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -178,17 +153,6 @@ export const deleteCard = /* GraphQL */ `
       ownerId
       faceUp
       cardValue
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -203,20 +167,6 @@ export const createPlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -231,20 +181,6 @@ export const updatePlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -259,20 +195,6 @@ export const deletePlayer = /* GraphQL */ `
       id
       roomId
       name
-      moveable {
-        id
-        draggable
-        x
-        y
-        z
-        lastOwner
-        inMotion
-        createdAt
-        updatedAt
-      }
-      cards {
-        nextToken
-      }
       createdAt
       updatedAt
     }

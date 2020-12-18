@@ -6,10 +6,6 @@ $util.qr($context.args.input.put("createdAt", $util.defaultIfNull($ctx.args.inpu
 ## Automatically set the updatedAt timestamp. **
 $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.input.updatedAt, $createdAt)))
 ## [End] Set default values. **
-
-
-
-
 ## [Start] Set the primary @key. **
 #set( $modelObjectKey = {
   "id": $util.dynamodb.toDynamoDB($ctx.args.input.id)
