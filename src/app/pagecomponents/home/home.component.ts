@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { API, graphqlOperation } from 'aws-amplify';
-import { CardsByRoomQueryVariables, CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, CreateRoomMutation, CreateRoomMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery } from 'src/app/API.service';
+import { CardsByRoomQueryVariables, CreateCardInput, CreateCardMutation, CreateCardMutationVariables, CreateMoveableInput, CreateMoveableMutation, CreateMoveableMutationVariables, CreateRoomMutation, CreateRoomMutationVariables, GetCardQuery, GetCardQueryVariables, ListCardsQuery, ListRoomsQuery } from 'src/app/API.service';
 import { createCard, createMoveable, createRoom } from 'src/graphql/mutations';
-import { cardsByRoom, getCard, listCards } from 'src/graphql/queries';
+import { cardsByRoom, getCard, getRoom, listCards, listRooms } from 'src/graphql/queries';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,6 +20,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(
   ): void {
+    this.initRoom();
+  }
+
+  async initRoom() {
+    const resp = await API.graphql(graphqlOperation(listRooms)) as { data: ListRoomsQuery };
+    console.log(resp);
+
   }
 
   async clickCreate() {
@@ -67,7 +74,7 @@ export class HomeComponent implements OnInit {
 
         const cardParams: CreateCardMutationVariables = {
           input: {
-            'cardValue': cardValue,
+            cardValue: cardValue,
             faceUp: true,
             ownerId: 'none',
             roomId: roomId,
