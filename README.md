@@ -9,6 +9,7 @@ RF, take two
 - `amplify mock` does not seem to work with parameterized subscriptions
 - To change from mock to cloud server, force recompilation via `amplify push`. `Ctrl-c` is supposed to work but doesn't seem to.
 - It is possible to regenerate `src/graphql/subscriptions.ts` by changing `codeGenTarget` in `.graphqlconfig.yml` from `angular` to `typescript`
+- Reset local `amplify mock` server by deleting the file: `amplify/mock-data/dynamodb/fake_us-fake-1.db` 
 
 ## Refs
 https://github.com/aws-amplify/docs/pull/614/files
