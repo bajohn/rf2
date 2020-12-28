@@ -81,10 +81,7 @@ export class HomeComponent implements OnInit {
             cardMoveableId: id
           }
         };
-
-        const resp = await API.graphql(graphqlOperation(createCard, cardParams)) as { data: CreateCardMutation };
-        console.log('done', resp.data);
-
+        
         promises.push(API.graphql(graphqlOperation(createCard, cardParams)));
         z += 1;
       }

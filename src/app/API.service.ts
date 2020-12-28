@@ -2,19 +2,34 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateRoomInput = {
-  id?: string | null,
-  gameType: string,
+export type ModelIDKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
 };
 
-export type ModelRoomConditionInput = {
-  gameType?: ModelStringInput | null,
-  and?: Array< ModelRoomConditionInput | null > | null,
-  or?: Array< ModelRoomConditionInput | null > | null,
-  not?: ModelRoomConditionInput | null,
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelCardFilterInput = {
+  id?: ModelIDInput | null,
+  roomId?: ModelIDInput | null,
+  ownerId?: ModelIDInput | null,
+  faceUp?: ModelBooleanInput | null,
+  cardValue?: ModelStringInput | null,
+  and?: Array< ModelCardFilterInput | null > | null,
+  or?: Array< ModelCardFilterInput | null > | null,
+  not?: ModelCardFilterInput | null,
 };
 
-export type ModelStringInput = {
+export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -54,6 +69,41 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type CreateRoomInput = {
+  id?: string | null,
+  gameType: string,
+};
+
+export type ModelRoomConditionInput = {
+  gameType?: ModelStringInput | null,
+  and?: Array< ModelRoomConditionInput | null > | null,
+  or?: Array< ModelRoomConditionInput | null > | null,
+  not?: ModelRoomConditionInput | null,
+};
+
 export type UpdateRoomInput = {
   id: string,
   gameType?: string | null,
@@ -83,13 +133,6 @@ export type ModelMoveableConditionInput = {
   and?: Array< ModelMoveableConditionInput | null > | null,
   or?: Array< ModelMoveableConditionInput | null > | null,
   not?: ModelMoveableConditionInput | null,
-};
-
-export type ModelBooleanInput = {
-  ne?: boolean | null,
-  eq?: boolean | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
 };
 
 export type ModelIntInput = {
@@ -135,22 +178,6 @@ export type ModelCardConditionInput = {
   and?: Array< ModelCardConditionInput | null > | null,
   or?: Array< ModelCardConditionInput | null > | null,
   not?: ModelCardConditionInput | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
 };
 
 export type UpdateCardInput = {
@@ -200,12 +227,6 @@ export type ModelRoomFilterInput = {
   not?: ModelRoomFilterInput | null,
 };
 
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-
 export type ModelMoveableFilterInput = {
   id?: ModelIDInput | null,
   draggable?: ModelBooleanInput | null,
@@ -219,17 +240,6 @@ export type ModelMoveableFilterInput = {
   not?: ModelMoveableFilterInput | null,
 };
 
-export type ModelCardFilterInput = {
-  id?: ModelIDInput | null,
-  roomId?: ModelIDInput | null,
-  ownerId?: ModelIDInput | null,
-  faceUp?: ModelBooleanInput | null,
-  cardValue?: ModelStringInput | null,
-  and?: Array< ModelCardFilterInput | null > | null,
-  or?: Array< ModelCardFilterInput | null > | null,
-  not?: ModelCardFilterInput | null,
-};
-
 export type ModelPlayerFilterInput = {
   id?: ModelIDInput | null,
   roomId?: ModelIDInput | null,
@@ -239,14 +249,42 @@ export type ModelPlayerFilterInput = {
   not?: ModelPlayerFilterInput | null,
 };
 
-export type ModelIDKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
+export type CardsByRoomFullQueryVariables = {
+  roomId?: string | null,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCardFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type CardsByRoomFullQuery = {
+  cardsByRoom:  {
+    __typename: "ModelCardConnection",
+    items:  Array< {
+      __typename: "Card",
+      id: string,
+      roomId: string,
+      ownerId: string,
+      faceUp: boolean,
+      cardValue: string,
+      createdAt: string,
+      updatedAt: string,
+      moveable:  {
+        __typename: "Moveable",
+        id: string,
+        draggable: boolean,
+        x: number,
+        y: number,
+        z: number,
+        lastOwner: string,
+        inMotion: boolean,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
 };
 
 export type CreateRoomMutationVariables = {

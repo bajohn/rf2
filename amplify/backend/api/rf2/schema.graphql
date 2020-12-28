@@ -65,6 +65,8 @@ type Player @model
   cards: [Card] @connection(keyName: "cardsByOwner", fields: ["id"])
 }
 
+
+
 # Next up:
 # type CardStack @model
 #   @key(fields: ["id"])

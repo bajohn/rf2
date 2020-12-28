@@ -11,7 +11,8 @@ import Observable from 'zen-observable-ts';
 import { onUpdateCard, onUpdateMoveable } from 'src/graphql/subscriptions';
 import { updateCard, updateMoveable } from 'src/graphql/mutations';
 import { cardsByOwner, cardsByRoom, getCard, getMoveable, listCards, playersByRoom } from 'src/graphql/queries';
-import { CardsByRoomQuery, CardsByRoomQueryVariables, GetCardQuery, GetCardQueryVariables, GetMoveableQueryVariables, ListCardsQuery, ListCardsQueryVariables, OnUpdateMoveableSubscription, PlayersByRoomQuery, PlayersByRoomQueryVariables, UpdateCardMutationVariables, UpdateMoveableMutationVariables } from 'src/app/API.service';
+import { CardsByRoomFullQuery, CardsByRoomQuery, CardsByRoomQueryVariables, GetCardQuery, GetCardQueryVariables, GetMoveableQueryVariables, ListCardsQuery, ListCardsQueryVariables, OnUpdateMoveableSubscription, PlayersByRoomQuery, PlayersByRoomQueryVariables, UpdateCardMutationVariables, UpdateMoveableMutationVariables } from 'src/app/API.service';
+import { cardsByRoomFull } from 'src/graphql/customqueries';
 
 interface localCard {
   cardValue: string
@@ -86,29 +87,25 @@ export class RoomComponent implements OnInit {
     const listParams: CardsByRoomQueryVariables = {
       roomId: this.roomId
     };
-    const resp = await API.graphql(graphqlOperation(cardsByRoom, listParams)) as { data: CardsByRoomQuery };
+    const resp = await API.graphql(graphqlOperation(cardsByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
+    const roomCardsResp = resp.data.cardsByRoom.items;
+    console.log(roomCardsResp);
 
-    for (const cardIter of resp.data.cardsByRoom.items) {
-
-
-      const cardParam: GetCardQueryVariables = {
-        id: cardIter.id
-      }
-      const cardResp = await API.graphql(graphqlOperation(getCard, cardParam)) as { data: GetCardQuery };
-      const cardRespData = cardResp.data.getCard;
+    roomCardsResp.forEach(el => {
       const cardObjToPush: localCard = {
-        cardValue: cardRespData.cardValue,
-        cardX: cardRespData.moveable.x,
-        cardY: cardRespData.moveable.y,
-        cardZ: cardRespData.moveable.z,
-        inMotion: cardRespData.moveable.inMotion,
-        faceUp: cardRespData.faceUp,
-        lastUpdateTime: (new Date(cardRespData.moveable.updatedAt)).getTime(),
-        lastOwner: cardRespData.moveable.lastOwner,
-        moveableId: cardRespData.moveable.id
+        cardValue: el.cardValue,
+        cardX: el.moveable.x,
+        cardY: el.moveable.y,
+        cardZ: el.moveable.z,
+        inMotion: el.moveable.inMotion,
+        faceUp: el.faceUp,
+        lastUpdateTime: (new Date(el.moveable.updatedAt)).getTime(),
+        lastOwner: el.moveable.lastOwner,
+        moveableId: el.moveable.id
       }
-      this.cards[cardRespData.cardValue] = cardObjToPush;
-    }
+      this.cards[el.cardValue] = cardObjToPush;
+    });
+
     this.cardValues = resp.data.cardsByRoom.items.map(el => el.cardValue);
 
     // All cards of room in one subscription
