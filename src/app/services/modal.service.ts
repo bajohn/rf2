@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { PlayerService } from './player.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class ModalService {
 
   _modalRef: MatDialogRef<any>;
-  constructor() { }
+  constructor(
+
+  ) { }
 
   // Should work for storing data from one modal at a time.
   setModalRef(newModal: MatDialogRef<any>) {

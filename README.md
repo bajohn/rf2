@@ -17,8 +17,12 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 ## TODO
 
+- playernamedialog- get player name to player service after entered- maybe trigger the dialog from the component level 
+to avoid a circular dependency in services
 - Write out logical game flow!
 - Card stacks
+- enableIterativeGsiUpdates 
+
 
 
 ## DONE

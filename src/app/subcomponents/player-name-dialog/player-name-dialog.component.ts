@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createPlayer } from 'src/graphql/mutations';
 import { CreatePlayerMutation, CreatePlayerMutationVariables } from 'src/app/API.service';
+import { PlayerService } from 'src/app/services/player.service';
 
 @Component({
   selector: 'app-player-name-dialog',
@@ -16,6 +17,7 @@ export class PlayerNameDialogComponent implements OnInit {
   public roomid;
   constructor(
     private modalService: ModalService,
+    private playerService: PlayerService,
     @Inject(MAT_DIALOG_DATA) public data: { playerId: string, roomId: string }
   ) {
 
@@ -38,6 +40,7 @@ export class PlayerNameDialogComponent implements OnInit {
 
   async completeModal() {
     this.modalService.getModalRef().close();
+    this.playerService.name = this.playerName;
     const playerParams: CreatePlayerMutationVariables = {
       input: {
         name: this.playerName,
