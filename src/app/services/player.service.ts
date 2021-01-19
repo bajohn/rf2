@@ -6,7 +6,7 @@ import { PlayersByRoomQuery, PlayersByRoomQueryVariables } from '../API.service'
 //import { PlayerNameDialogComponent } from '../subcomponents/player-name-dialog/player-name-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalService } from './modal.service';
-import { RoomService } from './room.service';
+import { MoveableService } from './moveable.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +17,9 @@ export class PlayerService {
   // playerName
   public name: string = '';
   constructor(
-    private room: RoomService,
+    private moveableService: MoveableService
   ) {
-    this.id = this.getOrCreatePlayerId(this.room.id);
+    this.id = this.getOrCreatePlayerId(this.moveableService.roomId);
 
     // const playerName = this.getPlayer(this.room.id, this.id);
     // if (playerName === null) {
