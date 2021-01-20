@@ -16,7 +16,8 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
-
+- Finish service refactor! State of all moveables should remain in the moveableService. Room component should just display
+these states
 - playernamedialog- get player name to player service after entered- maybe trigger the dialog from the component level 
 to avoid a circular dependency in services
 - Write out logical game flow!
