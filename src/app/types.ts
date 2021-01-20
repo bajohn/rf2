@@ -21,6 +21,7 @@ type moveable = {
     z: number
     lastOwner: string 
     inMotion: boolean 
+    lastUpdated: number
 }
 
 // moveable
@@ -32,7 +33,7 @@ type player = {
 }
 
 // moveable
-type card = {
+interface card extends moveable {
     id: string 
     faceUp: boolean
     cardValue: string 
