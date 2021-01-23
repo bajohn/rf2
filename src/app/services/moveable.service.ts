@@ -7,7 +7,7 @@ import Observable from 'zen-observable-ts';
 import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
 import { updateMoveable } from 'src/graphql/mutations';
-import { card, moveable } from '../types';
+import { card, cardStack, moveable } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ import { card, moveable } from '../types';
 export class MoveableService {
 
   private cards: card[];
-  private readonly lookup: moveable[];
+  private readonly lookup: { [key: string]: card | cardStack } = {};
   private isMouseDown: boolean = false;
 
 
@@ -43,9 +43,9 @@ export class MoveableService {
     const roomCardsResp = resp.data.cardsByRoom.items;
     console.log(roomCardsResp);
 
-    this.cards = roomCardsResp.map(el => {
+    this.cards = [roomCardsResp.map(el => {
       const cardObj: card = {
-        id: el.moveable.id,
+        id: el.id,
         roomId: this.roomService.id,
         cardValue: el.cardValue,
         x: el.moveable.x,
@@ -57,9 +57,10 @@ export class MoveableService {
         lastOwner: el.moveable.lastOwner,
         draggable: true
       };
+      this.lookup[el.id] = cardObj;
       return cardObj;
       //this.cards[el.cardValue] = cardObjToPush;
-    });
+    }).pop()];
 
     // Shouldn't need this anymore
     //this.cardValues = this.cards.map(el => el.cardValue);
@@ -130,7 +131,7 @@ export class MoveableService {
     }
   }
 
-  private isCard(moveableIn: card | moveable) {
+  private isCard(moveableIn: card | cardStack) {
     return 'cardValue' in moveableIn;
   }
 
@@ -141,9 +142,11 @@ export class MoveableService {
   public mouseDown(event: MouseEvent) {
   }
 
-  public beingDragged(cardValue) {
+  public beingDragged(id: string) {
     //return this.cards[cardValue].inMotion;
-    return true;
+    const moveableObj = this.lookup[id] as moveable;
+    console.log(moveableObj);
+    return moveableObj.inMotion;
   }
 
   public getHeight() {
