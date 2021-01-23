@@ -40,55 +40,55 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initRoom();
+    // this.initRoom();
   }
 
-  async initRoom() {
-    const playerParams: PlayersByRoomQueryVariables = {
-      roomId: this.roomService.id,
-      id: {
-        eq: this.playerService.id
-      }
-    };
-    const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
-    this.playerService.playerNameFromResp(resp.data);
+  // async initRoom() {
+  //   const playerParams: PlayersByRoomQueryVariables = {
+  //     roomId: this.roomService.id,
+  //     id: {
+  //       eq: this.playerService.id
+  //     }
+  //   };
+  //   const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
+  //   this.playerService.playerNameFromResp(resp.data);
 
-    if (this.playerService.name === '') {
-      this.playerNameDialog();
-    }
-  }
+  //   if (this.playerService.name === '') {
+  //     this.playerNameDialog();
+  //   }
+  // }
 
-  playerNameDialog() {
+  // playerNameDialog() {
 
-    const dialogRef = this.dialog.open(PlayerNameDialogComponent, {
-      width: '250px',
-      data: { playerId: this.playerService.id, roomId: this.roomService.id }
-    });
-    this.modalService.setModalRef(dialogRef);
-  }
-
-
-  mouseMove(event: MouseEvent) {
-    this.moveableService.publishCardUpdate(event);
-  }
+  //   const dialogRef = this.dialog.open(PlayerNameDialogComponent, {
+  //     width: '250px',
+  //     data: { playerId: this.playerService.id, roomId: this.roomService.id }
+  //   });
+  //   this.modalService.setModalRef(dialogRef);
+  // }
 
 
-  getCardW() {
-    return this.moveableService.CARD_W + 'px';
-  }
+  // mouseMove(event: MouseEvent) {
+  //   this.moveableService.publishCardUpdate(event);
+  // }
 
-  getCardH() {
-    return this.moveableService.CARD_H + 'px';
-  }
 
-  getFrontImgSrc(cardValue) {
-    return `assets/cards/${cardValue}.svg`;
-  }
+  // getCardW() {
+  //   return this.moveableService.CARD_W + 'px';
+  // }
 
-  getTransform(cardValue) {
-    const curCard = this.cards[cardValue];
-    return `translate3d(${curCard.cardX}px, ${curCard.cardY}px, 0px)`;
-  }
+  // getCardH() {
+  //   return this.moveableService.CARD_H + 'px';
+  // }
+
+  // getFrontImgSrc(cardValue) {
+  //   return `assets/cards/${cardValue}.svg`;
+  // }
+
+  // getTransform(cardValue) {
+  //   const curCard = this.cards[cardValue];
+  //   return `translate3d(${curCard.cardX}px, ${curCard.cardY}px, 0px)`;
+  // }
 
   mouseUp() {
     // for (const cardValue of this.cardValues) {

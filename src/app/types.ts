@@ -2,7 +2,7 @@
 
 // currently used for planning, will probably throw this out later
 
-type room = {
+export interface room  {
     roomId: string  // key 
     players: player[]
     // gameState: gameState  // RF only
@@ -12,38 +12,31 @@ type room = {
 
 
 
-type moveable = {
-    id: string 
+export interface moveable {
+    id: string
     roomId: string
     draggable: boolean
-    x: number 
-    y: number 
+    x: number
+    y: number
     z: number
-    lastOwner: string 
-    inMotion: boolean 
+    lastOwner: string
+    inMotion: boolean
     lastUpdated: number
 }
 
 // moveable
-type player = {
+export interface player {
     id: string //key 
     roomId: string // secondary index
-    name: string 
-    position: number 
+    name: string
+    position: number
 }
 
 // moveable
-interface card extends moveable {
-    id: string 
-    faceUp: boolean
-    cardValue: string 
-}
-
-// moveable
-type cardStack = {
- id: string 
- spread: boolean // each card offset or not 
- cards: card[] 
+export interface cardStack {
+    id: string
+    spread: boolean // each card offset or not 
+    cards: card[]
 
 }
 
@@ -51,16 +44,23 @@ type cardStack = {
 // RF only:
 ////////////
 
-type gameState = {
+export interface gameState {
     roomId: string // key
-    turn: number 
+    turn: number
     bids: bid[]
 }
 
 // raw type, not a model subscribed to
-type bid = {
-    turn: number 
-    playerId: string 
-    bid: number 
+export interface bid {
+    turn: number
+    playerId: string
+    bid: number
     actual: number // start at -1, fill in with actual value on turn completion
+}
+
+// moveable
+export interface card extends moveable {
+    // id: string 
+    faceUp: boolean
+    cardValue: string
 }

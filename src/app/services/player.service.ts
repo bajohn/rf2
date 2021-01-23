@@ -3,10 +3,6 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { playersByRoom } from 'src/graphql/queries';
 import { v4 as uuidv4 } from 'uuid';
 import { PlayersByRoomQuery, PlayersByRoomQueryVariables } from '../API.service';
-//import { PlayerNameDialogComponent } from '../subcomponents/player-name-dialog/player-name-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalService } from './modal.service';
-import { MoveableService } from './moveable.service';
 import { RoomService } from './room.service';
 
 @Injectable({
@@ -18,7 +14,6 @@ export class PlayerService {
   // playerName
   public name: string = '';
   constructor(
-    private moveableService: MoveableService,
     private roomService: RoomService
   ) {
     this.id = this.getOrCreatePlayerId(this.roomService.id);

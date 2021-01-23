@@ -7,13 +7,14 @@ import Observable from 'zen-observable-ts';
 import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
 import { updateMoveable } from 'src/graphql/mutations';
+import { card, moveable } from '../types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoveableService {
 
-  private readonly cards: card[];
+  private cards: card[];
   private readonly lookup: moveable[];
 
   //consts
@@ -40,8 +41,8 @@ export class MoveableService {
     const roomCardsResp = resp.data.cardsByRoom.items;
     console.log(roomCardsResp);
 
-    roomCardsResp.forEach(el => {
-      const cardObjToPush: card = {
+    this.cards = roomCardsResp.map(el => {
+      const cardObj: card = {
         id: el.moveable.id,
         roomId: this.roomService.id,
         cardValue: el.cardValue,
@@ -53,9 +54,9 @@ export class MoveableService {
         lastUpdated: (new Date(el.moveable.updatedAt)).getTime(),
         lastOwner: el.moveable.lastOwner,
         draggable: true
-
-      }
-      this.cards[el.cardValue] = cardObjToPush;
+      };
+      return cardObj;
+      //this.cards[el.cardValue] = cardObjToPush;
     });
 
     // Shouldn't need this anymore
@@ -94,7 +95,7 @@ export class MoveableService {
 
       }
     });
-     
+
   }
 
   publishCardUpdate(event: MouseEvent) {
