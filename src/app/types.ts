@@ -33,13 +33,19 @@ export interface player {
 }
 
 // moveable
-export interface cardStack {
+export interface cardStack extends moveable{
     id: string
     spread: boolean // each card offset or not 
     cards: card[]
 
 }
 
+// moveable
+export interface card extends moveable {
+    // id: string 
+    faceUp: boolean
+    cardValue: string
+}
 //////////////////////////////
 // RF only:
 ////////////
@@ -58,9 +64,3 @@ export interface bid {
     actual: number // start at -1, fill in with actual value on turn completion
 }
 
-// moveable
-export interface card extends moveable {
-    // id: string 
-    faceUp: boolean
-    cardValue: string
-}

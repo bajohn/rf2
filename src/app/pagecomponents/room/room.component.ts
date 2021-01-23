@@ -27,59 +27,51 @@ import { RoomService } from 'src/app/services/room.service';
 export class RoomComponent implements OnInit {
 
 
-  public cardValues: string[] = [];
-
   constructor(
     private dialog: MatDialog,
     private modalService: ModalService,
-    private playerService: PlayerService,
-    private moveableService: MoveableService,
-    private roomService: RoomService
+    public playerService: PlayerService,
+    public moveableService: MoveableService,
+    public roomService: RoomService
   ) {
 
   }
 
   ngOnInit(): void {
-    // this.initRoom();
+    this.initRoom();
   }
 
-  // async initRoom() {
-  //   const playerParams: PlayersByRoomQueryVariables = {
-  //     roomId: this.roomService.id,
-  //     id: {
-  //       eq: this.playerService.id
-  //     }
-  //   };
-  //   const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
-  //   this.playerService.playerNameFromResp(resp.data);
+  async initRoom() {
+    const playerParams: PlayersByRoomQueryVariables = {
+      roomId: this.roomService.id,
+      id: {
+        eq: this.playerService.id
+      }
+    };
+    const resp = await API.graphql(graphqlOperation(playersByRoom, playerParams)) as { data: PlayersByRoomQuery };
+    this.playerService.playerNameFromResp(resp.data);
 
-  //   if (this.playerService.name === '') {
-  //     this.playerNameDialog();
-  //   }
-  // }
+    if (this.playerService.name === '') {
+      this.playerNameDialog();
+    }
+  }
 
-  // playerNameDialog() {
+  playerNameDialog() {
 
-  //   const dialogRef = this.dialog.open(PlayerNameDialogComponent, {
-  //     width: '250px',
-  //     data: { playerId: this.playerService.id, roomId: this.roomService.id }
-  //   });
-  //   this.modalService.setModalRef(dialogRef);
-  // }
-
-
-  // mouseMove(event: MouseEvent) {
-  //   this.moveableService.publishCardUpdate(event);
-  // }
+    const dialogRef = this.dialog.open(PlayerNameDialogComponent, {
+      width: '250px',
+      data: { playerId: this.playerService.id, roomId: this.roomService.id }
+    });
+    this.modalService.setModalRef(dialogRef);
+  }
 
 
-  // getCardW() {
-  //   return this.moveableService.CARD_W + 'px';
-  // }
+  mouseMove(event: MouseEvent) {
+    this.moveableService.mouseMove(event);
+  }
 
-  // getCardH() {
-  //   return this.moveableService.CARD_H + 'px';
-  // }
+
+
 
   // getFrontImgSrc(cardValue) {
   //   return `assets/cards/${cardValue}.svg`;
@@ -107,9 +99,6 @@ export class RoomComponent implements OnInit {
 
   }
 
-  cardBeingDragged(cardValue) {
-    //return this.cards[cardValue].inMotion;
-  }
 
 
   getZ(cardValue) {

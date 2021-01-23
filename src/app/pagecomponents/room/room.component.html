@@ -1,8 +1,8 @@
-<!-- <div>
-    Room {{roomId}}
+<div>
+    Room {{roomService.id}}
 </div>
 <div>
-    Player {{playerId}}
+    Player {{playerService.id}}
 </div>
 
 <div class="page-container" 
@@ -10,30 +10,30 @@
 
 (mouseup)="mouseUp()"
 >
-<ng-container *ngFor="let cardValue of cardValues">
+
+<ng-container *ngFor="let card of moveableService.getCards()">
     <div 
   
     draggable="false" 
     [style.position]="'absolute'" 
     [style.transform-origin]="'100% 0'" 
-    [style.transform]="getTransform(cardValue)"
-    [style.height]="getHeight()"
-    [style.width]="getWidth()"
-    [style.z-index]="getZ(cardValue)"
+    [style.transform]="moveableService.getTransform(card.id)"
+    [style.height]="moveableService.getHeight()"
+    [style.width]="moveableService.getWidth()"
+    [style.z-index]="moveableService.getZ(card.id)"
     [class.card-overlay]="true"
-    [class.card-inactive]="!cardBeingDragged(cardValue)"
-    (mousedown)="mouseDown(cardValue)"
-  
+    [class.card-inactive]="!moveableService.beingDragged(card.id)"
+    (mousedown)="moveableService.mouseDown(card.id)"
       >
     
-    {{cardValue}}
+    {{card.id}}
 
     </div>
 </ng-container>
 
 
 
-</div> -->
+</div>
 
 
       <!-- <img  draggable="false"  [src]="getFrontImgSrc(cardValue)"> -->

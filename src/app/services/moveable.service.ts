@@ -16,6 +16,8 @@ export class MoveableService {
 
   private cards: card[];
   private readonly lookup: moveable[];
+  private isMouseDown: boolean = false;
+
 
   //consts
   public readonly CARD_H = 105;
@@ -98,7 +100,7 @@ export class MoveableService {
 
   }
 
-  publishCardUpdate(event: MouseEvent) {
+  private publishCardUpdate(event: MouseEvent) {
     for (const card of this.cards) {
       // const curCard = this.cards[cardValue];
       if (card.inMotion) {
@@ -126,6 +128,46 @@ export class MoveableService {
         }
       }
     }
+  }
+
+  private isCard(moveableIn: card | moveable) {
+    return 'cardValue' in moveableIn;
+  }
+
+
+  public mouseMove(event: MouseEvent) {
+  }
+
+  public mouseDown(event: MouseEvent) {
+  }
+
+  public beingDragged(cardValue) {
+    //return this.cards[cardValue].inMotion;
+    return true;
+  }
+
+  public getHeight() {
+    return this.CARD_W + 'px';
+  }
+
+  public getWidth() {
+    return this.CARD_H + 'px';
+  }
+
+  public getTransform(id) {
+    //   const curCard = this.cards[cardValue];
+    // return `translate3d(${curCard.cardX}px, ${curCard.cardY}px, 0px)`;
+    return `translate3d(10px, 10px, 0px)`;
+  }
+
+  public getZ(id) {
 
   }
+
+  public getCards(): card[] {
+    return this.cards;
+  }
+
+
 }
+
