@@ -8,6 +8,7 @@ import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
 import { updateMoveable } from 'src/graphql/mutations';
 import { card, cardStack, moveable } from '../types';
+import { exception } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -131,7 +132,7 @@ export class MoveableService {
     }
   }
 
-  private isCard(moveableIn: card | cardStack) {
+  private isCard(moveableIn: moveable) {
     return 'cardValue' in moveableIn;
   }
 
@@ -144,31 +145,46 @@ export class MoveableService {
 
   public beingDragged(id: string) {
     //return this.cards[cardValue].inMotion;
-    const moveableObj = this.lookup[id] as moveable;
-    console.log(moveableObj);
+    const moveableObj = this.lookupMoveable(id);
     return moveableObj.inMotion;
   }
 
-  public getHeight() {
-    return this.CARD_W + 'px';
+  public getHeight(id) {
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      return this.CARD_H + 'px';
+    }
   }
 
-  public getWidth() {
-    return this.CARD_H + 'px';
+  public getWidth(id) {
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      return this.CARD_W + 'px';
+    }
   }
 
   public getTransform(id) {
     //   const curCard = this.cards[cardValue];
     // return `translate3d(${curCard.cardX}px, ${curCard.cardY}px, 0px)`;
-    return `translate3d(10px, 10px, 0px)`;
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      return `translate3d(${moveableObj.x}px, ${moveableObj.y}px, 0px)`;
+    }
   }
 
   public getZ(id) {
-
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      return moveableObj.z;
+    }
   }
 
   public getCards(): card[] {
     return this.cards;
+  }
+
+  private lookupMoveable(id): moveable {
+    return this.lookup[id];
   }
 
 
