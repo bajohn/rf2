@@ -42,7 +42,7 @@ export class MoveableService {
     const roomCardsResp = resp.data.cardsByRoom.items;
     console.log(roomCardsResp);
 
-    this.cards = [roomCardsResp.map(el => {
+    this.cards = roomCardsResp.map(el => {
       const cardObj: card = {
         id: el.id,
         roomId: this.roomService.id,
@@ -59,7 +59,7 @@ export class MoveableService {
       };
       this.lookup[el.moveable.id] = cardObj;
       return cardObj;
-    }).pop()];
+    });
 
     const vars = {
       roomId: this.roomService.id,
