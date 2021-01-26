@@ -13,7 +13,7 @@ export interface room  {
 
 
 export interface moveable {
-    id: string
+    moveableId: string
     roomId: string
     draggable: boolean
     x: number
@@ -42,7 +42,7 @@ export interface cardStack extends moveable{
 
 // moveable
 export interface card extends moveable {
-    // id: string 
+    id: string 
     faceUp: boolean
     cardValue: string
 }

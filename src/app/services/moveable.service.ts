@@ -16,8 +16,8 @@ import { exception } from 'console';
 export class MoveableService {
 
   private cards: card[];
-  private readonly lookup: { [key: string]: card | cardStack } = {};
-  private isMouseDown: boolean = false;
+  private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
+  private inMotion: moveable[] = [];
 
 
   //consts
@@ -34,8 +34,6 @@ export class MoveableService {
 
   }
 
-  // cut from room.component
-  // TODO finish this!
   private async listCards() {
     const listParams: CardsByRoomQueryVariables = {
       roomId: this.roomService.id
@@ -49,6 +47,7 @@ export class MoveableService {
         id: el.id,
         roomId: this.roomService.id,
         cardValue: el.cardValue,
+        moveableId: el.moveable.id,
         x: el.moveable.x,
         y: el.moveable.y,
         z: el.moveable.z,
@@ -58,17 +57,10 @@ export class MoveableService {
         lastOwner: el.moveable.lastOwner,
         draggable: true
       };
-      this.lookup[el.id] = cardObj;
+      this.lookup[el.moveable.id] = cardObj;
       return cardObj;
-      //this.cards[el.cardValue] = cardObjToPush;
     }).pop()];
 
-    // Shouldn't need this anymore
-    //this.cardValues = this.cards.map(el => el.cardValue);
-
-    // All cards of room in one subscription
-    // // 
-    // One subcsription per moveable
     const vars = {
       roomId: this.roomService.id,
     };
@@ -79,72 +71,72 @@ export class MoveableService {
     obs.subscribe({
       next: (resp: { value: { data: OnUpdateMoveableSubscription } }) => {
         console.log('trigger');
-        const updatedCard = resp.value.data.onUpdateMoveable;
+        const updated = resp.value.data.onUpdateMoveable;
+        const local = this.lookup[updated.id];
 
-        const localCard = this.cards['AD'];
-        const updateTime = (new Date(updatedCard.updatedAt)).getTime();
-        if (!localCard.inMotion
-          && this.playerService.id !== updatedCard.lastOwner
-          && updateTime > localCard.lastUpdateTime) {
+        const updateTime = (new Date(updated.updatedAt)).getTime();
+        if (!local.inMotion
+          && this.playerService.id !== updated.lastOwner
+          && updateTime > local.lastUpdated) {
           const copyProps = {
-            cardX: updatedCard.x,
-            cardY: updatedCard.y,
-            cardZ: updatedCard.z,
-            //faceUp: updatedCard.faceUp,
-            lastOwner: updatedCard.lastOwner,
+            x: updated.x,
+            y: updated.y,
+            z: updated.z,
+            lastOwner: updated.lastOwner,
             lastUpdateTime: updateTime
           };
-          Object.assign(localCard, copyProps);
+          Object.assign(local, copyProps);
         }
-
       }
     });
 
-  }
-
-  private publishCardUpdate(event: MouseEvent) {
-    for (const card of this.cards) {
-      // const curCard = this.cards[cardValue];
-      if (card.inMotion) {
-        const curTime = (new Date()).getTime();
-        const x = event.x;
-        const y = event.y;
-
-        card.x = Math.round(x - this.CARD_W / 2);
-        card.y = Math.round(y - this.CARD_H / 2);
-        if (curTime - card.lastUpdated > this.UPDATE_MIN_MS) {
-          card.lastUpdated = curTime;
-          // change to moveable 
-          const moveableParams: UpdateMoveableMutationVariables = {
-            input: {
-              id: card.id,
-              x: card.x,
-              y: card.y,
-              z: card.z,
-              lastOwner: this.playerService.id,
-              inMotion: card.inMotion,
-            }
-          };
-
-          API.graphql(graphqlOperation(updateMoveable, moveableParams));
-        }
-      }
-    }
   }
 
   private isCard(moveableIn: moveable) {
     return 'cardValue' in moveableIn;
   }
 
-
   public mouseMove(event: MouseEvent) {
+    this.inMotion.forEach(obj => {
+      const curTime = (new Date()).getTime();
+      const x = event.x;
+      const y = event.y;
+
+      obj.x = Math.round(x - this.CARD_W / 2);
+      obj.y = Math.round(y - this.CARD_H / 2);
+      if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
+        obj.lastUpdated = curTime;
+        const moveableParams: UpdateMoveableMutationVariables = {
+          input: {
+            id: obj.moveableId,
+            x: obj.x,
+            y: obj.y,
+            z: obj.z,
+            lastOwner: this.playerService.id,
+            inMotion: obj.inMotion,
+          }
+        };
+
+        API.graphql(graphqlOperation(updateMoveable, moveableParams));
+      }
+    });
   }
 
-  public mouseDown(event: MouseEvent) {
+  public mouseDown(id: string) {
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      if (this.inMotion.indexOf(moveableObj)) {
+        this.inMotion.push(moveableObj);
+      }
+    }
+  }
+
+  public mouseUp() {
+    console.log('mouse up')
+    this.inMotion = [];
   }
 
   public beingDragged(id: string) {
-    //return this.cards[cardValue].inMotion;
     const moveableObj = this.lookupMoveable(id);
     return moveableObj.inMotion;
   }
@@ -164,8 +156,6 @@ export class MoveableService {
   }
 
   public getTransform(id) {
-    //   const curCard = this.cards[cardValue];
-    // return `translate3d(${curCard.cardX}px, ${curCard.cardY}px, 0px)`;
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
       return `translate3d(${moveableObj.x}px, ${moveableObj.y}px, 0px)`;

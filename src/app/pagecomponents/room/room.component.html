@@ -8,7 +8,7 @@
 <div class="page-container" 
 (mousemove)="mouseMove($event)"
 
-(mouseup)="mouseUp()"
+(mouseup)="moveableService.mouseUp()"
 >
 
 <ng-container *ngFor="let card of moveableService.getCards()">
@@ -17,13 +17,13 @@
     draggable="false" 
     [style.position]="'absolute'" 
     [style.transform-origin]="'100% 0'" 
-    [style.transform]="moveableService.getTransform(card.id)"
-    [style.height]="moveableService.getHeight(card.id)"
-    [style.width]="moveableService.getWidth(card.id)"
-    [style.z-index]="moveableService.getZ(card.id)"
+    [style.transform]="moveableService.getTransform(card.moveableId)"
+    [style.height]="moveableService.getHeight(card.moveableId)"
+    [style.width]="moveableService.getWidth(card.moveableId)"
+    [style.z-index]="moveableService.getZ(card.moveableId)"
     [class.card-overlay]="true"
-    [class.card-inactive]="!moveableService.beingDragged(card.id)"
-    (mousedown)="moveableService.mouseDown(card.id)"
+    [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
+    (mousedown)="moveableService.mouseDown(card.moveableId)"
       >
     
     {{card.id}}

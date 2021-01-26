@@ -70,7 +70,6 @@ export class PlayerService {
    */
   playerNameFromResp(data: PlayersByRoomQuery) {
     const items = data.playersByRoom.items;
-    console.log(items);
 
     if (items.length === 1) {
       this.name = items[0].name;
