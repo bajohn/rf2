@@ -1,0 +1,16 @@
+
+<div draggable="false" [style.position]="'absolute'" 
+[style.transform]="moveableService.getTransform(moveableId)"
+[style.height]="moveableService.getHeight(moveableId)"
+[style.width]="moveableService.getWidth(moveableId)"
+[style.z-index]="moveableService.getZ(moveableId)" 
+[class.card-overlay]="true"
+[class.card-inactive]="!moveableService.beingDragged(moveableId)"
+(mousedown)="moveableService.mouseDown(moveableId)"
+>
+
+{{moveableId}}
+<!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
+draggable="false"
+    [src]="getFrontImgSrc(card.cardValue)"> -->
+</div>

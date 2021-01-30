@@ -125,12 +125,18 @@ export class MoveableService {
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
+      moveableObj.inMotion = true;
+      console.log(true);
       this.inMotion.push(moveableObj);
     }
   }
 
   public mouseUp() {
     console.log('mouse up',  this.inMotion)
+    this.inMotion.forEach(moveable=>{
+      moveable.inMotion = false;
+      console.log(false);
+    })
     this.inMotion = [];
   }
 

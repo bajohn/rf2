@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { CardComponent } from './subcomponents/card/card.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
     HomeComponent,
     RoomComponent,
     PlayerNameDialogComponent,
+    CardComponent,
   ],
   imports: [
     BrowserModule,

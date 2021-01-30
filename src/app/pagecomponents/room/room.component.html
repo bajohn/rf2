@@ -7,42 +7,11 @@
 
 <div class="page-container" (mousemove)="mouseMove($event)" (mouseup)="moveableService.mouseUp()">
 
-    <ng-container *ngFor="let card of moveableService.getCards();trackBy:trackByKey">
-        <div draggable="false" [style.position]="'absolute'" 
-            [style.transform]="debugTransform()"
-            [style.height]="moveableService.getHeight(card.moveableId)"
-            [style.width]="moveableService.getWidth(card.moveableId)"
-            [style.z-index]="moveableService.getZ(card.moveableId)" 
-            [class.card-overlay]="true"
-            [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
-            (mousedown)="moveableService.mouseDown(card.moveableId)"
-            >
+    <app-card *ngFor="let card of moveableService.getCards();" [moveableId]="card.moveableId">
 
-            {{card.cardValue}}
-            <!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
-            draggable="false"
-                [src]="getFrontImgSrc(card.cardValue)"> -->
-        </div>
-    </ng-container>
+    </app-card>
 
 </div>
 
 
-    <!-- This is fast! How do we create a loop of these? -->
-    <div draggable="false" 
-    [style.position]="'absolute'" 
 
-        [style.transform]="moveableService.getTransform('1a9c7550-44e3-43b0-9aaa-4376e55579a2')"
-        [style.height]="100"
-        [style.width]="100"
-        [style.z-index]="100" 
-        [class.card-overlay]="true"
-        [class.card-inactive]=""
-        >
-
-        Hi!
-        <!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
-        draggable="false"
-            [src]="getFrontImgSrc(card.cardValue)"> -->
-            <!-- [style.transform-origin]="'100% 0'" -->
-    </div>
