@@ -23,7 +23,7 @@ export class MoveableService {
   //consts
   public readonly CARD_H = 105;
   public readonly CARD_W = 75;
-  public readonly UPDATE_MIN_MS = 1000;
+  public readonly UPDATE_MIN_MS = 100;
 
   constructor(
     private playerService: PlayerService,
