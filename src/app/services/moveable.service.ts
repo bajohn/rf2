@@ -23,7 +23,7 @@ export class MoveableService {
   //consts
   public readonly CARD_H = 105;
   public readonly CARD_W = 75;
-  public readonly UPDATE_MIN_MS = 100;
+  public readonly UPDATE_MIN_MS = 1000;
 
   constructor(
     private playerService: PlayerService,
@@ -39,7 +39,7 @@ export class MoveableService {
       roomId: this.roomService.id
     };
     const resp = await API.graphql(graphqlOperation(cardsByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
-    const roomCardsResp = resp.data.cardsByRoom.items;
+    const roomCardsResp = [resp.data.cardsByRoom.items[0]];
     console.log(roomCardsResp);
 
     this.cards = roomCardsResp.map(el => {
@@ -97,8 +97,9 @@ export class MoveableService {
   }
 
   public mouseMove(event: MouseEvent) {
+    const curTime = (new Date()).getTime();
     this.inMotion.forEach(obj => {
-      const curTime = (new Date()).getTime();
+
       const x = event.x;
       const y = event.y;
 
@@ -116,7 +117,6 @@ export class MoveableService {
             inMotion: obj.inMotion,
           }
         };
-
         API.graphql(graphqlOperation(updateMoveable, moveableParams));
       }
     });
@@ -125,14 +125,12 @@ export class MoveableService {
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
-      if (this.inMotion.indexOf(moveableObj)) {
-        this.inMotion.push(moveableObj);
-      }
+      this.inMotion.push(moveableObj);
     }
   }
 
   public mouseUp() {
-    console.log('mouse up')
+    console.log('mouse up',  this.inMotion)
     this.inMotion = [];
   }
 

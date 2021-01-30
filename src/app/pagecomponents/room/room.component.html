@@ -5,35 +5,43 @@
     Player {{playerService.id}}
 </div>
 
-<div class="page-container" 
-(mousemove)="mouseMove($event)"
+<div class="page-container" (mousemove)="mouseMove($event)" (mouseup)="moveableService.mouseUp()">
 
-(mouseup)="moveableService.mouseUp()"
->
+    <ng-container *ngFor="let card of moveableService.getCards();trackBy:trackByKey">
+        <div draggable="false" [style.position]="'absolute'" 
+            [style.transform]="debugTransform()"
+            [style.height]="moveableService.getHeight(card.moveableId)"
+            [style.width]="moveableService.getWidth(card.moveableId)"
+            [style.z-index]="moveableService.getZ(card.moveableId)" 
+            [class.card-overlay]="true"
+            [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
+            (mousedown)="moveableService.mouseDown(card.moveableId)"
+            >
 
-<ng-container *ngFor="let card of moveableService.getCards()">
-    <div 
-  
-    draggable="false" 
-    [style.position]="'absolute'" 
-    [style.transform-origin]="'100% 0'" 
-    [style.transform]="moveableService.getTransform(card.moveableId)"
-    [style.height]="moveableService.getHeight(card.moveableId)"
-    [style.width]="moveableService.getWidth(card.moveableId)"
-    [style.z-index]="moveableService.getZ(card.moveableId)"
-    [class.card-overlay]="true"
-    [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
-    (mousedown)="moveableService.mouseDown(card.moveableId)"
-      >
-    
-    {{card.id}}
-
-    </div>
-</ng-container>
-
-
+            {{card.cardValue}}
+            <!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
+            draggable="false"
+                [src]="getFrontImgSrc(card.cardValue)"> -->
+        </div>
+    </ng-container>
 
 </div>
 
 
-      <!-- <img  draggable="false"  [src]="getFrontImgSrc(cardValue)"> -->
+
+    <div draggable="false" 
+    [style.position]="'absolute'" 
+    [style.transform-origin]="'100% 0'"
+        [style.transform]="moveableService.getTransform('1a9c7550-44e3-43b0-9aaa-4376e55579a2')"
+        [style.height]="100"
+        [style.width]="100"
+        [style.z-index]="100" 
+        [class.card-overlay]="true"
+        [class.card-inactive]=""
+        >
+
+        Hi!
+        <!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
+        draggable="false"
+            [src]="getFrontImgSrc(card.cardValue)"> -->
+    </div>
