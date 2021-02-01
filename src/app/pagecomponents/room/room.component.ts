@@ -10,8 +10,6 @@ import { PlayersByRoomQuery, PlayersByRoomQueryVariables } from 'src/app/API.ser
 import { PlayerService } from 'src/app/services/player.service';
 import { MoveableService } from 'src/app/services/moveable.service';
 import { RoomService } from 'src/app/services/room.service';
-import { card } from 'src/app/types';
-
 
 
 @Component({
@@ -61,27 +59,11 @@ export class RoomComponent implements OnInit {
   }
 
   mouseMove(event: MouseEvent) {
-    this.mouseX = event.x ;
-    this.mouseY = event.y;
     this.moveableService.mouseMove(event);
   }
 
   getFrontImgSrc(cardValue) {
     return `assets/cards/${cardValue}.svg`;
   }
-
-
-  // DEBUG:
-  mouseX = 0;
-  mouseY = 0;
-  debugTransform() {
-    return `translate3d(${this.mouseX}px, ${this.mouseY}px, 0px)`;
-  }
-
-
-  trackByKey = (index: number, obj: card): string => {
-
-    return obj.id;
-  };
 
 }

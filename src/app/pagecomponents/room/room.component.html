@@ -7,7 +7,7 @@
 
 <div class="page-container" (mousemove)="mouseMove($event)" (mouseup)="moveableService.mouseUp()">
 
-    <app-card *ngFor="let card of moveableService.getCards();" [moveableId]="card.moveableId">
+    <app-card *ngFor="let card of moveableService.getCards();" [card]="card">
 
     </app-card>
 

@@ -8,7 +8,6 @@ import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
 import { updateMoveable } from 'src/graphql/mutations';
 import { card, cardStack, moveable } from '../types';
-import { exception } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +38,7 @@ export class MoveableService {
       roomId: this.roomService.id
     };
     const resp = await API.graphql(graphqlOperation(cardsByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
-    const roomCardsResp = [resp.data.cardsByRoom.items[0]];
+    const roomCardsResp = resp.data.cardsByRoom.items;
     console.log(roomCardsResp);
 
     this.cards = roomCardsResp.map(el => {
@@ -132,8 +131,8 @@ export class MoveableService {
   }
 
   public mouseUp() {
-    console.log('mouse up',  this.inMotion)
-    this.inMotion.forEach(moveable=>{
+    console.log('mouse up', this.inMotion)
+    this.inMotion.forEach(moveable => {
       moveable.inMotion = false;
       console.log(false);
     })
