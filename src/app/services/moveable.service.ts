@@ -24,6 +24,9 @@ export class MoveableService {
   public readonly CARD_W = 75;
   public readonly UPDATE_MIN_MS = 100;
 
+  // DEBUG
+  AC_ID = '';
+
   constructor(
     private playerService: PlayerService,
     private roomService: RoomService
@@ -56,6 +59,9 @@ export class MoveableService {
         lastOwner: el.moveable.lastOwner,
         draggable: true
       };
+      if (el.cardValue === 'AC') {
+        this.AC_ID = el.moveable.id;
+      }
       this.lookup[el.moveable.id] = cardObj;
       return cardObj;
     });
@@ -104,7 +110,11 @@ export class MoveableService {
 
       obj.x = Math.round(x - this.CARD_W / 2);
       obj.y = Math.round(y - this.CARD_H / 2);
+
+
+
       if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
+        this.inBox(this.AC_ID, x, y);
         obj.lastUpdated = curTime;
         const moveableParams: UpdateMoveableMutationVariables = {
           input: {
@@ -119,6 +129,21 @@ export class MoveableService {
         API.graphql(graphqlOperation(updateMoveable, moveableParams));
       }
     });
+  }
+
+  private inBox(moveableId, mouseX, mouseY) {
+    const target = this.lookupMoveable(moveableId);
+    //console.log(mouseY, this.CARD_H + target.y);
+    if (this.isCard(target)) {
+
+      if (target.x < mouseX &&
+        mouseX < target.x + this.CARD_W &&
+        target.y + this.CARD_H / 2 < mouseY &&
+        mouseY < target.y + 3 / 2 * this.CARD_H) {
+        console.log('IN ACE C')
+        console.log((new Date()).getTime());
+      }
+    }
   }
 
   public mouseDown(id: string) {

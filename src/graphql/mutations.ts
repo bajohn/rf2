@@ -194,6 +194,81 @@ export const deleteCard = /* GraphQL */ `
     }
   }
 `;
+export const createCardStack = /* GraphQL */ `
+  mutation CreateCardStack(
+    $input: CreateCardStackInput!
+    $condition: ModelCardStackConditionInput
+  ) {
+    createCardStack(input: $input, condition: $condition) {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateCardStack = /* GraphQL */ `
+  mutation UpdateCardStack(
+    $input: UpdateCardStackInput!
+    $condition: ModelCardStackConditionInput
+  ) {
+    updateCardStack(input: $input, condition: $condition) {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteCardStack = /* GraphQL */ `
+  mutation DeleteCardStack(
+    $input: DeleteCardStackInput!
+    $condition: ModelCardStackConditionInput
+  ) {
+    deleteCardStack(input: $input, condition: $condition) {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createPlayer = /* GraphQL */ `
   mutation CreatePlayer(
     $input: CreatePlayerInput!

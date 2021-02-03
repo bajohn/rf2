@@ -49,6 +49,21 @@ type Card @model
   moveable: Moveable @connection
 }
 
+type CardStack @model
+ @auth (
+    rules: [
+      { allow: public, operations: [create, update, delete, read] }
+    ]
+  )
+  @key(fields: ["id"])
+  @key(name: "stacksByRoom", fields: ["roomId", "id"], queryField: "stacksByRoom")
+  {
+  id: ID!
+  roomId: ID!
+  moveable: Moveable @connection
+  cardIds: [String] # No connection needed, use a lookup
+}
+
 type Player @model
  @auth (
     rules: [
@@ -62,7 +77,7 @@ type Player @model
   roomId: ID!
   name: String!
   moveable: Moveable @connection
-  cards: [Card] @connection(keyName: "cardsByOwner", fields: ["id"])
+  cards: [Card] @connection(keyName: "cardsByOwner", fields: ["id"]) # Might not meed this lookup
 }
 
 

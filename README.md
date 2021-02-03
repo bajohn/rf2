@@ -16,8 +16,7 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
-- ngFor is too slow! Otherwise the setup is great. How can we iterate through the card
-array without using ngFor?
+- What's up with the offset in the card movements?
 
 
 

@@ -140,6 +140,54 @@ export const listCards = /* GraphQL */ `
     }
   }
 `;
+export const getCardStack = /* GraphQL */ `
+  query GetCardStack($id: ID!) {
+    getCardStack(id: $id) {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listCardStacks = /* GraphQL */ `
+  query ListCardStacks(
+    $id: ID
+    $filter: ModelCardStackFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listCardStacks(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        roomId
+        cardIds
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getPlayer = /* GraphQL */ `
   query GetPlayer($id: ID!) {
     getPlayer(id: $id) {
@@ -244,6 +292,34 @@ export const cardsByOwner = /* GraphQL */ `
         ownerId
         faceUp
         cardValue
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const stacksByRoom = /* GraphQL */ `
+  query StacksByRoom(
+    $roomId: ID
+    $id: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCardStackFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    stacksByRoom(
+      roomId: $roomId
+      id: $id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        roomId
+        cardIds
         createdAt
         updatedAt
       }

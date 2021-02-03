@@ -167,6 +167,72 @@ export const onDeleteCard = /* GraphQL */ `
     }
   }
 `;
+export const onCreateCardStack = /* GraphQL */ `
+  subscription OnCreateCardStack {
+    onCreateCardStack {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCardStack = /* GraphQL */ `
+  subscription OnUpdateCardStack {
+    onUpdateCardStack {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCardStack = /* GraphQL */ `
+  subscription OnDeleteCardStack {
+    onDeleteCardStack {
+      id
+      roomId
+      moveable {
+        id
+        draggable
+        x
+        y
+        z
+        lastOwner
+        inMotion
+        createdAt
+        updatedAt
+      }
+      cardIds
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreatePlayer = /* GraphQL */ `
   subscription OnCreatePlayer {
     onCreatePlayer {
