@@ -42,7 +42,6 @@ export class MoveableService {
     };
     const resp = await API.graphql(graphqlOperation(cardsByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
     const roomCardsResp = resp.data.cardsByRoom.items;
-    console.log(roomCardsResp);
 
     this.cards = roomCardsResp.map(el => {
       const cardObj: card = {
@@ -142,16 +141,13 @@ export class MoveableService {
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
       moveableObj.inMotion = true;
-      console.log(true);
       this.inMotion.push(moveableObj);
     }
   }
 
   public mouseUp() {
-    console.log('mouse up', this.inMotion)
     this.inMotion.forEach(moveable => {
       moveable.inMotion = false;
-      console.log(false);
     })
     this.inMotion = [];
     for (const card of this.cards) {
