@@ -1,17 +1,12 @@
-<div>
-    Room {{roomService.id}}
-</div>
-<div>
-    Player {{playerService.id}}
-</div>
-
 <div class="page-container" (mousemove)="mouseMove($event)" (mouseup)="moveableService.mouseUp()">
-
     <app-card *ngFor="let card of moveableService.getCards();" [card]="card">
 
     </app-card>
+    <div>
+        Room {{roomService.id}}
+    </div>
+    <div>
+        Player {{playerService.id}}
+    </div>
 
 </div>
-
-
-

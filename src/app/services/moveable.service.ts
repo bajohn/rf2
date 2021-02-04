@@ -75,7 +75,6 @@ export class MoveableService {
 
     obs.subscribe({
       next: (resp: { value: { data: OnUpdateMoveableSubscription } }) => {
-        console.log('trigger');
         const updated = resp.value.data.onUpdateMoveable;
         const local = this.lookup[updated.id];
 
@@ -111,8 +110,6 @@ export class MoveableService {
       obj.x = Math.round(x - this.CARD_W / 2);
       obj.y = Math.round(y - this.CARD_H / 2);
 
-
-
       if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
         this.inBox(this.AC_ID, x, y);
         obj.lastUpdated = curTime;
@@ -133,15 +130,16 @@ export class MoveableService {
 
   private inBox(moveableId, mouseX, mouseY) {
     const target = this.lookupMoveable(moveableId);
-    //console.log(mouseY, this.CARD_H + target.y);
     if (this.isCard(target)) {
 
       if (target.x < mouseX &&
         mouseX < target.x + this.CARD_W &&
-        target.y + this.CARD_H / 2 < mouseY &&
-        mouseY < target.y + 3 / 2 * this.CARD_H) {
+        target.y < mouseY &&
+        mouseY < target.y + this.CARD_H) {
         console.log('IN ACE C')
-        console.log((new Date()).getTime());
+        //console.log((new Date()).getTime());
+      } else {
+        console.clear();
       }
     }
   }
