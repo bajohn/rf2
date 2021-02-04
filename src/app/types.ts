@@ -37,7 +37,7 @@ export interface cardStack extends moveable{
     id: string
     spread: boolean // each card offset or not 
     cards: card[]
-
+    highlight: boolean
 }
 
 // moveable
@@ -45,6 +45,7 @@ export interface card extends moveable {
     id: string 
     faceUp: boolean
     cardValue: string
+    highlight: boolean
 }
 //////////////////////////////
 // RF only:

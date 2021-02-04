@@ -6,6 +6,7 @@
 [style.z-index]="moveableService.getZ(card.moveableId)" 
 [class.card-overlay]="true"
 [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
+[class.highlight]="moveableService.isHighlighted(card.moveableId)"
 (mousedown)="moveableService.mouseDown(card.moveableId)"
 >
 

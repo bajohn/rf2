@@ -57,11 +57,9 @@ export class MoveableService {
         faceUp: el.faceUp,
         lastUpdated: (new Date(el.moveable.updatedAt)).getTime(),
         lastOwner: el.moveable.lastOwner,
-        draggable: true
+        draggable: true,
+        highlight: false
       };
-      if (el.cardValue === 'AC') {
-        this.AC_ID = el.moveable.id;
-      }
       this.lookup[el.moveable.id] = cardObj;
       return cardObj;
     });
@@ -96,7 +94,7 @@ export class MoveableService {
 
   }
 
-  private isCard(moveableIn: moveable) {
+  private isCard(moveableIn: card | cardStack) {
     return 'cardValue' in moveableIn;
   }
 
@@ -110,8 +108,12 @@ export class MoveableService {
       obj.x = Math.round(x - this.CARD_W / 2);
       obj.y = Math.round(y - this.CARD_H / 2);
 
+      for (const card of this.cards) {
+        card.highlight = this.inCard(card, x, y);
+      }
+
       if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
-        this.inBox(this.AC_ID, x, y);
+
         obj.lastUpdated = curTime;
         const moveableParams: UpdateMoveableMutationVariables = {
           input: {
@@ -128,20 +130,12 @@ export class MoveableService {
     });
   }
 
-  private inBox(moveableId, mouseX, mouseY) {
-    const target = this.lookupMoveable(moveableId);
-    if (this.isCard(target)) {
+  private inCard(card, mouseX, mouseY) {
+    return card.x < mouseX &&
+      mouseX < card.x + this.CARD_W &&
+      card.y < mouseY &&
+      mouseY < card.y + this.CARD_H;
 
-      if (target.x < mouseX &&
-        mouseX < target.x + this.CARD_W &&
-        target.y < mouseY &&
-        mouseY < target.y + this.CARD_H) {
-        console.log('IN ACE C')
-        //console.log((new Date()).getTime());
-      } else {
-        console.clear();
-      }
-    }
   }
 
   public mouseDown(id: string) {
@@ -160,6 +154,9 @@ export class MoveableService {
       console.log(false);
     })
     this.inMotion = [];
+    for (const card of this.cards) {
+      card.highlight = false;
+    }
   }
 
   public beingDragged(id: string) {
@@ -195,11 +192,19 @@ export class MoveableService {
     }
   }
 
+  public isHighlighted(id) {
+    const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj)) {
+      const card = moveableObj as card;
+      return card.highlight;
+    }
+  }
+
   public getCards(): card[] {
     return this.cards;
   }
 
-  private lookupMoveable(id): moveable {
+  private lookupMoveable(id): card | cardStack {
     return this.lookup[id];
   }
 
