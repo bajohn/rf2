@@ -38,4 +38,44 @@ export const cardsByRoomFull = /* GraphQL */ `
       nextToken
     }
   }
+`
+export const stacksByRoomFull = /* GraphQL */ `
+  query StacksByRoomFull(
+  $roomId: ID
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelCardStackFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  stacksByRoom(
+    roomId: $roomId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      roomId
+      cardIds
+      createdAt
+      updatedAt
+      moveable {
+            id
+            draggable
+            x
+            y
+            z
+            lastOwner
+            inMotion
+            createdAt
+            updatedAt
+      }
+    }
+    nextToken
+  }
+}
 `;
+

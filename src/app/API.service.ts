@@ -193,6 +193,32 @@ export type DeleteCardInput = {
   id: string,
 };
 
+export type CreateCardStackInput = {
+  id?: string | null,
+  roomId: string,
+  cardIds?: Array< string | null > | null,
+  cardStackMoveableId?: string | null,
+};
+
+export type ModelCardStackConditionInput = {
+  roomId?: ModelIDInput | null,
+  cardIds?: ModelStringInput | null,
+  and?: Array< ModelCardStackConditionInput | null > | null,
+  or?: Array< ModelCardStackConditionInput | null > | null,
+  not?: ModelCardStackConditionInput | null,
+};
+
+export type UpdateCardStackInput = {
+  id: string,
+  roomId?: string | null,
+  cardIds?: Array< string | null > | null,
+  cardStackMoveableId?: string | null,
+};
+
+export type DeleteCardStackInput = {
+  id: string,
+};
+
 export type CreatePlayerInput = {
   id?: string | null,
   roomId: string,
@@ -238,6 +264,15 @@ export type ModelMoveableFilterInput = {
   and?: Array< ModelMoveableFilterInput | null > | null,
   or?: Array< ModelMoveableFilterInput | null > | null,
   not?: ModelMoveableFilterInput | null,
+};
+
+export type ModelCardStackFilterInput = {
+  id?: ModelIDInput | null,
+  roomId?: ModelIDInput | null,
+  cardIds?: ModelStringInput | null,
+  and?: Array< ModelCardStackFilterInput | null > | null,
+  or?: Array< ModelCardStackFilterInput | null > | null,
+  not?: ModelCardStackFilterInput | null,
 };
 
 export type ModelPlayerFilterInput = {
@@ -506,6 +541,90 @@ export type DeleteCardMutation = {
   } | null,
 };
 
+export type CreateCardStackMutationVariables = {
+  input: CreateCardStackInput,
+  condition?: ModelCardStackConditionInput | null,
+};
+
+export type CreateCardStackMutation = {
+  createCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateCardStackMutationVariables = {
+  input: UpdateCardStackInput,
+  condition?: ModelCardStackConditionInput | null,
+};
+
+export type UpdateCardStackMutation = {
+  updateCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteCardStackMutationVariables = {
+  input: DeleteCardStackInput,
+  condition?: ModelCardStackConditionInput | null,
+};
+
+export type DeleteCardStackMutation = {
+  deleteCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreatePlayerMutationVariables = {
   input: CreatePlayerInput,
   condition?: ModelPlayerConditionInput | null,
@@ -746,6 +865,56 @@ export type ListCardsQuery = {
   } | null,
 };
 
+export type GetCardStackQueryVariables = {
+  id: string,
+};
+
+export type GetCardStackQuery = {
+  getCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListCardStacksQueryVariables = {
+  id?: string | null,
+  filter?: ModelCardStackFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListCardStacksQuery = {
+  listCardStacks:  {
+    __typename: "ModelCardStackConnection",
+    items:  Array< {
+      __typename: "CardStack",
+      id: string,
+      roomId: string,
+      cardIds: Array< string | null > | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
 export type GetPlayerQueryVariables = {
   id: string,
 };
@@ -845,6 +1014,30 @@ export type CardsByOwnerQuery = {
       ownerId: string,
       faceUp: boolean,
       cardValue: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type StacksByRoomQueryVariables = {
+  roomId?: string | null,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCardStackFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type StacksByRoomQuery = {
+  stacksByRoom:  {
+    __typename: "ModelCardStackConnection",
+    items:  Array< {
+      __typename: "CardStack",
+      id: string,
+      roomId: string,
+      cardIds: Array< string | null > | null,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -1045,6 +1238,75 @@ export type OnDeleteCardSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateCardStackSubscription = {
+  onCreateCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateCardStackSubscription = {
+  onUpdateCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteCardStackSubscription = {
+  onDeleteCardStack:  {
+    __typename: "CardStack",
+    id: string,
+    roomId: string,
+    moveable:  {
+      __typename: "Moveable",
+      id: string,
+      draggable: boolean,
+      x: number,
+      y: number,
+      z: number,
+      lastOwner: string,
+      inMotion: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    cardIds: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
   } | null,

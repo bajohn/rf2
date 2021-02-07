@@ -1,8 +1,21 @@
 import { Injectable } from '@angular/core';
 import { API, graphqlOperation } from 'aws-amplify';
-import { cardsByRoomFull } from 'src/graphql/customqueries';
+import {
+  cardsByRoomFull,
+  stacksByRoomFull
+} from 'src/graphql/customqueries';
 import { onUpdateMoveable } from 'src/graphql/subscriptions';
-import { CardsByRoomFullQuery, CardsByRoomQueryVariables, OnUpdateMoveableSubscription, UpdateMoveableMutationVariables } from '../API.service';
+import {
+  CardsByRoomFullQuery,
+  CardsByRoomQueryVariables,
+  OnUpdateMoveableSubscription,
+  UpdateMoveableMutationVariables,
+  StacksByRoomQuery,
+  StacksByRoomQueryVariables,
+
+} from '../API.service';
+
+
 import Observable from 'zen-observable-ts';
 import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
@@ -32,7 +45,17 @@ export class MoveableService {
     private roomService: RoomService
 
   ) {
+    this.listStacks();
     this.listCards();
+
+  }
+
+  private async listStacks() {
+    const listParams: StacksByRoomQueryVariables = {
+      roomId: this.roomService.id
+    };
+    const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
+    console.log(resp);
 
   }
 
@@ -148,7 +171,7 @@ export class MoveableService {
   public mouseUp() {
     this.inMotion.forEach(moveable => {
       moveable.inMotion = false;
-    })
+    });
     this.inMotion = [];
     for (const card of this.cards) {
       card.highlight = false;
@@ -203,6 +226,7 @@ export class MoveableService {
   private lookupMoveable(id): card | cardStack {
     return this.lookup[id];
   }
+
 
 
 }

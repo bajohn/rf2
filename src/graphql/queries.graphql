@@ -125,6 +125,50 @@ query ListCards(
     nextToken
   }
 }
+query GetCardStack($id: ID!) {
+  getCardStack(id: $id) {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
+query ListCardStacks(
+  $id: ID
+  $filter: ModelCardStackFilterInput
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listCardStacks(
+    id: $id
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      id
+      roomId
+      cardIds
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
 query GetPlayer($id: ID!) {
   getPlayer(id: $id) {
     id
@@ -222,6 +266,32 @@ query CardsByOwner(
       ownerId
       faceUp
       cardValue
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query StacksByRoom(
+  $roomId: ID
+  $id: ModelIDKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelCardStackFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  stacksByRoom(
+    roomId: $roomId
+    id: $id
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      roomId
+      cardIds
       createdAt
       updatedAt
     }

@@ -173,6 +173,75 @@ mutation DeleteCard(
     updatedAt
   }
 }
+mutation CreateCardStack(
+  $input: CreateCardStackInput!
+  $condition: ModelCardStackConditionInput
+) {
+  createCardStack(input: $input, condition: $condition) {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateCardStack(
+  $input: UpdateCardStackInput!
+  $condition: ModelCardStackConditionInput
+) {
+  updateCardStack(input: $input, condition: $condition) {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteCardStack(
+  $input: DeleteCardStackInput!
+  $condition: ModelCardStackConditionInput
+) {
+  deleteCardStack(input: $input, condition: $condition) {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
 mutation CreatePlayer(
   $input: CreatePlayerInput!
   $condition: ModelPlayerConditionInput

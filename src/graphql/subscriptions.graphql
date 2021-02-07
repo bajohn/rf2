@@ -146,6 +146,66 @@ subscription OnDeleteCard {
     updatedAt
   }
 }
+subscription OnCreateCardStack {
+  onCreateCardStack {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateCardStack {
+  onUpdateCardStack {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteCardStack {
+  onDeleteCardStack {
+    id
+    roomId
+    moveable {
+      id
+      draggable
+      x
+      y
+      z
+      lastOwner
+      inMotion
+      createdAt
+      updatedAt
+    }
+    cardIds
+    createdAt
+    updatedAt
+  }
+}
 subscription OnCreatePlayer {
   onCreatePlayer {
     id

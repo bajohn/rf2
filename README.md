@@ -16,7 +16,12 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
-- What's up with the offset in the card movements?
+- Logic for init, with card stacks
+    - populate cards from backend
+    - populate card stacks from backend. 
+    - moving stack - moves all owned cards in a loop
+    - z index should be able to handle the visual of the stack
+    - all cards under top one should be upside down. top one can be up or down.
 
 
 
@@ -37,3 +42,4 @@ to avoid a circular dependency in services
 - Figure out parameterized subscriptions!
 - Figure how to get query strings from auto-generated queries.
 - Set up card subscriptions with properly scoped parameters (`cardValue, roomId`)
+- What's up with the offset in the card movements?
