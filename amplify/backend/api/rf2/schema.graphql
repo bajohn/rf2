@@ -12,6 +12,7 @@ type Room @model
   gameType: String!
   players: [Player] @connection(keyName: "playersByRoom", fields: ["id"])
   card: [Card] @connection(keyName: "cardsByRoom", fields: ["id"])
+  cardStacks: [CardStack] @connection(keyName: "stacksByRoom", fields: ["id"])
 }
 
 type Moveable @model

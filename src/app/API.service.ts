@@ -92,6 +92,15 @@ export type ModelStringInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelCardStackFilterInput = {
+  id?: ModelIDInput | null,
+  roomId?: ModelIDInput | null,
+  cardIds?: ModelStringInput | null,
+  and?: Array< ModelCardStackFilterInput | null > | null,
+  or?: Array< ModelCardStackFilterInput | null > | null,
+  not?: ModelCardStackFilterInput | null,
+};
+
 export type CreateRoomInput = {
   id?: string | null,
   gameType: string,
@@ -266,15 +275,6 @@ export type ModelMoveableFilterInput = {
   not?: ModelMoveableFilterInput | null,
 };
 
-export type ModelCardStackFilterInput = {
-  id?: ModelIDInput | null,
-  roomId?: ModelIDInput | null,
-  cardIds?: ModelStringInput | null,
-  and?: Array< ModelCardStackFilterInput | null > | null,
-  or?: Array< ModelCardStackFilterInput | null > | null,
-  not?: ModelCardStackFilterInput | null,
-};
-
 export type ModelPlayerFilterInput = {
   id?: ModelIDInput | null,
   roomId?: ModelIDInput | null,
@@ -322,6 +322,42 @@ export type CardsByRoomFullQuery = {
   } | null,
 };
 
+export type StacksByRoomFullQueryVariables = {
+  roomId?: string | null,
+  id?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCardStackFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type StacksByRoomFullQuery = {
+  stacksByRoom:  {
+    __typename: "ModelCardStackConnection",
+    items:  Array< {
+      __typename: "CardStack",
+      id: string,
+      roomId: string,
+      cardIds: Array< string | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      moveable:  {
+        __typename: "Moveable",
+        id: string,
+        draggable: boolean,
+        x: number,
+        y: number,
+        z: number,
+        lastOwner: string,
+        inMotion: boolean,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
 export type CreateRoomMutationVariables = {
   input: CreateRoomInput,
   condition?: ModelRoomConditionInput | null,
@@ -338,6 +374,10 @@ export type CreateRoomMutation = {
     } | null,
     card:  {
       __typename: "ModelCardConnection",
+      nextToken: string | null,
+    } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -363,6 +403,10 @@ export type UpdateRoomMutation = {
       __typename: "ModelCardConnection",
       nextToken: string | null,
     } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
+      nextToken: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -384,6 +428,10 @@ export type DeleteRoomMutation = {
     } | null,
     card:  {
       __typename: "ModelCardConnection",
+      nextToken: string | null,
+    } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,
@@ -738,6 +786,10 @@ export type GetRoomQuery = {
       __typename: "ModelCardConnection",
       nextToken: string | null,
     } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
+      nextToken: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1082,6 +1134,10 @@ export type OnCreateRoomSubscription = {
       __typename: "ModelCardConnection",
       nextToken: string | null,
     } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
+      nextToken: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1100,6 +1156,10 @@ export type OnUpdateRoomSubscription = {
       __typename: "ModelCardConnection",
       nextToken: string | null,
     } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
+      nextToken: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1116,6 +1176,10 @@ export type OnDeleteRoomSubscription = {
     } | null,
     card:  {
       __typename: "ModelCardConnection",
+      nextToken: string | null,
+    } | null,
+    cardStacks:  {
+      __typename: "ModelCardStackConnection",
       nextToken: string | null,
     } | null,
     createdAt: string,

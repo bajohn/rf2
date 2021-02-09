@@ -13,12 +13,16 @@ import {
   CreateCardStackMutationVariables,
   CreateMoveableMutation,
   CreateMoveableMutationVariables,
+  DeleteMoveableMutationVariables,
+  DeleteMoveableMutation,
+  DeleteCardStackMutationVariables,
+  DeleteCardStackMutation,
 
 } from 'src/app/API.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { MoveableService } from 'src/app/services/moveable.service';
 import { RoomService } from 'src/app/services/room.service';
-import { createCardStack, createMoveable } from 'src/graphql/mutations';
+import { createCardStack, createMoveable, deleteCardStack, deleteMoveable } from 'src/graphql/mutations';
 
 
 @Component({
@@ -75,20 +79,28 @@ export class RoomComponent implements OnInit {
     return `assets/cards/${cardValue}.svg`;
   }
 
-  async clickCreate() {
+  public clickCreate() {
     console.log('click');
+    this.createStack();
+  }
 
+  public clickDelete() {
+    console.log('click');
+    this.deleteStack();
+  }
+
+  private async createStack() {
     const createMoveableParams: CreateMoveableMutationVariables = {
       input: {
         x: 100,
         y: 100,
         z: 100,
-        inMotion: false, 
-        draggable: true, 
+        inMotion: false,
+        draggable: true,
         lastOwner: '',
       }
     }
-    const moveableResp = await await API.graphql(graphqlOperation(createMoveable, createMoveableParams)) as { data: CreateMoveableMutation };
+    const moveableResp = await API.graphql(graphqlOperation(createMoveable, createMoveableParams)) as { data: CreateMoveableMutation };
     const moveableId = moveableResp.data.createMoveable.id;
 
 
@@ -99,7 +111,27 @@ export class RoomComponent implements OnInit {
       }
     }
     const resp = await API.graphql(graphqlOperation(createCardStack, createStackParams)) as { data: CreateCardStackMutation };
-    console.log(resp);
+  }
+
+  private async deleteStack() {
+    const stacks = this.moveableService.getStacks();
+    if (stacks.length > 0) {
+      const stack = stacks.pop();
+
+      const deleteMoveableParams: DeleteMoveableMutationVariables = {
+        input: {
+          id: stack.moveableId
+        }
+      };
+      const moveableResp = await API.graphql(graphqlOperation(deleteMoveable, deleteMoveableParams)) as { data: DeleteMoveableMutation };
+
+      const deleteStackParams: DeleteCardStackMutationVariables = {
+        input: {
+          id: stack.id
+        }
+      };
+      const stackResp = await API.graphql(graphqlOperation(deleteCardStack, deleteStackParams)) as { data: DeleteCardStackMutation };
+    }
   }
 
 }

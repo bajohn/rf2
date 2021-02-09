@@ -35,7 +35,7 @@ export interface player {
 // moveable
 export interface cardStack extends moveable{
     id: string
-    spread: boolean // each card offset or not 
+    // spread: boolean // each card offset or not 
     cards: card[]
     highlight: boolean
 }

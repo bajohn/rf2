@@ -9,6 +9,9 @@ subscription OnCreateRoom {
     card {
       nextToken
     }
+    cardStacks {
+      nextToken
+    }
     createdAt
     updatedAt
   }
@@ -23,6 +26,9 @@ subscription OnUpdateRoom {
     card {
       nextToken
     }
+    cardStacks {
+      nextToken
+    }
     createdAt
     updatedAt
   }
@@ -35,6 +41,9 @@ subscription OnDeleteRoom {
       nextToken
     }
     card {
+      nextToken
+    }
+    cardStacks {
       nextToken
     }
     createdAt

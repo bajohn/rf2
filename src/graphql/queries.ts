@@ -13,6 +13,9 @@ export const getRoom = /* GraphQL */ `
       card {
         nextToken
       }
+      cardStacks {
+        nextToken
+      }
       createdAt
       updatedAt
     }

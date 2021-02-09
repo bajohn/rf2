@@ -12,6 +12,9 @@ mutation CreateRoom(
     card {
       nextToken
     }
+    cardStacks {
+      nextToken
+    }
     createdAt
     updatedAt
   }
@@ -29,6 +32,9 @@ mutation UpdateRoom(
     card {
       nextToken
     }
+    cardStacks {
+      nextToken
+    }
     createdAt
     updatedAt
   }
@@ -44,6 +50,9 @@ mutation DeleteRoom(
       nextToken
     }
     card {
+      nextToken
+    }
+    cardStacks {
       nextToken
     }
     createdAt

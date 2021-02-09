@@ -13,6 +13,9 @@ export const onCreateRoom = /* GraphQL */ `
       card {
         nextToken
       }
+      cardStacks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -29,6 +32,9 @@ export const onUpdateRoom = /* GraphQL */ `
       card {
         nextToken
       }
+      cardStacks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -43,6 +49,9 @@ export const onDeleteRoom = /* GraphQL */ `
         nextToken
       }
       card {
+        nextToken
+      }
+      cardStacks {
         nextToken
       }
       createdAt

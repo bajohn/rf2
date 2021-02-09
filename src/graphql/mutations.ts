@@ -16,6 +16,9 @@ export const createRoom = /* GraphQL */ `
       card {
         nextToken
       }
+      cardStacks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -35,6 +38,9 @@ export const updateRoom = /* GraphQL */ `
       card {
         nextToken
       }
+      cardStacks {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -52,6 +58,9 @@ export const deleteRoom = /* GraphQL */ `
         nextToken
       }
       card {
+        nextToken
+      }
+      cardStacks {
         nextToken
       }
       createdAt

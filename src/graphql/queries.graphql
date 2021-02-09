@@ -9,6 +9,9 @@ query GetRoom($id: ID!) {
     card {
       nextToken
     }
+    cardStacks {
+      nextToken
+    }
     createdAt
     updatedAt
   }

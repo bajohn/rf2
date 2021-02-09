@@ -10,8 +10,9 @@ import {
   CardsByRoomQueryVariables,
   OnUpdateMoveableSubscription,
   UpdateMoveableMutationVariables,
-  StacksByRoomQuery,
+  GetMoveableQuery,
   StacksByRoomQueryVariables,
+  StacksByRoomFullQuery,
 
 } from '../API.service';
 
@@ -28,6 +29,7 @@ import { card, cardStack, moveable } from '../types';
 export class MoveableService {
 
   private cards: card[];
+  private stacks: cardStack[];
   private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
   private inMotion: moveable[] = [];
 
@@ -54,9 +56,22 @@ export class MoveableService {
     const listParams: StacksByRoomQueryVariables = {
       roomId: this.roomService.id
     };
-    const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
-    console.log(resp);
+    const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: StacksByRoomFullQuery };
+    const roomStacksResp = resp.data.stacksByRoom.items;
 
+    this.stacks = roomStacksResp.map(el => {
+
+      const moveableResp = this.respToLoc(el);
+      const stackObj: cardStack = Object.assign({
+        id: el.id,
+        highlight: false,
+        cards: []
+      }, moveableResp);
+      this.lookup[el.moveable.id] = stackObj;
+      return stackObj;
+
+    });
+    console.log(this.stacks);
   }
 
   private async listCards() {
@@ -67,21 +82,14 @@ export class MoveableService {
     const roomCardsResp = resp.data.cardsByRoom.items;
 
     this.cards = roomCardsResp.map(el => {
-      const cardObj: card = {
+
+      const moveableResp = this.respToLoc(el);
+      const cardObj: card = Object.assign({
         id: el.id,
-        roomId: this.roomService.id,
-        cardValue: el.cardValue,
-        moveableId: el.moveable.id,
-        x: el.moveable.x,
-        y: el.moveable.y,
-        z: el.moveable.z,
-        inMotion: el.moveable.inMotion,
         faceUp: el.faceUp,
-        lastUpdated: (new Date(el.moveable.updatedAt)).getTime(),
-        lastOwner: el.moveable.lastOwner,
-        draggable: true,
+        cardValue: el.cardValue,
         highlight: false
-      };
+      }, moveableResp);
       this.lookup[el.moveable.id] = cardObj;
       return cardObj;
     });
@@ -114,6 +122,24 @@ export class MoveableService {
       }
     });
 
+  }
+
+  // Stealing GetMoveableQuery as a general moveable type 
+  // from the backend
+  private respToLoc(el: { moveable: GetMoveableQuery['getMoveable'] }) {
+    const resp: moveable = {
+      //id: el.id,
+      roomId: this.roomService.id,
+      moveableId: el.moveable.id,
+      x: el.moveable.x,
+      y: el.moveable.y,
+      z: el.moveable.z,
+      inMotion: el.moveable.inMotion,
+      lastUpdated: (new Date(el.moveable.updatedAt)).getTime(),
+      lastOwner: el.moveable.lastOwner,
+      draggable: true,
+    }
+    return resp;
   }
 
   private isCard(moveableIn: card | cardStack) {
@@ -221,6 +247,10 @@ export class MoveableService {
 
   public getCards(): card[] {
     return this.cards;
+  }
+
+  public getStacks(): cardStack[] {
+    return this.stacks;
   }
 
   private lookupMoveable(id): card | cardStack {
