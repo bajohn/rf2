@@ -34,10 +34,13 @@ export class MoveableService {
   private inMotion: moveable[] = [];
 
 
-  //consts
+  //consts  public readonly UPDATE_MIN_MS = 100;
+  public readonly UPDATE_MIN_MS = 100;
   public readonly CARD_H = 105;
   public readonly CARD_W = 75;
-  public readonly UPDATE_MIN_MS = 100;
+  public readonly STACK_H = 105;
+  public readonly STACK_W = 100;
+
 
   // DEBUG
   AC_ID = '';
@@ -146,6 +149,10 @@ export class MoveableService {
     return 'cardValue' in moveableIn;
   }
 
+  private isStack(moveableIn: card | cardStack) {
+    return 'cards' in moveableIn;
+  }
+
   public mouseMove(event: MouseEvent) {
     const curTime = (new Date()).getTime();
     this.inMotion.forEach(obj => {
@@ -156,9 +163,14 @@ export class MoveableService {
       obj.x = Math.round(x - this.CARD_W / 2);
       obj.y = Math.round(y - this.CARD_H / 2);
 
+
       for (const card of this.cards) {
-        card.highlight = this.inCard(card, x, y);
+        this.updateHighlight(x, y, card);
       }
+      for (const stack of this.stacks) {
+        this.updateHighlight(x, y, stack);
+      }
+
 
       if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
 
@@ -178,20 +190,30 @@ export class MoveableService {
     });
   }
 
-  private inCard(card, mouseX, mouseY) {
-    return card.x < mouseX &&
-      mouseX < card.x + this.CARD_W &&
-      card.y < mouseY &&
-      mouseY < card.y + this.CARD_H;
+  private updateHighlight(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
+    const curHighlight = moveableIn.highlight;
+    const nextHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
+    if (curHighlight !== nextHighlight) {
+      console.log(moveableIn, nextHighlight);
+      moveableIn.highlight = nextHighlight;
+    }
+  }
+
+  private inMoveable(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
+    const width = this.isCard(moveableIn) ? this.CARD_W : this.STACK_W
+    const height = this.isCard(moveableIn) ? this.CARD_H : this.STACK_H
+    return moveableIn.x < mouseX &&
+      mouseX < moveableIn.x + width &&
+      moveableIn.y < mouseY &&
+      mouseY < moveableIn.y + height;
 
   }
 
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
-    if (this.isCard(moveableObj)) {
-      moveableObj.inMotion = true;
-      this.inMotion.push(moveableObj);
-    }
+    moveableObj.inMotion = true;
+    this.inMotion.push(moveableObj);
+
   }
 
   public mouseUp() {
@@ -202,6 +224,10 @@ export class MoveableService {
     for (const card of this.cards) {
       card.highlight = false;
     }
+    for (const stack of this.stacks) {
+      stack.highlight = false;
+    }
+
   }
 
   public beingDragged(id: string) {
@@ -213,6 +239,8 @@ export class MoveableService {
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
       return this.CARD_H + 'px';
+    } else if (this.isStack(moveableObj)) {
+      return this.STACK_H + 'px';
     }
   }
 
@@ -220,27 +248,25 @@ export class MoveableService {
     const moveableObj = this.lookupMoveable(id);
     if (this.isCard(moveableObj)) {
       return this.CARD_W + 'px';
+    } else if (this.isStack(moveableObj)) {
+      return this.STACK_W + 'px';
     }
   }
 
   public getTransform(id) {
     const moveableObj = this.lookupMoveable(id);
-    if (this.isCard(moveableObj)) {
-      return `translate3d(${moveableObj.x}px, ${moveableObj.y}px, 0px)`;
-    }
+    return `translate3d(${moveableObj.x}px, ${moveableObj.y}px, 0px)`;
   }
 
   public getZ(id) {
     const moveableObj = this.lookupMoveable(id);
-    if (this.isCard(moveableObj)) {
-      return moveableObj.z;
-    }
+    return moveableObj.z;
   }
 
   public isHighlighted(id) {
     const moveableObj = this.lookupMoveable(id);
-    if (this.isCard(moveableObj)) {
-      const card = moveableObj as card;
+    if (this.isCard(moveableObj) || this.isStack(moveableObj)) {
+      const card = moveableObj as card | cardStack;
       return card.highlight;
     }
   }

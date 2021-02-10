@@ -2,6 +2,11 @@
     <app-card *ngFor="let card of moveableService.getCards();" [card]="card">
 
     </app-card>
+
+    <app-card-stack *ngFor="let stack of moveableService.getStacks();" [stack]="stack">
+
+    </app-card-stack>
+
     <div>
         Room {{roomService.id}}
     </div>

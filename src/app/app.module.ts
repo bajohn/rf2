@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { CardComponent } from './subcomponents/card/card.component';
+import { CardStackComponent } from './subcomponents/card-stack/card-stack.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { CardComponent } from './subcomponents/card/card.component';
     RoomComponent,
     PlayerNameDialogComponent,
     CardComponent,
+    CardStackComponent,
   ],
   imports: [
     BrowserModule,

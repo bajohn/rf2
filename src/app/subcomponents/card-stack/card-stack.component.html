@@ -1,0 +1,18 @@
+
+<div draggable="false" [style.position]="'absolute'" 
+[style.transform]="moveableService.getTransform(stack.moveableId)"
+[style.height]="moveableService.getHeight(stack.moveableId)"
+[style.width]="moveableService.getWidth(stack.moveableId)"
+[style.z-index]="moveableService.getZ(stack.moveableId)" 
+[class.card-overlay]="true"
+[class.card-inactive]="!moveableService.beingDragged(stack.moveableId)"
+[class.highlight]="moveableService.isHighlighted(stack.moveableId)"
+(mousedown)="moveableService.mouseDown(stack.moveableId)"
+>
+
+Card count: {{stack.cards.length}}
+
+<!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
+draggable="false"
+    [src]="getFrontImgSrc(card.cardValue)"> -->
+</div>
