@@ -4,6 +4,13 @@
 
 }
 
+.card-overlay::selection  {
+    color: none;
+    background: none;
+
+}
+
+
 .card-inactive {
     transition: transform 100ms ease-in-out;
 }
@@ -18,6 +25,11 @@
     background-color: lightgray;
     position: absolute;
     z-index:0;
+}
+
+.page-container::selection {
+    color: none;
+    background: none;
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
