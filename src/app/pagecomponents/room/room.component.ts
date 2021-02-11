@@ -75,10 +75,6 @@ export class RoomComponent implements OnInit {
     this.moveableService.mouseMove(event);
   }
 
-  getFrontImgSrc(cardValue) {
-    return `assets/cards/${cardValue}.svg`;
-  }
-
   public clickCreate() {
     console.log('click');
     this.createStack();

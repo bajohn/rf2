@@ -15,4 +15,8 @@ export class CardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getFrontImgSrc(cardValue) {
+    return `assets/cards/${cardValue}.svg`;
+  }
+
 }

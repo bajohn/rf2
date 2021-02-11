@@ -33,17 +33,13 @@ export class MoveableService {
   private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
   private inMotion: moveable[] = [];
 
-
-  //consts  public readonly UPDATE_MIN_MS = 100;
   public readonly UPDATE_MIN_MS = 100;
   public readonly CARD_H = 105;
   public readonly CARD_W = 75;
   public readonly STACK_H = 105;
   public readonly STACK_W = 100;
 
-
-  // DEBUG
-  AC_ID = '';
+  private maxZ = -1;
 
   constructor(
     private playerService: PlayerService,
@@ -94,6 +90,7 @@ export class MoveableService {
         highlight: false
       }, moveableResp);
       this.lookup[el.moveable.id] = cardObj;
+      this.maxZ = Math.max(this.maxZ, cardObj.z);
       return cardObj;
     });
 
@@ -194,7 +191,6 @@ export class MoveableService {
     const curHighlight = moveableIn.highlight;
     const nextHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
     if (curHighlight !== nextHighlight) {
-      console.log(moveableIn, nextHighlight);
       moveableIn.highlight = nextHighlight;
     }
   }
@@ -212,18 +208,28 @@ export class MoveableService {
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
     moveableObj.inMotion = true;
+    this.maxZ += 1;
+    moveableObj.z = this.maxZ;
     this.inMotion.push(moveableObj);
+
 
   }
 
   public mouseUp() {
-    this.inMotion.forEach(moveable => {
-      moveable.inMotion = false;
-    });
-    this.inMotion = [];
-    for (const card of this.cards) {
-      card.highlight = false;
+
+    if (this.inMotion.length > 1) {
+      console.error('Not ready for this');
+    } else if (this.inMotion.length === 1) {
+      const inMotion = this.inMotion.pop();
     }
+
+
+    for (const card of this.cards) {
+      if (card.inMotion) {
+        card.highlight = false;
+      }
+    }
+
     for (const stack of this.stacks) {
       stack.highlight = false;
     }
