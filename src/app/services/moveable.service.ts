@@ -70,7 +70,6 @@ export class MoveableService {
       return stackObj;
 
     });
-    console.log(this.stacks);
   }
 
   private async listCards() {
