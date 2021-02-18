@@ -7,6 +7,7 @@
 [class.card-overlay]="true"
 [class.card-inactive]="!moveableService.beingDragged(stack.moveableId)"
 [class.highlight]="moveableService.isHighlighted(stack.moveableId)"
+[class.no-drag-highlighting]="true"
 (mousedown)="moveableService.mouseDown(stack.moveableId)"
 >
 

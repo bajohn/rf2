@@ -1,5 +1,7 @@
 
-<div draggable="false" [style.position]="'absolute'" 
+<div 
+draggable="false" 
+[style.position]="'absolute'" 
 [style.transform]="moveableService.getTransform(card.moveableId)"
 [style.height]="moveableService.getHeight(card.moveableId)"
 [style.width]="moveableService.getWidth(card.moveableId)"
@@ -7,11 +9,17 @@
 [class.card-overlay]="true"
 [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
 [class.highlight]="moveableService.isHighlighted(card.moveableId)"
+[class.no-drag-highlighting]="true"
 (mousedown)="moveableService.mouseDown(card.moveableId)"
 >
 
 {{card.cardValue}}
-<img [style.width]="moveableService.getWidth(card.moveableId)" 
+<img 
+[style.width]="moveableService.getWidth(card.moveableId)" 
+[style.width]="moveableService.getWidth(card.moveableId)" 
 draggable="false"
-    [src]="getFrontImgSrc(card.cardValue)">
+[src]="getFrontImgSrc(card.cardValue)"
+[class.no-drag-highlighting]="true"
+>
+
 </div>

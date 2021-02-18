@@ -4,13 +4,6 @@
 
 }
 
-.card-overlay::selection  {
-    color: none;
-    background: none;
-
-}
-
-
 .card-inactive {
     transition: transform 100ms ease-in-out;
 }
@@ -27,7 +20,7 @@
     z-index:0;
 }
 
-.page-container::selection {
+.no-drag-highlighting::selection {
     color: none;
     background: none;
 }
