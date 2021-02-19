@@ -31,8 +31,8 @@ export class MoveableService {
   private cards: card[];
   private stacks: cardStack[];
   private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
-  private inMotion: moveable[] = [];
-  private dropTarget: moveable = null;
+  private inMotion: (card | cardStack)[] = [];
+  private dropTarget: card | cardStack = null;
 
   public readonly UPDATE_MIN_MS = 100;
   public readonly CARD_H = 105;
@@ -151,7 +151,6 @@ export class MoveableService {
   }
 
   private publishUpdate(moveable, curTime) {
-    console.log(moveable)
     moveable.lastUpdated = curTime;
     const moveableParams: UpdateMoveableMutationVariables = {
       input: {
@@ -173,22 +172,30 @@ export class MoveableService {
 
   private updateHighlight(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
     // const curHighlight = moveableIn.highlight;
-    const maybeHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
     // if (curHighlight !== nextHighlight) {
     //   moveableIn.highlight = nextHighlight;
     // }
-    if (maybeHighlight) {
-      if ((!moveableIn.inMotion)) {
-        if ((!this.dropTarget) || moveableIn.z > this.dropTarget.z) {
+    if (!moveableIn.inMotion) {
+      const maybeHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
+      if (maybeHighlight) {
+        if (this.dropTarget) {
+
+          if (moveableIn.z > this.dropTarget.z) {
+            moveableIn.highlight = true;
+            this.dropTarget = moveableIn;
+          }
+        } else {
 
           moveableIn.highlight = true;
           this.dropTarget = moveableIn;
         }
+      } else {
+        moveableIn.highlight = false;
+        if (moveableIn === this.dropTarget) {
+          this.dropTarget = null;
+        }
       }
     }
-    // else {
-    //   moveableIn.highlight = false;
-    // }
   }
 
   private inMoveable(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
@@ -204,6 +211,7 @@ export class MoveableService {
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
     moveableObj.inMotion = true;
+    moveableObj.highlight = true;
     this.maxZ += 1;
     moveableObj.z = this.maxZ;
     this.inMotion.push(moveableObj);
@@ -214,15 +222,15 @@ export class MoveableService {
     if (this.inMotion.length > 1) {
       console.error('Not ready for this');
     } else if (this.inMotion.length === 1) {
+      this.dropTarget = null;
       const inMotion = this.inMotion.pop();
       inMotion.inMotion = false;
+      inMotion.highlight = false;
       this.publishUpdate(inMotion, this.curTime());
     }
 
     for (const card of this.cards) {
-      if (card.inMotion) {
-        card.highlight = false;
-      }
+      card.highlight = false;
     }
 
     for (const stack of this.stacks) {
