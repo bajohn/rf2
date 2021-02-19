@@ -32,6 +32,7 @@ export class MoveableService {
   private stacks: cardStack[];
   private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
   private inMotion: moveable[] = [];
+  private dropTarget: moveable = null;
 
   public readonly UPDATE_MIN_MS = 100;
   public readonly CARD_H = 105;
@@ -92,7 +93,7 @@ export class MoveableService {
       this.maxZ = Math.max(this.maxZ, cardObj.z);
       return cardObj;
     });
-
+    console.log(this.cards)
     const vars = {
       roomId: this.roomService.id,
     };
@@ -149,49 +150,45 @@ export class MoveableService {
     return 'cards' in moveableIn;
   }
 
-  public mouseMove(event: MouseEvent) {
-    const curTime = (new Date()).getTime();
-    this.inMotion.forEach(obj => {
-
-      const x = event.x;
-      const y = event.y;
-
-      obj.x = Math.round(x - this.CARD_W / 2);
-      obj.y = Math.round(y - this.CARD_H / 2);
-
-
-      for (const card of this.cards) {
-        this.updateHighlight(x, y, card);
+  private publishUpdate(moveable, curTime) {
+    console.log(moveable)
+    moveable.lastUpdated = curTime;
+    const moveableParams: UpdateMoveableMutationVariables = {
+      input: {
+        id: moveable.moveableId,
+        x: moveable.x,
+        y: moveable.y,
+        z: moveable.z,
+        lastOwner: this.playerService.id,
+        inMotion: moveable.inMotion,
       }
-      for (const stack of this.stacks) {
-        this.updateHighlight(x, y, stack);
-      }
-
-
-      if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
-
-        obj.lastUpdated = curTime;
-        const moveableParams: UpdateMoveableMutationVariables = {
-          input: {
-            id: obj.moveableId,
-            x: obj.x,
-            y: obj.y,
-            z: obj.z,
-            lastOwner: this.playerService.id,
-            inMotion: obj.inMotion,
-          }
-        };
-        API.graphql(graphqlOperation(updateMoveable, moveableParams));
-      }
-    });
+    };
+    API.graphql(graphqlOperation(updateMoveable, moveableParams));
   }
 
+  private curTime() {
+    return (new Date()).getTime();
+  }
+
+
   private updateHighlight(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
-    const curHighlight = moveableIn.highlight;
-    const nextHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
-    if (curHighlight !== nextHighlight) {
-      moveableIn.highlight = nextHighlight;
+    // const curHighlight = moveableIn.highlight;
+    const maybeHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
+    // if (curHighlight !== nextHighlight) {
+    //   moveableIn.highlight = nextHighlight;
+    // }
+    if (maybeHighlight) {
+      if ((!moveableIn.inMotion)) {
+        if ((!this.dropTarget) || moveableIn.z > this.dropTarget.z) {
+
+          moveableIn.highlight = true;
+          this.dropTarget = moveableIn;
+        }
+      }
     }
+    // else {
+    //   moveableIn.highlight = false;
+    // }
   }
 
   private inMoveable(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
@@ -210,8 +207,6 @@ export class MoveableService {
     this.maxZ += 1;
     moveableObj.z = this.maxZ;
     this.inMotion.push(moveableObj);
-
-
   }
 
   public mouseUp() {
@@ -220,8 +215,9 @@ export class MoveableService {
       console.error('Not ready for this');
     } else if (this.inMotion.length === 1) {
       const inMotion = this.inMotion.pop();
+      inMotion.inMotion = false;
+      this.publishUpdate(inMotion, this.curTime());
     }
-
 
     for (const card of this.cards) {
       if (card.inMotion) {
@@ -232,8 +228,33 @@ export class MoveableService {
     for (const stack of this.stacks) {
       stack.highlight = false;
     }
-
   }
+
+
+  public mouseMove(event: MouseEvent) {
+    const curTime = this.curTime()
+    this.inMotion.forEach(obj => {
+
+      const x = event.x;
+      const y = event.y;
+
+      obj.x = Math.round(x - this.CARD_W / 2);
+      obj.y = Math.round(y - this.CARD_H / 2);
+
+
+      for (const card of this.cards) {
+        this.updateHighlight(x, y, card);
+      }
+      for (const stack of this.stacks) {
+        this.updateHighlight(x, y, stack);
+      }
+
+      if (curTime - obj.lastUpdated > this.UPDATE_MIN_MS) {
+        this.publishUpdate(obj, curTime);
+      }
+    });
+  }
+
 
   public beingDragged(id: string) {
     const moveableObj = this.lookupMoveable(id);
