@@ -222,10 +222,15 @@ export class MoveableService {
     if (this.inMotion.length > 1) {
       console.error('Not ready for this');
     } else if (this.inMotion.length === 1) {
-      this.dropTarget = null;
       const inMotion = this.inMotion.pop();
       inMotion.inMotion = false;
       inMotion.highlight = false;
+      if (this.dropTarget) {
+        inMotion.x = this.dropTarget.x;
+        inMotion.y = this.dropTarget.y;
+        this.dropTarget = null;
+      }
+
       this.publishUpdate(inMotion, this.curTime());
     }
 
