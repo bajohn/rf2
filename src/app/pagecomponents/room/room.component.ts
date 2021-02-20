@@ -77,57 +77,16 @@ export class RoomComponent implements OnInit {
 
   public clickCreate() {
     console.log('click');
-    this.createStack();
+    // this.moveableService.createStack();
   }
 
   public clickDelete() {
     console.log('click');
-    this.deleteStack();
+    this.moveableService.deleteStack();
   }
 
-  private async createStack() {
-    const createMoveableParams: CreateMoveableMutationVariables = {
-      input: {
-        x: 100,
-        y: 100,
-        z: 100,
-        inMotion: false,
-        draggable: true,
-        lastOwner: '',
-      }
-    }
-    const moveableResp = await API.graphql(graphqlOperation(createMoveable, createMoveableParams)) as { data: CreateMoveableMutation };
-    const moveableId = moveableResp.data.createMoveable.id;
 
 
-    const createStackParams: CreateCardStackMutationVariables = {
-      input: {
-        roomId: this.roomService.id,
-        cardStackMoveableId: moveableId
-      }
-    }
-    const resp = await API.graphql(graphqlOperation(createCardStack, createStackParams)) as { data: CreateCardStackMutation };
-  }
 
-  private async deleteStack() {
-    const stacks = this.moveableService.getStacks();
-    if (stacks.length > 0) {
-      const stack = stacks.pop();
-
-      const deleteMoveableParams: DeleteMoveableMutationVariables = {
-        input: {
-          id: stack.moveableId
-        }
-      };
-      const moveableResp = await API.graphql(graphqlOperation(deleteMoveable, deleteMoveableParams)) as { data: DeleteMoveableMutation };
-
-      const deleteStackParams: DeleteCardStackMutationVariables = {
-        input: {
-          id: stack.id
-        }
-      };
-      const stackResp = await API.graphql(graphqlOperation(deleteCardStack, deleteStackParams)) as { data: DeleteCardStackMutation };
-    }
-  }
 
 }

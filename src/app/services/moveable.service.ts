@@ -13,6 +13,14 @@ import {
   GetMoveableQuery,
   StacksByRoomQueryVariables,
   StacksByRoomFullQuery,
+  CreateMoveableMutationVariables,
+  CreateCardStackMutationVariables,
+  CreateCardStackMutation,
+  CreateMoveableMutation,
+  DeleteMoveableMutationVariables,
+  DeleteCardStackMutationVariables,
+  DeleteMoveableMutation,
+  DeleteCardStackMutation,
 
 } from '../API.service';
 
@@ -20,7 +28,7 @@ import {
 import Observable from 'zen-observable-ts';
 import { PlayerService } from './player.service';
 import { RoomService } from './room.service';
-import { updateMoveable } from 'src/graphql/mutations';
+import { createCardStack, createMoveable, deleteCardStack, deleteMoveable, updateMoveable } from 'src/graphql/mutations';
 import { card, cardStack, moveable } from '../types';
 
 @Injectable({
@@ -61,16 +69,19 @@ export class MoveableService {
 
     this.stacks = roomStacksResp.map(el => {
 
+      const cardsInStack = el.cardIds.map(cardId=>{
+        return this.lookupMoveable(cardId) as card;
+      })
       const moveableResp = this.respToLoc(el);
       const stackObj: cardStack = Object.assign({
         id: el.id,
         highlight: false,
-        cards: []
+        cards: cardsInStack
       }, moveableResp);
       this.lookup[el.moveable.id] = stackObj;
       return stackObj;
-
     });
+    console.log(this.stacks);
   }
 
   private async listCards() {
@@ -93,7 +104,6 @@ export class MoveableService {
       this.maxZ = Math.max(this.maxZ, cardObj.z);
       return cardObj;
     });
-    console.log(this.cards)
     const vars = {
       roomId: this.roomService.id,
     };
@@ -228,6 +238,13 @@ export class MoveableService {
       if (this.dropTarget) {
         inMotion.x = this.dropTarget.x;
         inMotion.y = this.dropTarget.y;
+        if (this.isCard(inMotion)) {
+          if (this.isCard(this.dropTarget)) {
+            this.createStack(inMotion, [this.dropTarget.id, inMotion.id]);
+          } else if (this.isStack(this.dropTarget)) {
+            console.log('add to stack ', inMotion.id);
+          }
+        }
         this.dropTarget = null;
       }
 
@@ -322,6 +339,55 @@ export class MoveableService {
     return this.lookup[id];
   }
 
+
+  // TODO: this class is huge, move to a helper
+  // class or make private.
+  public async createStack(moveable: moveable, cardIds: string[]) {
+    const createMoveableParams: CreateMoveableMutationVariables = {
+      input: {
+        x: moveable.x,
+        y: moveable.y,
+        z: moveable.z,
+        inMotion: false,
+        draggable: true,
+        lastOwner: '',
+      }
+    }
+    const moveableResp = await API.graphql(graphqlOperation(createMoveable, createMoveableParams)) as { data: CreateMoveableMutation };
+    const moveableId = moveableResp.data.createMoveable.id;
+
+
+    const createStackParams: CreateCardStackMutationVariables = {
+      input: {
+        roomId: this.roomService.id,
+        cardStackMoveableId: moveableId,
+        cardIds: cardIds
+      }
+    }
+    console.log('create stack', createStackParams);
+    const resp = await API.graphql(graphqlOperation(createCardStack, createStackParams)) as { data: CreateCardStackMutation };
+  }
+
+  public async deleteStack() {
+    const stacks = this.getStacks();
+    if (stacks.length > 0) {
+      const stack = stacks.pop();
+
+      const deleteMoveableParams: DeleteMoveableMutationVariables = {
+        input: {
+          id: stack.moveableId
+        }
+      };
+      const moveableResp = await API.graphql(graphqlOperation(deleteMoveable, deleteMoveableParams)) as { data: DeleteMoveableMutation };
+
+      const deleteStackParams: DeleteCardStackMutationVariables = {
+        input: {
+          id: stack.id
+        }
+      };
+      const stackResp = await API.graphql(graphqlOperation(deleteCardStack, deleteStackParams)) as { data: DeleteCardStackMutation };
+    }
+  }
 
 
 }
