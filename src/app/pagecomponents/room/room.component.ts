@@ -23,6 +23,7 @@ import { PlayerService } from 'src/app/services/player.service';
 import { MoveableService } from 'src/app/services/moveable.service';
 import { RoomService } from 'src/app/services/room.service';
 import { createCardStack, createMoveable, deleteCardStack, deleteMoveable } from 'src/graphql/mutations';
+import { StackService } from 'src/app/services/stack.service';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class RoomComponent implements OnInit {
     private modalService: ModalService,
     public playerService: PlayerService,
     public moveableService: MoveableService,
-    public roomService: RoomService
+    public roomService: RoomService,
+    public stackService: StackService
   ) {
 
   }
@@ -82,11 +84,8 @@ export class RoomComponent implements OnInit {
 
   public clickDelete() {
     console.log('click');
-    this.moveableService.deleteStack();
+    const stack = this.moveableService.getStacks().pop();
+    this.stackService.delete(stack.id, stack.moveableId);
   }
-
-
-
-
 
 }
