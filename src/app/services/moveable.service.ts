@@ -49,34 +49,17 @@ export class MoveableService {
     private stackService: StackService
 
   ) {
-    this.listStacks();
-    this.listCards();
-    this.subscribeToMoveable();
-    this.subscribeToStack();
+    this.init();
+
   }
 
-  private async listStacks() {
-    const listParams: StacksByRoomQueryVariables = {
-      roomId: this.roomService.id
-    };
-    const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: StacksByRoomFullQuery };
-    const roomStacksResp = resp.data.stacksByRoom.items;
-
-    this.stacks = roomStacksResp.map(el => {
-
-      const cardsInStack = !el.cardIds ? [] : el.cardIds.map(cardId => {
-        return this.lookupMoveable(cardId) as card;
-      });
-      const moveableResp = this.respToLoc(el);
-      const stackObj: cardStack = Object.assign({
-        id: el.id,
-        highlight: false,
-        cards: cardsInStack
-      }, moveableResp);
-      this.lookup[el.moveable.id] = stackObj;
-      return stackObj;
-    });
-    console.log('list stacks', this.stacks);
+  private async init() {
+    // Populate card lookup before populating stacks,
+    // since stacks uses card lookup.
+    await this.listCards();
+    this.listStacks();
+    this.subscribeToMoveable();
+    this.subscribeToStack();
   }
 
   private async listCards() {
@@ -100,6 +83,32 @@ export class MoveableService {
       return cardObj;
     });
   }
+
+  private async listStacks() {
+    const listParams: StacksByRoomQueryVariables = {
+      roomId: this.roomService.id
+    };
+    const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: StacksByRoomFullQuery };
+    const roomStacksResp = resp.data.stacksByRoom.items;
+
+    this.stacks = roomStacksResp.map(el => {
+      const cardsInStack = !el.cardIds ? [] : el.cardIds.map(cardId => {
+        const ret = this.lookupMoveable(cardId) as card;
+        return ret;
+      });
+      const moveableResp = this.respToLoc(el);
+      const stackObj: cardStack = Object.assign({
+        id: el.id,
+        highlight: false,
+        cards: cardsInStack
+      }, moveableResp);
+      this.lookup[el.moveable.id] = stackObj;
+      return stackObj;
+    });
+    console.log('list stacks', this.stacks);
+  }
+
+
 
   private subscribeToMoveable() {
     const vars = {
@@ -142,18 +151,23 @@ export class MoveableService {
     obs.subscribe({
       next: (resp: { value: { data: OnUpdateCardStackSubscription } }) => {
         const updated = resp.value.data.onUpdateCardStack;
-        const local = this.lookup[updated.id];
+        const local = this.lookup[updated.moveable.id] as cardStack;
 
         const updateTime = (new Date(updated.updatedAt)).getTime();
         if (!local.inMotion
           //&& this.playerService.id !== updated.lastOwner
           && updateTime > local.lastUpdated) {
+          const cardsInStack = !updated.cardIds ? [] : updated.cardIds.map(cardId => {
+            const ret = this.lookupMoveable(cardId) as card;
+            return ret;
+          });
           const copyProps = {
-            cardIds: updated.cardIds,
+            cards: cardsInStack,
             //lastOwner: updated.lastOwner,
             lastUpdateTime: updateTime
           };
           Object.assign(local, copyProps);
+          console.log('update', local);
         }
       }
     });
@@ -265,7 +279,7 @@ export class MoveableService {
         inMotion.y = this.dropTarget.y;
         if (this.isCard(inMotion)) {
           if (this.isCard(this.dropTarget)) {
-            this.stackService.create(inMotion, [this.dropTarget.id, inMotion.moveableId]);
+            this.stackService.create(inMotion, [this.dropTarget.moveableId, inMotion.moveableId]);
           } else if (this.isStack(this.dropTarget)) {
             console.log('add to stack ', inMotion.moveableId);
             const targetStack = this.dropTarget as cardStack;
