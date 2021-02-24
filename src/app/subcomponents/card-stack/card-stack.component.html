@@ -10,10 +10,12 @@
 [class.no-drag-highlighting]="true"
 (mousedown)="moveableService.mouseDown(stack.moveableId)"
 >
-
-Card count: {{stack.cards.length}}
-
-<!-- <img [style.width]="moveableService.getWidth(card.moveableId)" 
+<img 
+[style.width]="moveableService.CARD_W + 'px' " 
 draggable="false"
-    [src]="getFrontImgSrc(card.cardValue)"> -->
+[src]="topCard()"
+[class.no-drag-highlighting]="true"
+>
+    Card count: {{stack.cards.length}}
+
 </div>

@@ -15,8 +15,7 @@ draggable="false"
 
 {{card.cardValue}}
 <img 
-[style.width]="moveableService.getWidth(card.moveableId)" 
-[style.width]="moveableService.getWidth(card.moveableId)" 
+[style.width]="moveableService.getWidth(card.moveableId)"  
 draggable="false"
 [src]="getFrontImgSrc(card.cardValue)"
 [class.no-drag-highlighting]="true"

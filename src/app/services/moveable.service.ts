@@ -29,7 +29,7 @@ import { StackService } from './stack.service';
 })
 export class MoveableService {
 
-  private cards: card[];
+  private roomCards: card[] = [];
   private stacks: cardStack[];
   private readonly lookup: { [key: string]: card | cardStack } = {}; // moveableId->flattened obj
   private inMotion: (card | cardStack)[] = [];
@@ -56,8 +56,13 @@ export class MoveableService {
   private async init() {
     // Populate card lookup before populating stacks,
     // since stacks uses card lookup.
-    await this.listCards();
-    this.listStacks();
+    const allCards = await this.listCards();
+    const stackCards = await this.listStacks();
+    for(const stackCard of stackCards) {
+      allCards.splice(allCards.indexOf(stackCard),1);
+    }
+    console.log(allCards, stackCards);
+    this.roomCards = allCards;
     this.subscribeToMoveable();
     this.subscribeToStack();
   }
@@ -69,7 +74,7 @@ export class MoveableService {
     const resp = await API.graphql(graphqlOperation(cardsByRoomFull, listParams)) as { data: CardsByRoomFullQuery };
     const roomCardsResp = resp.data.cardsByRoom.items;
 
-    this.cards = roomCardsResp.map(el => {
+    const allCards = roomCardsResp.map(el => {
 
       const moveableResp = this.respToLoc(el);
       const cardObj: card = Object.assign({
@@ -82,6 +87,7 @@ export class MoveableService {
       this.maxZ = Math.max(this.maxZ, cardObj.z);
       return cardObj;
     });
+    return allCards;
   }
 
   private async listStacks() {
@@ -91,6 +97,7 @@ export class MoveableService {
     const resp = await API.graphql(graphqlOperation(stacksByRoomFull, listParams)) as { data: StacksByRoomFullQuery };
     const roomStacksResp = resp.data.stacksByRoom.items;
 
+    let stackCards: card[] = [];
     this.stacks = roomStacksResp.map(el => {
       const cardsInStack = !el.cardIds ? [] : el.cardIds.map(cardId => {
         const ret = this.lookupMoveable(cardId) as card;
@@ -103,9 +110,10 @@ export class MoveableService {
         cards: cardsInStack
       }, moveableResp);
       this.lookup[el.moveable.id] = stackObj;
+      stackCards = stackCards.concat(cardsInStack);
       return stackObj;
     });
-    console.log('list stacks', this.stacks);
+    return stackCards;
   }
 
 
@@ -296,7 +304,7 @@ export class MoveableService {
       this.publishUpdate(inMotion, this.curTime());
     }
 
-    for (const card of this.cards) {
+    for (const card of this.roomCards) {
       card.highlight = false;
     }
 
@@ -317,7 +325,7 @@ export class MoveableService {
       obj.y = Math.round(y - this.CARD_H / 2);
 
 
-      for (const card of this.cards) {
+      for (const card of this.roomCards) {
         this.updateHighlight(x, y, card);
       }
       for (const stack of this.stacks) {
@@ -373,7 +381,7 @@ export class MoveableService {
   }
 
   public getCards(): card[] {
-    return this.cards;
+    return this.roomCards;
   }
 
   public getStacks(): cardStack[] {

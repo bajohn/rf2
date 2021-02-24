@@ -14,4 +14,18 @@ export class CardStackComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  topCard() {
+    const cards = this.stack.cards;
+    if (cards.length > 0) {
+
+      const cardValue = cards[cards.length - 1].cardValue;
+      return `assets/cards/${cardValue}.svg`;
+    } else {
+      return '';
+    }
+
+  }
+
+
+
 }
