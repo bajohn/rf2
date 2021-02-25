@@ -1,7 +1,12 @@
 .card-overlay {
-    background-color: lightcoral;
+    /* background-color: lightcoral; */
         /* transform-origin: 100% 0; */
+}
 
+.stack-overlay {
+    background-color: #727280;
+    border-radius: 10px;
+    padding-bottom: 5px;
 }
 
 .card-inactive {

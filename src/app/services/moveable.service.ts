@@ -58,8 +58,8 @@ export class MoveableService {
     // since stacks uses card lookup.
     const allCards = await this.listCards();
     const stackCards = await this.listStacks();
-    for(const stackCard of stackCards) {
-      allCards.splice(allCards.indexOf(stackCard),1);
+    for (const stackCard of stackCards) {
+      allCards.splice(allCards.indexOf(stackCard), 1);
     }
     console.log(allCards, stackCards);
     this.roomCards = allCards;
@@ -267,6 +267,9 @@ export class MoveableService {
 
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
+    if (this.isCard(moveableObj) && this.roomCards.indexOf(moveableObj as card) === -1) {
+      this.roomCards.push(moveableObj as card);
+    }
     moveableObj.inMotion = true;
     moveableObj.highlight = true;
     this.maxZ += 1;
@@ -289,13 +292,13 @@ export class MoveableService {
           if (this.isCard(this.dropTarget)) {
             this.stackService.create(inMotion, [this.dropTarget.moveableId, inMotion.moveableId]);
           } else if (this.isStack(this.dropTarget)) {
-            console.log('add to stack ', inMotion.moveableId);
             const targetStack = this.dropTarget as cardStack;
             const stackId = targetStack.id;
-            console.log(targetStack);
             const cards = targetStack.cards.map(card => card.moveableId);
             cards.push(inMotion.moveableId);
             this.stackService.updateCards(stackId, cards);
+            const idx = this.roomCards.indexOf(inMotion as card);
+            this.roomCards.splice(idx, 1);
           }
         }
         this.dropTarget = null;
