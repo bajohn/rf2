@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MoveableService } from 'src/app/services/moveable.service';
-import { StackService } from 'src/app/services/stack.service';
 import { cardStack } from 'src/app/types';
 
 @Component({
@@ -12,7 +11,6 @@ export class CardStackComponent implements OnInit {
   @Input() stack: cardStack;
   constructor(
     public moveableService: MoveableService,
-    private stackService: StackService
   ) { }
 
   ngOnInit(): void {

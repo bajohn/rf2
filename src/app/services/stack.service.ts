@@ -16,7 +16,7 @@ import {
 } from '../API.service';
 import { createCardStack, createMoveable, deleteCardStack, deleteMoveable, updateCardStack } from 'src/graphql/mutations';
 import { RoomService } from './room.service';
-import { moveable } from '../types';
+import { card, cardStack, moveable } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ export class StackService {
 
   // TODO: this class is huge, move to a helper
   // class or make private.
-  public async create(moveable: moveable, cardIds: string[]) {
+  public async create(moveable: moveable, cards: card[]): Promise<cardStack> {
     const createMoveableParams: CreateMoveableMutationVariables = {
       input: {
         x: moveable.x,
@@ -42,8 +42,7 @@ export class StackService {
     }
     const moveableResp = await API.graphql(graphqlOperation(createMoveable, createMoveableParams)) as { data: CreateMoveableMutation };
     const moveableId = moveableResp.data.createMoveable.id;
-
-
+    const cardIds = cards.map(card => card.moveableId);
     const createStackParams: CreateCardStackMutationVariables = {
       input: {
         roomId: this.roomService.id,
@@ -51,8 +50,22 @@ export class StackService {
         cardIds: cardIds
       }
     }
-    console.log('create stack', createStackParams);
     const resp = await API.graphql(graphqlOperation(createCardStack, createStackParams)) as { data: CreateCardStackMutation };
+    const stack: cardStack = {
+      id: resp.data.createCardStack.id,
+      roomId: this.roomService.id,
+      moveableId: moveableId,
+      cards: cards,
+      x: moveable.x,
+      y: moveable.y,
+      z: moveable.z,
+      inMotion: false,
+      draggable: true,
+      lastOwner: '',
+      highlight: false,
+      lastUpdated: (new Date()).getTime(),
+    };
+    return stack;
   }
 
   public async delete(stackId: string, moveableId: string) {

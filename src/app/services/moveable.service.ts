@@ -290,16 +290,19 @@ export class MoveableService {
         inMotion.y = this.dropTarget.y;
         if (this.isCard(inMotion)) {
           if (this.isCard(this.dropTarget)) {
-            this.stackService.create(inMotion, [this.dropTarget.moveableId, inMotion.moveableId]);
+            this.createStack(inMotion as card);
+            const idx = this.roomCards.indexOf(this.dropTarget as card);
+            this.roomCards.splice(idx, 1);
           } else if (this.isStack(this.dropTarget)) {
             const targetStack = this.dropTarget as cardStack;
             const stackId = targetStack.id;
             const cards = targetStack.cards.map(card => card.moveableId);
             cards.push(inMotion.moveableId);
             this.stackService.updateCards(stackId, cards);
-            const idx = this.roomCards.indexOf(inMotion as card);
-            this.roomCards.splice(idx, 1);
+
           }
+          const idx = this.roomCards.indexOf(inMotion as card);
+          this.roomCards.splice(idx, 1);
         }
         this.dropTarget = null;
       }
@@ -314,6 +317,15 @@ export class MoveableService {
     for (const stack of this.stacks) {
       stack.highlight = false;
     }
+  }
+
+  private async createStack(moveable: card) {
+    const stack = await this.stackService.create(
+      moveable, [this.dropTarget as card, moveable]
+    );
+    this.stacks.push(stack);
+    this.lookup[stack.moveableId] = stack;
+    console.log(this.stacks);
   }
 
 

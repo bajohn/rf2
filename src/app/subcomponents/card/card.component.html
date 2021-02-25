@@ -6,13 +6,15 @@
     [style.height]="moveableService.getHeight(card.moveableId)"
     [style.width]="moveableService.getWidth(card.moveableId)"
     [style.z-index]="moveableService.getZ(card.moveableId)" 
-    [class.card-overlay]="true"
+
     [class.card-inactive]="!moveableService.beingDragged(card.moveableId)"
-    [class.highlight]="moveableService.isHighlighted(card.moveableId)"
+
     [class.no-drag-highlighting]="true"
     (mousedown)="moveableService.mouseDown(card.moveableId)"
     >
-    
+    <div [class.card-overlay]="moveableService.isHighlighted(card.moveableId)">
+
+    </div>
     <img 
         [style.width]="moveableService.getWidth(card.moveableId)"  
         draggable="false"
@@ -21,3 +23,6 @@
     >
 
 </div>
+
+
+<!-- [class.highlight]="moveableService.isHighlighted(card.moveableId)" -->
