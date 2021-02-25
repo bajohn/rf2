@@ -34,7 +34,6 @@ export class CardStackComponent implements OnInit {
   baseHit(event: MouseEvent) {
     const offsetX = event.x - this.stack.x;
     const offsetY = event.y - this.stack.y;
-    console.log(offsetX, offsetY, this.moveableService.CARD_W, this.moveableService.CARD_H);
     if (offsetY > this.moveableService.CARD_H) {
       this.moveableService.mouseDown(this.stack.moveableId);
     } else {

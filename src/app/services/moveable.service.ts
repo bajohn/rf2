@@ -175,7 +175,6 @@ export class MoveableService {
             lastUpdateTime: updateTime
           };
           Object.assign(local, copyProps);
-          console.log('update', local);
         }
       }
     });
@@ -325,7 +324,6 @@ export class MoveableService {
     );
     this.stacks.push(stack);
     this.lookup[stack.moveableId] = stack;
-    console.log(this.stacks);
   }
 
 
