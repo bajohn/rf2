@@ -46,6 +46,7 @@ export interface card extends moveable {
     faceUp: boolean
     cardValue: string
     highlight: boolean
+    ownerId: string // could be none, or a stack id, or a player id
 }
 //////////////////////////////
 // RF only:

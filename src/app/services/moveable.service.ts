@@ -89,7 +89,8 @@ export class MoveableService {
         id: el.id,
         faceUp: el.faceUp,
         cardValue: el.cardValue,
-        highlight: false
+        highlight: false,
+        ownerId: el.ownerId
       }, moveableResp);
       this.lookup[el.moveable.id] = cardObj;
       this.maxZ = Math.max(this.maxZ, cardObj.z);
