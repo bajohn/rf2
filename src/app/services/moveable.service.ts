@@ -70,7 +70,12 @@ export class MoveableService {
       allCards.splice(allCards.indexOf(stackCard), 1);
     }
     console.log(allCards, stackCards);
-    this.roomCards = allCards;
+    this.roomCards = allCards.reduce((lv, cv) => {
+      if (cv.ownerId === '') {
+        lv.push(cv);
+      }
+      return lv;
+    }, [] as card[])
     this.subscribeToMoveable();
     this.subscribeToStack();
   }
@@ -140,7 +145,7 @@ export class MoveableService {
         const updated = resp.value.data.onUpdateMoveable;
         const local = this.lookup[updated.id];
 
-        const updateTime = (new Date(updated.updatedAt)).getTime();
+        const updateTime = this.curTime();
         if (!local.inMotion
           && this.playerService.id !== updated.lastOwner
           && updateTime > local.lastUpdated) {
@@ -170,7 +175,7 @@ export class MoveableService {
         const updated = resp.value.data.onUpdateCardStack;
         const local = this.lookup[updated.moveable.id] as cardStack;
 
-        const updateTime = (new Date(updated.updatedAt)).getTime();
+        const updateTime = this.curTime();
         if (!local.inMotion
           //&& this.playerService.id !== updated.lastOwner
           && updateTime > local.lastUpdated) {
@@ -196,7 +201,7 @@ export class MoveableService {
           highlight: false,
           inMotion: false,
           lastOwner: '',
-          lastUpdated: (new Date()).getTime(),
+          lastUpdated: this.curTime(),
           id: created.id,
           moveableId: created.moveable.id,
           roomId: this.roomService.id,
@@ -252,7 +257,7 @@ export class MoveableService {
       y: el.moveable.y,
       z: el.moveable.z,
       inMotion: el.moveable.inMotion,
-      lastUpdated: (new Date(el.moveable.updatedAt)).getTime(),
+      lastUpdated: this.curTime(),
       lastOwner: el.moveable.lastOwner,
       draggable: true,
     }
@@ -356,8 +361,8 @@ export class MoveableService {
           } else if (this.isStack(this.dropTarget)) {
             const targetStack = this.dropTarget as cardStack;
             const stackId = targetStack.id;
-            const cards = targetStack.cards.map(card => card.moveableId);
-            cards.push(inMotion.moveableId);
+            const cards = targetStack.cards
+            cards.push(inMotion as card);
             this.stackService.updateCards(stackId, cards);
 
           }
@@ -379,10 +384,12 @@ export class MoveableService {
     }
   }
 
-  private async createStack(moveable: card) {
+  // Combine two cards into a new stack
+  private async createStack(droppingCard: card) {
     const stack = await this.stackService.create(
-      moveable, [this.dropTarget as card, moveable]
+      droppingCard, this.dropTarget as card
     );
+
     this.stacks.push(stack);
     this.lookup[stack.moveableId] = stack;
   }

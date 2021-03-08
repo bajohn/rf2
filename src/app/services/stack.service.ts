@@ -12,9 +12,18 @@ import {
   DeleteCardStackMutation,
   UpdateCardStackMutationVariables,
   UpdateCardStackMutation,
+  UpdateCardMutation,
+  UpdateCardMutationVariables,
 
 } from '../API.service';
-import { createCardStack, createMoveable, deleteCardStack, deleteMoveable, updateCardStack } from 'src/graphql/mutations';
+import {
+  createCardStack,
+  createMoveable,
+  deleteCardStack,
+  deleteMoveable,
+  updateCard,
+  updateCardStack
+} from 'src/graphql/mutations';
 import { RoomService } from './room.service';
 import { card, cardStack, moveable } from '../types';
 
@@ -29,12 +38,13 @@ export class StackService {
 
   // TODO: this class is huge, move to a helper
   // class or make private.
-  public async create(moveable: moveable, cards: card[]): Promise<cardStack> {
+  public async create(targetCard: card, droppingCard: card): Promise<cardStack> {
+    const cards = [targetCard, droppingCard];
     const createMoveableParams: CreateMoveableMutationVariables = {
       input: {
-        x: moveable.x,
-        y: moveable.y,
-        z: moveable.z,
+        x: targetCard.x,
+        y: targetCard.y,
+        z: targetCard.z,
         inMotion: false,
         draggable: true,
         lastOwner: '',
@@ -50,15 +60,42 @@ export class StackService {
         cardIds: cardIds
       }
     }
-    const resp = await API.graphql(graphqlOperation(createCardStack, createStackParams)) as { data: CreateCardStackMutation };
+
+
+    // TODO: update card owner
+
+    const targetCardParams: UpdateCardMutationVariables = {
+      input: {
+        ownerId: moveableId,
+        id: targetCard.id
+      }
+    }
+
+    const droppingCardParams: UpdateCardMutationVariables = {
+      input: {
+        ownerId: moveableId,
+        id: droppingCard.id
+      }
+    }
+
+    // TODO: test this! completely untested.
+    const updateResps = await Promise.all([
+      API.graphql(graphqlOperation(createCardStack, createStackParams)) as Promise<{ data: CreateCardStackMutation }>,
+      API.graphql(graphqlOperation(updateCard, targetCardParams)) as Promise<{ data: UpdateCardMutation }>,
+      API.graphql(graphqlOperation(updateCard, droppingCardParams)) as Promise<{ data: UpdateCardMutation }>
+    ])
+
+
+    const createStackResp = updateResps[0];
+
     const stack: cardStack = {
-      id: resp.data.createCardStack.id,
+      id: createStackResp.data.createCardStack.id,
       roomId: this.roomService.id,
       moveableId: moveableId,
       cards: cards,
-      x: moveable.x,
-      y: moveable.y,
-      z: moveable.z,
+      x: targetCard.x,
+      y: targetCard.y,
+      z: targetCard.z,
       inMotion: false,
       draggable: true,
       lastOwner: '',
@@ -88,7 +125,9 @@ export class StackService {
     );
   }
 
+
   public async updateCards(stackId, cardIds) {
+
     const moveableParams: UpdateCardStackMutationVariables = {
       input: {
         id: stackId,

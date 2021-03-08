@@ -9,20 +9,10 @@ import { playersByRoom } from 'src/graphql/queries';
 import {
   PlayersByRoomQuery,
   PlayersByRoomQueryVariables,
-  CreateCardStackMutation,
-  CreateCardStackMutationVariables,
-  CreateMoveableMutation,
-  CreateMoveableMutationVariables,
-  DeleteMoveableMutationVariables,
-  DeleteMoveableMutation,
-  DeleteCardStackMutationVariables,
-  DeleteCardStackMutation,
-
 } from 'src/app/API.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { MoveableService } from 'src/app/services/moveable.service';
 import { RoomService } from 'src/app/services/room.service';
-import { createCardStack, createMoveable, deleteCardStack, deleteMoveable } from 'src/graphql/mutations';
 import { StackService } from 'src/app/services/stack.service';
 
 
@@ -79,7 +69,6 @@ export class RoomComponent implements OnInit {
 
   public clickCreate() {
     console.log('click');
-    // this.moveableService.createStack();
   }
 
   public clickDelete() {
