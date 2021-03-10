@@ -74,7 +74,7 @@ export class RoomComponent implements OnInit {
   public clickDelete() {
     console.log('click');
     const stack = this.moveableService.getStacks().pop();
-    this.stackService.delete(stack.id, stack.moveableId);
+    this.stackService.delete(stack);
   }
 
 }

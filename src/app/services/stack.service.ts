@@ -26,6 +26,7 @@ import {
 } from 'src/graphql/mutations';
 import { RoomService } from './room.service';
 import { card, cardStack, moveable } from '../types';
+import { CardService } from './card.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ import { card, cardStack, moveable } from '../types';
 export class StackService {
 
   constructor(
-    private roomService: RoomService
+    private roomService: RoomService,
+    private cardService: CardService
   ) { }
 
   // TODO: this class is huge, move to a helper
@@ -62,28 +64,11 @@ export class StackService {
     }
 
 
-    // TODO: update card owner
-
-    const targetCardParams: UpdateCardMutationVariables = {
-      input: {
-        ownerId: moveableId,
-        id: targetCard.id
-      }
-    }
-
-    const droppingCardParams: UpdateCardMutationVariables = {
-      input: {
-        ownerId: moveableId,
-        id: droppingCard.id
-      }
-    }
-
     // TODO: test this! completely untested.
     const updateResps = await Promise.all([
       API.graphql(graphqlOperation(createCardStack, createStackParams)) as Promise<{ data: CreateCardStackMutation }>,
-      API.graphql(graphqlOperation(updateCard, targetCardParams)) as Promise<{ data: UpdateCardMutation }>,
-      API.graphql(graphqlOperation(updateCard, droppingCardParams)) as Promise<{ data: UpdateCardMutation }>
-    ])
+      this.cardService.updateOwners(cards, moveableId)
+    ]);
 
 
     const createStackResp = updateResps[0];
@@ -105,24 +90,40 @@ export class StackService {
     return stack;
   }
 
-  public async delete(stackId: string, moveableId: string) {
+  public async delete(stack: cardStack) {
 
     const deleteMoveableParams: DeleteMoveableMutationVariables = {
       input: {
-        id: moveableId
+        id: stack.moveableId
       }
     };
 
 
     const deleteStackParams: DeleteCardStackMutationVariables = {
       input: {
-        id: stackId
+        id: stack.id
       }
     };
-    const moveableResp = await Promise.all(
-      [API.graphql(graphqlOperation(deleteMoveable, deleteMoveableParams)) as Promise<{ data: DeleteMoveableMutation }>,
-      API.graphql(graphqlOperation(deleteCardStack, deleteStackParams)) as Promise<{ data: DeleteCardStackMutation }>]
-    );
+    const deletePromises: Promise<any>[] = [
+      API.graphql(graphqlOperation(deleteMoveable, deleteMoveableParams)) as Promise<{ data: DeleteMoveableMutation }>,
+      API.graphql(graphqlOperation(deleteCardStack, deleteStackParams)) as Promise<{ data: DeleteCardStackMutation }>
+    ];
+
+    const allPromises = stack.cards.reduce((lv, cv) => {
+
+      const updateCardParams: UpdateCardMutationVariables = {
+        input: {
+          ownerId: stack.moveableId,
+          id: cv.id
+        }
+      };
+
+      lv.push(API.graphql(graphqlOperation(updateCard, updateCardParams)) as Promise<any>);
+      return lv;
+    }, deletePromises);
+
+    const moveableResp = await Promise.all(allPromises);
+
   }
 
 

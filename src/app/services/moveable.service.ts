@@ -30,13 +30,15 @@ import { RoomService } from './room.service';
 import { updateMoveable } from 'src/graphql/mutations';
 import { card, cardStack, moveable } from '../types';
 import { StackService } from './stack.service';
+import { CardService } from './card.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoveableService {
 
-  private roomCards: card[] = [];
+  //private roomCards: card[] = [];
+  private allCards: card[] = [];
   private stacks: cardStack[];
   // moveableId->flattened obj
   private readonly lookup: { [key: string]: card | cardStack } = {};
@@ -54,7 +56,8 @@ export class MoveableService {
   constructor(
     private playerService: PlayerService,
     private roomService: RoomService,
-    private stackService: StackService
+    private stackService: StackService,
+    private cardService: CardService
 
   ) {
     this.init();
@@ -64,20 +67,24 @@ export class MoveableService {
   private async init() {
     // Populate card lookup before populating stacks,
     // since stacks uses card lookup.
-    const allCards = await this.listCards();
-    const stackCards = await this.listStacks();
-    for (const stackCard of stackCards) {
-      allCards.splice(allCards.indexOf(stackCard), 1);
-    }
-    console.log(allCards, stackCards);
-    this.roomCards = allCards.reduce((lv, cv) => {
-      if (cv.ownerId === '') {
+    this.allCards = await this.listCards();
+    await this.listStacks();
+    // for (const stackCard of stackCards) {
+    //   allCards.splice(allCards.indexOf(stackCard), 1);
+    // }
+
+    this.subscribeToMoveable();
+    this.subscribeToStack();
+    console.log(this.stacks);
+  }
+
+  roomCards() {
+    return this.allCards.reduce((lv, cv) => {
+      if (cv.ownerId === 'none' && lv.length < 2) {
         lv.push(cv);
       }
       return lv;
-    }, [] as card[])
-    this.subscribeToMoveable();
-    this.subscribeToStack();
+    }, [] as card[]);
   }
 
   private async listCards() {
@@ -332,9 +339,18 @@ export class MoveableService {
 
   public mouseDown(id: string) {
     const moveableObj = this.lookupMoveable(id);
-    if (this.isCard(moveableObj) && this.roomCards.indexOf(moveableObj as card) === -1) {
-      this.roomCards.push(moveableObj as card);
+    if (this.isCard(moveableObj)) {
+      const localCard = moveableObj as card;
+      if (localCard.ownerId !== 'none') {
+        const owner = this.lookupMoveable(localCard.ownerId);
+        if (this.isStack(owner)) {
+          // TODO remove ownerId here, reevaluate roomCards
+          this.cardService.updateOwners([localCard], 'none');
+        }
+      }
+      //this.roomCards.push(moveableObj as card);
     }
+
     moveableObj.inMotion = true;
     moveableObj.highlight = true;
     this.maxZ += 1;
@@ -355,9 +371,10 @@ export class MoveableService {
         inMotion.y = this.dropTarget.y;
         if (this.isCard(inMotion)) {
           if (this.isCard(this.dropTarget)) {
+
             this.createStack(inMotion as card);
-            const idx = this.roomCards.indexOf(this.dropTarget as card);
-            this.roomCards.splice(idx, 1);
+            // const idx = this.roomCards.indexOf(this.dropTarget as card);
+            // this.roomCards.splice(idx, 1);
           } else if (this.isStack(this.dropTarget)) {
             const targetStack = this.dropTarget as cardStack;
             const stackId = targetStack.id;
@@ -366,8 +383,8 @@ export class MoveableService {
             this.stackService.updateCards(stackId, cards);
 
           }
-          const idx = this.roomCards.indexOf(inMotion as card);
-          this.roomCards.splice(idx, 1);
+          // const idx = this.roomCards.indexOf(inMotion as card);
+          // this.roomCards.splice(idx, 1);
         }
         this.dropTarget = null;
       }
@@ -375,7 +392,7 @@ export class MoveableService {
       this.publishUpdate(inMotion, this.curTime());
     }
 
-    for (const card of this.roomCards) {
+    for (const card of this.allCards) {
       card.highlight = false;
     }
 
@@ -406,7 +423,7 @@ export class MoveableService {
       obj.y = Math.round(y - this.CARD_H / 2);
 
 
-      for (const card of this.roomCards) {
+      for (const card of this.allCards) {
         this.updateHighlight(x, y, card);
       }
       for (const stack of this.stacks) {
@@ -462,7 +479,7 @@ export class MoveableService {
   }
 
   public getCards(): card[] {
-    return this.roomCards;
+    return this.roomCards();
   }
 
   public getStacks(): cardStack[] {
