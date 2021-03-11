@@ -68,6 +68,7 @@ export class MoveableService {
     // Populate card lookup before populating stacks,
     // since stacks uses card lookup.
     this.allCards = await this.listCards();
+    console.log(this.allCards);
     await this.listStacks();
     // for (const stackCard of stackCards) {
     //   allCards.splice(allCards.indexOf(stackCard), 1);
@@ -80,7 +81,7 @@ export class MoveableService {
 
   roomCards() {
     return this.allCards.reduce((lv, cv) => {
-      if (cv.ownerId === 'none' && lv.length < 2) {
+      if (cv.ownerId === 'none') {
         lv.push(cv);
       }
       return lv;
@@ -345,7 +346,14 @@ export class MoveableService {
         const owner = this.lookupMoveable(localCard.ownerId);
         if (this.isStack(owner)) {
           // TODO remove ownerId here, reevaluate roomCards
+          const ownerStack = owner as cardStack;
+          const ownerCards = ownerStack.cards;
+          const idx = ownerCards.indexOf(localCard);
+          const newOwnerCards = ownerCards.splice(idx, 1);
+          ownerStack.cards = ownerCards;
+          this.stackService.updateCards(newOwnerCards, ownerStack.id);
           this.cardService.updateOwners([localCard], 'none');
+
         }
       }
       //this.roomCards.push(moveableObj as card);
@@ -370,21 +378,23 @@ export class MoveableService {
         inMotion.x = this.dropTarget.x;
         inMotion.y = this.dropTarget.y;
         if (this.isCard(inMotion)) {
+          const inMotionCard = inMotion as card;
           if (this.isCard(this.dropTarget)) {
 
-            this.createStack(inMotion as card);
+            this.createStack(inMotionCard);
             // const idx = this.roomCards.indexOf(this.dropTarget as card);
             // this.roomCards.splice(idx, 1);
           } else if (this.isStack(this.dropTarget)) {
             const targetStack = this.dropTarget as cardStack;
             const stackId = targetStack.id;
             const cards = targetStack.cards
-            cards.push(inMotion as card);
-            this.stackService.updateCards(stackId, cards);
+            cards.push(inMotionCard);
+            this.stackService.updateCards(cards, stackId);
 
           }
-          // const idx = this.roomCards.indexOf(inMotion as card);
-          // this.roomCards.splice(idx, 1);
+          else {
+            this.cardService.updateOwners([inMotionCard], 'none');
+          }
         }
         this.dropTarget = null;
       }

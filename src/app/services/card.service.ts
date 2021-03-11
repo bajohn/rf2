@@ -15,15 +15,21 @@ export class CardService {
   ) { }
 
   // set all cards to have ownerId of newOwner
-  public async updateOwners(cards: card[], newOwner: string) {
-    return cards.map(el => {
+  public updateOwnerPromises(cards: card[], newOwner: string): Promise<any>[] {
+    const promises = cards.map(el => {
       const cardParams: UpdateCardMutationVariables = {
         input: {
           ownerId: newOwner,
           id: el.id
         }
       }
+      el.ownerId = newOwner;
       return API.graphql(graphqlOperation(updateCard, cardParams)) as Promise<{ data: UpdateCardMutation }>;
     });
+    return promises;
+  }
+
+  public async updateOwners(cards, newOwner) {
+    await this.updateOwnerPromises(cards, newOwner);
   }
 }

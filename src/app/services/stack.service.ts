@@ -65,10 +65,12 @@ export class StackService {
 
 
     // TODO: test this! completely untested.
-    const updateResps = await Promise.all([
+    const promises = [
       API.graphql(graphqlOperation(createCardStack, createStackParams)) as Promise<{ data: CreateCardStackMutation }>,
-      this.cardService.updateOwners(cards, moveableId)
-    ]);
+    ].concat(this.cardService.updateOwnerPromises(cards, moveableId));
+    console.log(promises);
+    const updateResps = await Promise.all(promises);
+
 
 
     const createStackResp = updateResps[0];
@@ -127,14 +129,13 @@ export class StackService {
   }
 
 
-  public async updateCards(stackId, cardIds) {
-
+  public async updateCards(cards: card[], stackId: string) {
     const moveableParams: UpdateCardStackMutationVariables = {
       input: {
         id: stackId,
-        cardIds: cardIds
+        cardIds: cards.map(el => el.moveableId)
       }
     };
-    const resp = await API.graphql(graphqlOperation(updateCardStack, moveableParams)) as { data: UpdateCardStackMutation };;
+    return await API.graphql(graphqlOperation(updateCardStack, moveableParams)) as { data: UpdateCardStackMutation };;
   }
 }
