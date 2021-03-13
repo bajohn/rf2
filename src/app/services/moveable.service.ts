@@ -307,10 +307,18 @@ export class MoveableService {
       if (maybeHighlight) {
         if (this.dropTarget) {
 
-          if (moveableIn.z > this.dropTarget.z) {
+
+          if (
+            // Priority 1: stacks 
+            (!this.isStack(this.dropTarget) && this.isStack(moveableIn))
+            ||
+            // Priority 2: z-index
+            (moveableIn.z > this.dropTarget.z)
+          ) {
             moveableIn.highlight = true;
             this.dropTarget = moveableIn;
           }
+
         } else {
 
           moveableIn.highlight = true;
@@ -348,12 +356,8 @@ export class MoveableService {
 
           this.stackService.removeCard(owner as cardStack, localCard);
 
-
-          this.cardService.updateOwners([localCard], 'none');
-
         }
       }
-      //this.roomCards.push(moveableObj as card);
     }
 
     moveableObj.inMotion = true;

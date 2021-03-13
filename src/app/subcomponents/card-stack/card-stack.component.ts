@@ -37,7 +37,8 @@ export class CardStackComponent implements OnInit {
     if (offsetY > this.moveableService.CARD_H) {
       this.moveableService.mouseDown(this.stack.moveableId);
     } else {
-      const topCard = this.stack.cards.pop();
+      // TODO sort this out! 
+      const topCard = this.stack.cards[this.stack.cards.length - 1];
       this.moveableService.mouseDown(topCard.moveableId);
     }
   }

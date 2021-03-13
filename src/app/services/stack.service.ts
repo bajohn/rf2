@@ -148,10 +148,10 @@ export class StackService {
     console.log(ownerCardIds.length);
 
     const idx = ownerCardIds.indexOf(card.id);
-    console.log(stack, card);
-    this.cardService.updateOwners([card], 'none');
+    console.log(ownerCardIds, card);
     console.log(idx);
     if (idx > -1) {
+      this.cardService.updateOwners([card], 'none');
       const newOwnerCards = ownerCards.splice(idx, 1);
       stack.cards = newOwnerCards;
 
