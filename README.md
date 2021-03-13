@@ -16,6 +16,10 @@ https://github.com/aws-amplify/docs/pull/614/files
 
 
 ## TODO
+
+ // TODO: figure out this prioritization!!!
+
+
 - Logic for init, with card stacks
     - populate cards from backend
     - populate card stacks from backend. 

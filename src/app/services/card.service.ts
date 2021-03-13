@@ -11,25 +11,24 @@ import { RoomService } from './room.service';
 export class CardService {
 
   constructor(
-    private roomService: RoomService
   ) { }
 
   // set all cards to have ownerId of newOwner
-  public updateOwnerPromises(cards: card[], newOwner: string): Promise<any>[] {
+  public updateOwnerPromises(cards: card[], ownerMoveableId: string): Promise<any>[] {
     const promises = cards.map(el => {
       const cardParams: UpdateCardMutationVariables = {
         input: {
-          ownerId: newOwner,
+          ownerId: ownerMoveableId,
           id: el.id
         }
       }
-      el.ownerId = newOwner;
+      el.ownerId = ownerMoveableId;
       return API.graphql(graphqlOperation(updateCard, cardParams)) as Promise<{ data: UpdateCardMutation }>;
     });
     return promises;
   }
 
-  public async updateOwners(cards, newOwner) {
-    await this.updateOwnerPromises(cards, newOwner);
+  public async updateOwners(cards, ownerMoveableId) {
+    await this.updateOwnerPromises(cards, ownerMoveableId);
   }
 }

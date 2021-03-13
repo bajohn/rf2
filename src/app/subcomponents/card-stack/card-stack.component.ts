@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MoveableService } from 'src/app/services/moveable.service';
-import { cardStack } from 'src/app/types';
+import { card, cardStack } from 'src/app/types';
 
 @Component({
   selector: 'app-card-stack',

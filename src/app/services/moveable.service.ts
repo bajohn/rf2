@@ -301,10 +301,7 @@ export class MoveableService {
 
 
   private updateHighlight(mouseX: number, mouseY: number, moveableIn: cardStack | card) {
-    // const curHighlight = moveableIn.highlight;
-    // if (curHighlight !== nextHighlight) {
-    //   moveableIn.highlight = nextHighlight;
-    // }
+    // TODO: figure out this prioritization!!!
     if (!moveableIn.inMotion) {
       const maybeHighlight = this.inMoveable(mouseX, mouseY, moveableIn);
       if (maybeHighlight) {
@@ -345,13 +342,13 @@ export class MoveableService {
       if (localCard.ownerId !== 'none') {
         const owner = this.lookupMoveable(localCard.ownerId);
         if (this.isStack(owner)) {
+
+
           // TODO remove ownerId here, reevaluate roomCards
-          const ownerStack = owner as cardStack;
-          const ownerCards = ownerStack.cards;
-          const idx = ownerCards.indexOf(localCard);
-          const newOwnerCards = ownerCards.splice(idx, 1);
-          ownerStack.cards = ownerCards;
-          this.stackService.updateCards(newOwnerCards, ownerStack.id);
+
+          this.stackService.removeCard(owner as cardStack, localCard);
+
+
           this.cardService.updateOwners([localCard], 'none');
 
         }
@@ -380,16 +377,16 @@ export class MoveableService {
         if (this.isCard(inMotion)) {
           const inMotionCard = inMotion as card;
           if (this.isCard(this.dropTarget)) {
-
+            console.log('iscard');
             this.createStack(inMotionCard);
             // const idx = this.roomCards.indexOf(this.dropTarget as card);
             // this.roomCards.splice(idx, 1);
           } else if (this.isStack(this.dropTarget)) {
+            console.log('isstack');
             const targetStack = this.dropTarget as cardStack;
-            const stackId = targetStack.id;
             const cards = targetStack.cards
             cards.push(inMotionCard);
-            this.stackService.updateCards(cards, stackId);
+            this.stackService.updateCards(cards, targetStack);
 
           }
           else {

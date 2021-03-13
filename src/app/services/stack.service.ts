@@ -27,6 +27,7 @@ import {
 import { RoomService } from './room.service';
 import { card, cardStack, moveable } from '../types';
 import { CardService } from './card.service';
+import { promise } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -68,11 +69,7 @@ export class StackService {
     const promises = [
       API.graphql(graphqlOperation(createCardStack, createStackParams)) as Promise<{ data: CreateCardStackMutation }>,
     ].concat(this.cardService.updateOwnerPromises(cards, moveableId));
-    console.log(promises);
     const updateResps = await Promise.all(promises);
-
-
-
     const createStackResp = updateResps[0];
 
     const stack: cardStack = {
@@ -115,7 +112,7 @@ export class StackService {
 
       const updateCardParams: UpdateCardMutationVariables = {
         input: {
-          ownerId: stack.moveableId,
+          ownerId: 'none',
           id: cv.id
         }
       };
@@ -124,18 +121,42 @@ export class StackService {
       return lv;
     }, deletePromises);
 
-    const moveableResp = await Promise.all(allPromises);
+    return await Promise.all(allPromises);
 
   }
 
 
-  public async updateCards(cards: card[], stackId: string) {
+  public async updateCards(cards: card[], stack: cardStack) {
     const moveableParams: UpdateCardStackMutationVariables = {
       input: {
-        id: stackId,
+        id: stack.id,
         cardIds: cards.map(el => el.moveableId)
       }
     };
-    return await API.graphql(graphqlOperation(updateCardStack, moveableParams)) as { data: UpdateCardStackMutation };;
+    const promises = this.cardService.updateOwnerPromises(cards, stack.moveableId).concat(
+      [
+        API.graphql(graphqlOperation(updateCardStack, moveableParams)) as Promise<{ data: UpdateCardStackMutation }>,
+      ]
+    )
+    return await Promise.all(promises);
+  }
+
+
+  removeCard(stack: cardStack, card: card) {
+    const ownerCards = stack.cards;
+    const ownerCardIds = ownerCards.map(card => card.id);
+    console.log(ownerCardIds.length);
+
+    const idx = ownerCardIds.indexOf(card.id);
+    console.log(stack, card);
+    this.cardService.updateOwners([card], 'none');
+    console.log(idx);
+    if (idx > -1) {
+      const newOwnerCards = ownerCards.splice(idx, 1);
+      stack.cards = newOwnerCards;
+
+      this.updateCards(newOwnerCards, stack);
+    }
+
   }
 }
